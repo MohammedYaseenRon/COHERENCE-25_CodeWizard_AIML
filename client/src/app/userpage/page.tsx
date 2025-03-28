@@ -53,11 +53,13 @@ export default function ResumeScannerApp() {
 
     socket.onmessage = (event) => {
       try {
-        const parsedData = JSON.parse(event.data);
-        setAnalysisResults(parsedData);
-        setUploadStatus('Analysis Complete');
-        setIsScanning(false);
-        setCurrentView('candidates');
+        if (!event.data.startsWith('Processing')){
+          const parsedData = JSON.parse(event.data);
+          setAnalysisResults(parsedData);
+          setUploadStatus('Analysis Complete');
+          setIsScanning(false);
+          setCurrentView('candidates');
+        }
       } catch (error) {
         console.error('Error parsing WebSocket message:', error);
         setUploadStatus('Error processing analysis');
