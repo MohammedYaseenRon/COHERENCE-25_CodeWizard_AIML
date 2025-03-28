@@ -1,0 +1,284 @@
+{
+  "New Resume.pdf": {
+    "contact_info": {
+      "full_name": "MOHAMMED USMANI",
+      "email": "usmanimohammed12@gmail.com",
+      "phone": "+91 86899 08731",
+      "location": "Bhayandar, Maharashtra, India",
+      "linkedin": "https://www.linkedin.com/in/mohammed-usmani-927a96286"
+    },
+    "education": [
+      {
+        "degree": "Bachelor's degree",
+        "institution": "VIT (Virar), Mumbai University",
+        "graduation_year": 2026,
+        "gpa": 8.25,
+        "honors": null
+      },
+      {
+        "degree": "Diploma In Engineering",
+        "institution": "Pravin Patil College, MSBTE",
+        "graduation_year": 2023,
+        "gpa": 81.33,
+        "honors": null
+      }
+    ],
+    "work_experience": [
+      {
+        "company": "YBI Foundation",
+        "job_title": "Data Science Intern",
+        "start_date": "June 2024",
+        "end_date": "July 2024",
+        "responsibilities": [
+          "Collected, cleaned, and pre-processed large datasets for accurate analysis.",
+          "Conducted Exploratory Data Analysis (EDA) to identify patterns and insights.",
+          "Evaluated and optimized machine learning models using performance metrics like accuracy, precision, recall, and F1-score.",
+          "Collaborated with the team to deliver data-driven solutions for real-world problems.",
+          "Documented findings and presented analytical insights to stakeholders."
+        ],
+        "technologies": null
+      }
+    ],
+    "skills": {
+      "technical_skills": [
+        "MERN Stack",
+        "Firebase",
+        "Supabase",
+        "Redux",
+        "React Native",
+        "SQL",
+        "Machine Learning"
+      ],
+      "soft_skills": null,
+      "certifications": null
+    },
+    "summary": "Skilled MERN stack and React Native developer with expertise in AI/ML integration. Experienced in building scalable web and mobile apps, optimizing performance, and deploying ML models.",
+    "projects": [
+      {
+        "name": "CityFix \u2013 Community Collaboration App",
+        "description": "Built a React Native app for issue reporting and project management.",
+        "technologies": [
+          "React Native",
+          "Expo",
+          "Firebase",
+          "Node.js",
+          "Zustand"
+        ],
+        "start_date": null,
+        "end_date": null,
+        "link": null
+      },
+      {
+        "name": "Game Website \u2013 Gaming Platform",
+        "description": "Developed a platform with admin controls for game and user management.",
+        "technologies": [
+          "Next.js",
+          "Supabase",
+          "Zustand",
+          "Tailwind CSS"
+        ],
+        "start_date": null,
+        "end_date": null,
+        "link": null
+      },
+      {
+        "name": "EdTech Website \u2013 Al Educational Platform",
+        "description": "Built an Al-driven platform for study planning and academic tasks.",
+        "technologies": [
+          "Next.js",
+          "FastAPI",
+          "Supabase",
+          "TypeScript"
+        ],
+        "start_date": null,
+        "end_date": null,
+        "link": null
+      }
+    ]
+  },
+  "My Resume.pdf": {
+    "contact_info": {
+      "full_name": "Mayuresh Pawar",
+      "email": "mayurpawar130904@gmail.com",
+      "phone": "9168206706",
+      "location": null,
+      "linkedin": null
+    },
+    "education": [
+      {
+        "degree": "Bachelor of Engineering\n(CSE AI/ML)",
+        "institution": "Mumbai University",
+        "graduation_year": 2026,
+        "gpa": 7.85,
+        "honors": null
+      }
+    ],
+    "work_experience": [
+      {
+        "company": "Neural Labs",
+        "job_title": "Product Design Intern",
+        "start_date": "May 2024",
+        "end_date": "Jan 2025",
+        "responsibilities": [
+          "Designed a healthcare application, integrating Al-powered\ninsights, improving doctors' workflow efficiency by 45%.",
+          "Conducted ethnographic research and diary studies, leading to\na refined app UI with a 50% boost in engagement.",
+          "Created interactive data visualizations for medical reports,\nreducing cognitive load by 35% and improving doctor-patient\ncommunication.",
+          "Collaborated with data scientists to develop an NLP-based\nchatbot, reducing customer support queries by 30%."
+        ],
+        "technologies": null
+      },
+      {
+        "company": "Oneture Technologies",
+        "job_title": "UX Design Intern",
+        "start_date": "Oct 2023",
+        "end_date": "Mar 2024",
+        "responsibilities": [
+          "Designed an accessibility-focused redesign, aligning with\nWCAG 2.1 compliance and improving usability scores by 25%.",
+          "Developed a UX performance dashboard using Python\n(Pandas, Matplotlib) and GA4, providing real-time insights for\nstakeholders.",
+          "Executed data-driven user research, analyzing 50+ user\nsessions to refine onboarding flows, reducing drop-off rates by\n23%.",
+          "Leveraged A/B testing and behavioral analytics, optimizing key\nUl elements and increasing conversion rates by 20%."
+        ],
+        "technologies": null
+      }
+    ],
+    "skills": {
+      "technical_skills": [
+        "Design Thinking",
+        "Wireframing",
+        "Information Architecture",
+        "Heuristic Evaluation",
+        "Usability Testing",
+        "Accessibility & Inclusive Design",
+        "A/B Testing",
+        "Funnel Optimization",
+        "User Journey Mapping",
+        "GA4 (Google Analytics)",
+        "Ethnographic Research",
+        "High-Fidelity Mockups",
+        "Rapid Prototyping",
+        "Micro-Interactions",
+        "Predictive Analytics",
+        "Machine Learning for UX Insights",
+        "Personalization",
+        "Al-Assisted Design",
+        "Data-Driven UI",
+        "Data Analysis (Pandas, NumPy)",
+        "Figma",
+        "InVision",
+        "Adobe XD",
+        "Sketch",
+        "Python (Pandas, NumPy, Matplotlib)",
+        "GA4",
+        "SQL",
+        "Tableau",
+        "Predictive Analytics",
+        "Al-Assisted Design",
+        "NLP-based UX Solutions"
+      ],
+      "soft_skills": null,
+      "certifications": null
+    },
+    "summary": "UX Designer blending data-driven storytelling with\nunique design frameworks and product strategies\nto create intuitive, impactful user experiences.",
+    "projects": null
+  },
+  "Resume Mohammed.pdf": {
+    "contact_info": {
+      "full_name": "Mohammed Usmani",
+      "email": "usmanimohammed12@gmail.com",
+      "phone": "+91 86899 08731",
+      "location": "Bhayandar, Thane 401101, India",
+      "linkedin": "LinkedIn"
+    },
+    "education": [
+      {
+        "degree": "B.E. IN CSE (AIML)",
+        "institution": "VIVA INSTITUTE OF TECHNOLOGY, VIRAR",
+        "graduation_year": 2026,
+        "gpa": null,
+        "honors": null
+      },
+      {
+        "degree": "DIPLOMA IN ENGINEERING",
+        "institution": "PRAVIN PATIL POLYTECHNIC, BHAYANDAR",
+        "graduation_year": 2023,
+        "gpa": 81.33,
+        "honors": null
+      }
+    ],
+    "work_experience": [
+      {
+        "company": "YBI FOUNDATION",
+        "job_title": "DATA SCIENCE INTERN",
+        "start_date": "JUNE 2024",
+        "end_date": "JULY 2024",
+        "responsibilities": [
+          "Assisted in data collection, cleaning, and preprocessing to ensure high-quality datasets for analysis.",
+          "Conducted exploratory data analysis (EDA) to uncover patterns, trends, and insights.",
+          "Assessed and optimized machine learning models using key metrics such as accuracy, precision, recall, and F1-score."
+        ],
+        "technologies": null
+      }
+    ],
+    "skills": {
+      "technical_skills": [
+        "JavaScript",
+        "TypeScript",
+        "MERN Stack (MongoDB, Express, React JS, Node JS)",
+        "Supabase",
+        "Firebase",
+        "Prisma ORM",
+        "Zustand",
+        "PostgreSQL",
+        "Vercel",
+        "Tailwind",
+        "React Native",
+        "Git",
+        "Python",
+        "FastAPI",
+        "Django",
+        "Machine Learning"
+      ],
+      "soft_skills": null,
+      "certifications": null
+    },
+    "summary": "Computer Science Engineering student specializing in AI/ML with expertise in full-stack development. Developed award-winning projects, including a Community Improvement App (3rd place, GNEC Fall Competition 2024) and an Al-powered Education Platform (Mumbai Hacks). Proficient in MERN stack, Firebase, Supabase, and machine learning. Strong problem-solving skills, teamwork abilities, and hackathon experience. Eager to drive innovation in software and AI.",
+    "projects": [
+      {
+        "name": "CityFix",
+        "description": "Cross-Platform Community Collaboration App\n\u2022\nDeveloped a cross-platform application to enhance community collaboration and problem-solving.\n\u2022\nKey features: Fundraising, issue creation, project management, and NGO location mapping.",
+        "technologies": [
+          "React Native",
+          "Expo",
+          "Firebase",
+          "Node.js",
+          "Express",
+          "Railway",
+          "Zustand",
+          "GitHub"
+        ],
+        "start_date": null,
+        "end_date": null,
+        "link": null
+      },
+      {
+        "name": "EduTech Website",
+        "description": "Al-Powered Educational Platform\nDesigned and developed an Al-driven platform to assist students in creating study plans, summarizing lectures, preparing for exams, and managing academic tasks.",
+        "technologies": [
+          "Next.js",
+          "Supabase",
+          "TypeScript",
+          "Node.js",
+          "Tailwind",
+          "Ollama",
+          "Llama 3.2",
+          "Python",
+          "FastAPI",
+          "GitHub"
+        ],
+        "start_date": null,
+        "end_date": null,
+        "link": null
+      }
+    ]
+  }
+}
