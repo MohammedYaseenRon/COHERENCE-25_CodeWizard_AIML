@@ -10,6 +10,8 @@ import json
 from typing import List, Optional, Dict
 from pydantic import BaseModel, Field
 from fastapi.middleware.cors import CORSMiddleware
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
 
 # Load environment variables
 load_dotenv()
@@ -302,6 +304,17 @@ class ResumeAnalysisServer:
             except Exception as e:
                 print(f"Unexpected error: {e}")
                 await websocket.send_text(f"Unexpected error: {str(e)}")
+
+            def rank_resumes(job_description, resumes):
+                # Combine job description with resumes
+                documents = [job_description] + resumes
+                vectorizer = TfidfVectorizer().fit_transform(documents)
+                vectors = vectorizer.toarray()
+
+                # Calculate cosine similarity
+                job_description_vector = vectors[0]
+                resume_vectors = vectors[1:]
+                cosine_similarities = cosine_similarity([job_description_vector], resume_vectors).flatten()
 
     def run(self):
         import uvicorn
