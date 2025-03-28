@@ -7,20 +7,14 @@ from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from google import genai
 from dotenv import load_dotenv
 import json
-from typing import List, Optional
+from typing import List, Optional, Dict
 from pydantic import BaseModel, Field
 from fastapi.middleware.cors import CORSMiddleware
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
 
 # Load environment variables
 load_dotenv()
-
-# origins = [
-#     "http://localhost.tiangolo.com",
-#     "https://localhost.tiangolo.com",
-#     "http://localhost",
-#     "http://localhost:8080",
-# ]
-
 app = FastAPI()
 
 app.add_middleware(
@@ -30,6 +24,10 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+class JobDescriptionRequest(BaseModel):
+    job_description: str
+    resumes_file: str = 'resume_analysis_results.json'
 
 class ContactInfo(BaseModel):
     full_name: str = Field(..., description="Full name of the candidate")
@@ -143,10 +141,37 @@ async def websocket_endpoint(websocket: WebSocket):
 
 
 class ResumeAnalysisServer:
-    def __init__(self):
+    def __init__(self, results_file='resume_analysis_results.json'):
         load_dotenv()
         self.app = FastAPI()
         self.setup_routes()
+
+        self.results_file = results_file
+        self.load_results()
+
+    def load_results(self):
+        """
+        Load existing results from JSON file or create a new empty dictionary
+        """
+        try:
+            with open(self.results_file, 'r') as f:
+                self.analysis_results = json.load(f)
+        except FileNotFoundError:
+            self.analysis_results = {}
+
+    def save_results(self):
+        """
+        Save current analysis results to JSON file
+        """
+        with open(self.results_file, 'w') as f:
+            json.dump(self.analysis_results, f, indent=2)
+
+    def update_results(self, filename, resume_data):
+        """
+        Update results dictionary and save to file
+        """
+        self.analysis_results[filename] = resume_data
+        self.save_results()
 
     def setup_routes(self):
         @self.app.websocket("/resume-analyze")
@@ -218,6 +243,100 @@ class ResumeAnalysisServer:
             except Exception as e:
                 print(f"Unexpected error: {e}")
                 await websocket.send_text(f"Unexpected error: {str(e)}")
+
+        @self.app.websocket("/multi-upload")
+        async def multi_file_upload_endpoint(websocket: WebSocket):
+            await websocket.accept()
+            
+            try:
+                # Receive initial metadata about file upload
+                file_metadata = await websocket.receive_json()
+                num_files = file_metadata.get('num_files', 1)
+                
+                # Process multiple files
+                for _ in range(num_files):
+                    # Receive file metadata for each file
+                    current_file_metadata = await websocket.receive_json()
+                    filename = current_file_metadata.get('filename', f'uploaded_file_{_}.pdf')
+                    
+                    # Create a temporary file to save the uploaded PDF
+                    with tempfile.NamedTemporaryFile(delete=False, suffix='.pdf') as temp_file:
+                        # Receive file chunks
+                        while True:
+                            file_chunk = await websocket.receive_bytes()
+                            if file_chunk == b'EOF':
+                                break
+                            temp_file.write(file_chunk)
+                    
+                    try:
+                        # Upload file to Gemini
+                        client = genai.Client(api_key=os.getenv("GOOGLE_API_KEY"))
+                        file_path = pathlib.Path(temp_file.name)
+                        
+                        # Upload the file to Gemini
+                        sample_file = client.files.upload(file=file_path)
+                        
+                        # Detailed prompt for comprehensive analysis
+                        prompt = """
+                        Perform a COMPREHENSIVE analysis of this resume.
+                        CRITICAL INSTRUCTIONS:
+                        1. Extract EVERY single detail from the document
+                        2. Do NOT skip or summarize - provide FULL information
+                        3. If any section is incomplete, explicitly state what's missing
+                        4. Ensure maximum detail and precision
+                        
+                        Extraction Depth:
+                        - Contact Info: Full details
+                        - Education: Complete academic history
+                        - Work Experience: Detailed role descriptions
+                        - Skills: Exhaustive technical and soft skills
+                        - Projects: All notable projects
+                        - Certifications: Complete list
+                        """
+                        
+                        # Generate content with JSON schema
+                        response = client.models.generate_content(
+                            model='gemini-2.0-flash',
+                            contents=[sample_file, prompt],
+                            config={
+                                'response_mime_type': 'application/json',
+                                'response_schema': ResumeProfile,
+                            },
+                        )
+                        
+                        # Get parsed data and update results
+                        resume_data = response.parsed.model_dump()
+                        self.update_results(filename, resume_data)
+                        
+                    except Exception as e:
+                        error_data = {
+                            "error": f"Error processing file: {str(e)}"
+                        }
+                        self.update_results(filename, error_data)
+                    
+                    finally:
+                        # Clean up temporary file
+                        os.unlink(temp_file.name)
+                
+                # Send compiled results
+                await websocket.send_text(json.dumps(self.analysis_results, indent=2))
+            
+            except WebSocketDisconnect:
+                print("WebSocket connection closed")
+            except Exception as e:
+                print(f"Unexpected error: {e}")
+                await websocket.send_text(f"Unexpected error: {str(e)}")
+
+    def rank_resumes(job_description, resumes):
+        # Combine job description with resumes
+        documents = [job_description] + resumes
+        vectorizer = TfidfVectorizer().fit_transform(documents)
+        vectors = vectorizer.toarray()
+
+        # Calculate cosine similarity
+        job_description_vector = vectors[0]
+        resume_vectors = vectors[1:]
+        cosine_similarities = cosine_similarity([job_description_vector], resume_vectors).flatten()
 
     def run(self):
         import uvicorn

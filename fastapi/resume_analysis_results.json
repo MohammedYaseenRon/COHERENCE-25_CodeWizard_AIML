@@ -1,0 +1,659 @@
+{
+  "New Resume.pdf": {
+    "contact_info": {
+      "full_name": "MOHAMMED USMANI",
+      "email": "usmanimohammed12@gmail.com",
+      "phone": "+91 86899 08731",
+      "location": "Bhayandar, Maharashtra, India",
+      "linkedin": "https://www.linkedin.com/in/mohammed-usmani-927a96286"
+    },
+    "education": [
+      {
+        "degree": "Bachelor's degree",
+        "institution": "VIT (Virar), Mumbai University",
+        "graduation_year": 2026,
+        "gpa": 8.25,
+        "honors": null
+      },
+      {
+        "degree": "Diploma In Engineering",
+        "institution": "Pravin Patil College, MSBTE",
+        "graduation_year": 2023,
+        "gpa": 81.33,
+        "honors": null
+      }
+    ],
+    "work_experience": [
+      {
+        "company": "YBI Foundation",
+        "job_title": "Data Science Intern",
+        "start_date": "June 2024",
+        "end_date": "July 2024",
+        "responsibilities": [
+          "Collected, cleaned, and pre-processed large datasets for accurate analysis.",
+          "Conducted Exploratory Data Analysis (EDA) to identify patterns and insights.",
+          "Evaluated and optimized machine learning models using performance metrics like accuracy, precision, recall, and F1-score.",
+          "Collaborated with the team to deliver data-driven solutions for real-world problems.",
+          "Documented findings and presented analytical insights to stakeholders."
+        ],
+        "technologies": null
+      }
+    ],
+    "skills": {
+      "technical_skills": [
+        "MERN Stack",
+        "Firebase",
+        "Supabase",
+        "Redux",
+        "React Native",
+        "SQL",
+        "Machine Learning"
+      ],
+      "soft_skills": null,
+      "certifications": null
+    },
+    "summary": "Skilled MERN stack and React Native developer with expertise in AI/ML integration. Experienced in building scalable web and mobile apps, optimizing performance, and deploying ML models.",
+    "projects": [
+      {
+        "name": "CityFix \u2013 Community Collaboration App",
+        "description": "Built a React Native app for issue reporting and project management.",
+        "technologies": [
+          "React Native",
+          "Expo",
+          "Firebase",
+          "Node.js",
+          "Zustand"
+        ],
+        "start_date": null,
+        "end_date": null,
+        "link": null
+      },
+      {
+        "name": "Game Website \u2013 Gaming Platform",
+        "description": "Developed a platform with admin controls for game and user management.",
+        "technologies": [
+          "Next.js",
+          "Supabase",
+          "Zustand",
+          "Tailwind CSS"
+        ],
+        "start_date": null,
+        "end_date": null,
+        "link": null
+      },
+      {
+        "name": "EdTech Website \u2013 Al Educational Platform",
+        "description": "Built an Al-driven platform for study planning and academic tasks.",
+        "technologies": [
+          "Next.js",
+          "FastAPI",
+          "Supabase",
+          "TypeScript"
+        ],
+        "start_date": null,
+        "end_date": null,
+        "link": null
+      }
+    ]
+  },
+  "My Resume.pdf": {
+    "contact_info": {
+      "full_name": "Mayuresh Pawar",
+      "email": "mayurpawar130904@gmail.com",
+      "phone": "9168206706",
+      "location": null,
+      "linkedin": null
+    },
+    "education": [
+      {
+        "degree": "Bachelor of Engineering\n(CSE AI/ML)",
+        "institution": "Mumbai University",
+        "graduation_year": 2026,
+        "gpa": 7.85,
+        "honors": null
+      }
+    ],
+    "work_experience": [
+      {
+        "company": "Neural Labs",
+        "job_title": "Product Design Intern",
+        "start_date": "May 2024",
+        "end_date": "Jan 2025",
+        "responsibilities": [
+          "Designed a healthcare application, integrating Al-powered\ninsights, improving doctors' workflow efficiency by 45%.",
+          "Conducted ethnographic research and diary studies, leading to\na refined app UI with a 50% boost in engagement.",
+          "Created interactive data visualizations for medical reports,\nreducing cognitive load by 35% and improving doctor-patient\ncommunication.",
+          "Collaborated with data scientists to develop an NLP-based\nchatbot, reducing customer support queries by 30%."
+        ],
+        "technologies": null
+      },
+      {
+        "company": "Oneture Technologies",
+        "job_title": "UX Design Intern",
+        "start_date": "Oct 2023",
+        "end_date": "Mar 2024",
+        "responsibilities": [
+          "Designed an accessibility-focused redesign, aligning with\nWCAG 2.1 compliance and improving usability scores by 25%.",
+          "Developed a UX performance dashboard using Python\n(Pandas, Matplotlib) and GA4, providing real-time insights for\nstakeholders.",
+          "Executed data-driven user research, analyzing 50+ user\nsessions to refine onboarding flows, reducing drop-off rates by\n23%.",
+          "Leveraged A/B testing and behavioral analytics, optimizing key\nUl elements and increasing conversion rates by 20%."
+        ],
+        "technologies": null
+      }
+    ],
+    "skills": {
+      "technical_skills": [
+        "Design Thinking",
+        "Wireframing",
+        "Information Architecture",
+        "Heuristic Evaluation",
+        "Usability Testing",
+        "Accessibility & Inclusive Design",
+        "A/B Testing",
+        "Funnel Optimization",
+        "User Journey Mapping",
+        "GA4 (Google Analytics)",
+        "Ethnographic Research",
+        "High-Fidelity Mockups",
+        "Rapid Prototyping",
+        "Micro-Interactions",
+        "Predictive Analytics",
+        "Machine Learning for UX Insights",
+        "Personalization",
+        "Al-Assisted Design",
+        "Data-Driven UI",
+        "Data Analysis (Pandas, NumPy)",
+        "Figma",
+        "InVision",
+        "Adobe XD",
+        "Sketch",
+        "Python (Pandas, NumPy, Matplotlib)",
+        "GA4",
+        "SQL",
+        "Tableau",
+        "Predictive Analytics",
+        "Al-Assisted Design",
+        "NLP-based UX Solutions"
+      ],
+      "soft_skills": null,
+      "certifications": null
+    },
+    "summary": "UX Designer blending data-driven storytelling with\nunique design frameworks and product strategies\nto create intuitive, impactful user experiences.",
+    "projects": null
+  },
+  "Resume Mohammed.pdf": {
+    "contact_info": {
+      "full_name": "Mohammed Usmani",
+      "email": "usmanimohammed12@gmail.com",
+      "phone": "+91 86899 08731",
+      "location": "Bhayandar, Thane 401101, India",
+      "linkedin": "LinkedIn"
+    },
+    "education": [
+      {
+        "degree": "B.E. IN CSE (AIML)",
+        "institution": "VIVA INSTITUTE OF TECHNOLOGY, VIRAR",
+        "graduation_year": 2026,
+        "gpa": null,
+        "honors": null
+      },
+      {
+        "degree": "DIPLOMA IN ENGINEERING",
+        "institution": "PRAVIN PATIL POLYTECHNIC, BHAYANDAR",
+        "graduation_year": 2023,
+        "gpa": 81.33,
+        "honors": null
+      }
+    ],
+    "work_experience": [
+      {
+        "company": "YBI FOUNDATION",
+        "job_title": "DATA SCIENCE INTERN",
+        "start_date": "JUNE 2024",
+        "end_date": "JULY 2024",
+        "responsibilities": [
+          "Assisted in data collection, cleaning, and preprocessing to ensure high-quality datasets for analysis.",
+          "Conducted exploratory data analysis (EDA) to uncover patterns, trends, and insights.",
+          "Assessed and optimized machine learning models using key metrics such as accuracy, precision, recall, and F1-score."
+        ],
+        "technologies": null
+      }
+    ],
+    "skills": {
+      "technical_skills": [
+        "JavaScript",
+        "TypeScript",
+        "MERN Stack (MongoDB, Express, React JS, Node JS)",
+        "Supabase",
+        "Firebase",
+        "Prisma ORM",
+        "Zustand",
+        "PostgreSQL",
+        "Vercel",
+        "Tailwind",
+        "React Native",
+        "Git",
+        "Python",
+        "FastAPI",
+        "Django",
+        "Machine Learning"
+      ],
+      "soft_skills": null,
+      "certifications": null
+    },
+    "summary": "Computer Science Engineering student specializing in AI/ML with expertise in full-stack development. Developed award-winning projects, including a Community Improvement App (3rd place, GNEC Fall Competition 2024) and an Al-powered Education Platform (Mumbai Hacks). Proficient in MERN stack, Firebase, Supabase, and machine learning. Strong problem-solving skills, teamwork abilities, and hackathon experience. Eager to drive innovation in software and AI.",
+    "projects": [
+      {
+        "name": "CityFix",
+        "description": "Cross-Platform Community Collaboration App\n\u2022\nDeveloped a cross-platform application to enhance community collaboration and problem-solving.\n\u2022\nKey features: Fundraising, issue creation, project management, and NGO location mapping.",
+        "technologies": [
+          "React Native",
+          "Expo",
+          "Firebase",
+          "Node.js",
+          "Express",
+          "Railway",
+          "Zustand",
+          "GitHub"
+        ],
+        "start_date": null,
+        "end_date": null,
+        "link": null
+      },
+      {
+        "name": "EduTech Website",
+        "description": "Al-Powered Educational Platform\nDesigned and developed an Al-driven platform to assist students in creating study plans, summarizing lectures, preparing for exams, and managing academic tasks.",
+        "technologies": [
+          "Next.js",
+          "Supabase",
+          "TypeScript",
+          "Node.js",
+          "Tailwind",
+          "Ollama",
+          "Llama 3.2",
+          "Python",
+          "FastAPI",
+          "GitHub"
+        ],
+        "start_date": null,
+        "end_date": null,
+        "link": null
+      }
+    ]
+  },
+  "Prathmesh_resume (5)-1-2.pdf": {
+    "contact_info": {
+      "full_name": "PRATHMESH BIDVE",
+      "email": "bidveprathmesh590@gmail.com",
+      "phone": null,
+      "location": "Latur, Maharastra",
+      "linkedin": "prathmesh-bidve"
+    },
+    "education": [
+      {
+        "degree": "Bachelor of Technology in Information Technology (Currently in 7th Sem)",
+        "institution": "M S Bidve Engineering College Latur",
+        "graduation_year": 2025,
+        "gpa": 6.91,
+        "honors": null
+      },
+      {
+        "degree": "Diploma In Electrical Engineering",
+        "institution": "Swami Vivekananda Institute of Polytechnic Latur",
+        "graduation_year": 2022,
+        "gpa": 84.5,
+        "honors": null
+      }
+    ],
+    "work_experience": [
+      {
+        "company": "Nexgen Elit",
+        "job_title": "Full Stack Developer Intern",
+        "start_date": "June 2024",
+        "end_date": "Present",
+        "responsibilities": [
+          "Developed production-level code using Next.js, Tailwind CSS, and Nodejs",
+          "Managed version control with Git and GitHub, reducing code conflicts for a 10-member team.",
+          "Collaborated with UX/UI design team, increasing user satisfaction scores by 15%..",
+          "Worked on real-world projects, ensuring high-quality code and efficient workflows.."
+        ],
+        "technologies": [
+          "Next.js",
+          "Tailwind CSS",
+          "Node.js",
+          "Git",
+          "GitHub"
+        ]
+      },
+      {
+        "company": "Predixion Ai",
+        "job_title": "Full Stack Developer Intern",
+        "start_date": "March 2024",
+        "end_date": "April 2024",
+        "responsibilities": [
+          "Proficiently Implemented React.js frontend development tasks, aligning with industry-standard technologies.",
+          "Demonstrated strong version control skills by effectively handled projects with GitHub.",
+          "Effectively deployed and coordinated applications on Vercel, highlighting skills in deployment processes."
+        ],
+        "technologies": [
+          "React.js",
+          "GitHub",
+          "Vercel"
+        ]
+      }
+    ],
+    "skills": {
+      "technical_skills": [
+        "Programming Languages: C, C++ (using for Competitive Programming), Java,Javascript, Typescript",
+        "Front-End Technologies: NextJS, ReactJs, HTML5, CSS3, Tailwind CSS, Bootstrap",
+        "Back-End Technologies : NodeJs, ExpressJs, EJS, FastApi,Cloudflare Workers",
+        "Databases: MongoDB, MySQL, postgresql",
+        "Tools: Postman, Git, GitHub, VS Code, slack, Sublime, Windows, Figma"
+      ],
+      "soft_skills": null,
+      "certifications": [
+        "Git | Udemy",
+        "Javascript | Udemy",
+        "React Js | kgcoding"
+      ]
+    },
+    "summary": null,
+    "projects": [
+      {
+        "name": "BlogCraft",
+        "description": "Designed a cutting-edge blogging platform with React frontend, Cloudflare Workers backend, and TypeScript for enhanced type safety; optimized loading speeds by 40% and reduced server response time by 50%\nIncorporated JWT authentication to ensure 100% secure access and enhance user trust.\nEmployed Prisma ORM with PostgreSQL for efficient data management, enabling seamless scalability to accommodate growing content demands.",
+        "technologies": [
+          "ReactJs",
+          "TypeScript",
+          "Cloudflare Workers",
+          "Prisma",
+          "PostgreSQL",
+          "Jwt"
+        ],
+        "start_date": null,
+        "end_date": null,
+        "link": "GitHub"
+      },
+      {
+        "name": "Barebeat-MusicPlayer",
+        "description": "Created an immersive user interface using HTML and CSS, seamlessly integrating album art, track details, intuitive playback controls; resulting in a 40% increase in user engagement and a 25% decrease in bounce rate.\nImplemented real-time audio playback with 5+ JavaScript functions, featuring play/pause and track skipping\nOptimized React components (Header, Playlist, Controls, Track Display) for 25% faster page rendering, elevating user engagement and satisfaction.",
+        "technologies": [
+          "HTML",
+          "CSS",
+          "Javascript",
+          "Reactjs",
+          "nodejs"
+        ],
+        "start_date": null,
+        "end_date": null,
+        "link": "GitHub"
+      },
+      {
+        "name": "Top-Headline",
+        "description": "Crafted an engaging ReactJS frontend with 15+ interactive elements for a vibrant user experience.\nBoosted user engagement, Integrated NewsAPI for 100% real-time headlines\nDesigned a visually appealing news hub with cutting-edge technologies, delivering the latest updates at a glance.",
+        "technologies": [
+          "HTML",
+          "CSS",
+          "Javascript",
+          "ReactJs",
+          "NewsApi"
+        ],
+        "start_date": null,
+        "end_date": null,
+        "link": "GitHub"
+      }
+    ]
+  },
+  "Resume - Shivam Musterya (1).pdf": {
+    "contact_info": {
+      "full_name": "Mohammed Yaseen Ron",
+      "email": "yaseenron070@gmail.com",
+      "phone": "+91-7208455991",
+      "location": null,
+      "linkedin": "www.linkedin.com/in/yaseen-ron-36319b305"
+    },
+    "education": [
+      {
+        "degree": "BE in Computer Science and Engineering (AI & ML)",
+        "institution": "Viva Institute of Technology",
+        "graduation_year": 2026,
+        "gpa": null,
+        "honors": null
+      },
+      {
+        "degree": "Higher Secondary Education in Science",
+        "institution": "SN College of Science and Arts",
+        "graduation_year": 2022,
+        "gpa": null,
+        "honors": null
+      }
+    ],
+    "work_experience": [
+      {
+        "company": "Private Limited Comapany",
+        "job_title": "FrontEnd Developer",
+        "start_date": "Oct 2024",
+        "end_date": "Present",
+        "responsibilities": [
+          "Collaborated with cross-functional teams to translate business objectives into scalable web solutions, ensuring full alignment with project goals and reducing time-to-market by 20%.",
+          "Developed dynamic and responsive user interfaces, optimizing user engagement and website performance."
+        ],
+        "technologies": null
+      },
+      {
+        "company": "Supraja Technologies",
+        "job_title": "Cybersecurity Intern",
+        "start_date": "Feb 2024",
+        "end_date": "Apr 2024",
+        "responsibilities": [
+          "Performed VAPT, identifying and mitigating critical vulnerabilities in 10+ web applications.",
+          "Discovered and exploited website vulnerabilities, documenting processes for security enhancement."
+        ],
+        "technologies": null
+      },
+      {
+        "company": "ShigaCorp",
+        "job_title": "Business Development Intern",
+        "start_date": "Aug 2023",
+        "end_date": "Oct 2023",
+        "responsibilities": [
+          "Visualized data-driven reports, reducing decision-making time and facilitating rapid adaptation to market trends.",
+          "Maximized business development efforts through targeted data analysis, driving a 25% increase in sales leads."
+        ],
+        "technologies": null
+      },
+      {
+        "company": "Anand Techno Creations",
+        "job_title": "IoT Project Development Intern",
+        "start_date": "Jun 2021",
+        "end_date": "Aug 2021",
+        "responsibilities": [
+          "Executed end-to-end IoT project lifecycles, from conceptualization to implementation, resulting in the successful development of 2+ commercially viable solutions.",
+          "Excelled in PCB design and simulation with Proteus, seamlessly integrating IoT devices with Firebase and AWS."
+        ],
+        "technologies": null
+      }
+    ],
+    "skills": {
+      "technical_skills": [
+        "C++",
+        "Python",
+        "JavaScript",
+        "SQL",
+        "React.js",
+        "Django",
+        "Material-UI",
+        "Github",
+        "VS Code",
+        "Microsoft Tools",
+        "Tableau",
+        "Blockchain",
+        "Data Analysis",
+        "Web Scraping"
+      ],
+      "soft_skills": [
+        "Quick Learner",
+        "Critical Thinking",
+        "Problem Solving",
+        "Analytical Skills",
+        "Growth mindset",
+        "Confidence"
+      ],
+      "certifications": [
+        "Full Stack Development: 100xDevs"
+      ]
+    },
+    "summary": null,
+    "projects": [
+      {
+        "name": "Friend Next Door",
+        "description": "Offers Al-driven mental health support, enabling users to engage with empathetic 3D virtual companions. Through authentic conversations and comprehensive resources, fosters a supportive environment for emotional well-being.",
+        "technologies": [
+          "React.js",
+          "Conv.ai",
+          "Ready Player Me",
+          "Vercel"
+        ],
+        "start_date": null,
+        "end_date": null,
+        "link": null
+      },
+      {
+        "name": "Intelligent Intrusion Detection System",
+        "description": "Redefines network monitoring, by utilizing advanced ML/DL techniques surpassing traditional IDS systems. Its intuitive dashboard empowers admins to efficiently track and manage traffic, enhancing network security.",
+        "technologies": [
+          "HTML",
+          "CSS",
+          "Javascript",
+          "Django",
+          "Python",
+          "ML/DL models"
+        ],
+        "start_date": null,
+        "end_date": null,
+        "link": null
+      },
+      {
+        "name": "EcoSense",
+        "description": "An environmental monitoring system which utilizes real-time data for visualizing environment layers. Includes time series forecasts, health & policy recommendations, interactive maps, and ecofriendly marketplace.",
+        "technologies": [
+          "HTML/CSS",
+          "Javascript",
+          "HERE api",
+          "OpenStreetMap",
+          "Open Al"
+        ],
+        "start_date": null,
+        "end_date": null,
+        "link": null
+      },
+      {
+        "name": "Dynamo",
+        "description": "A multimodal route optimization platform using advanced algorithms to find efficient paths among destinations.Implemented additional features like last mile delivery optimizations, shipment manager, and consumption calculator",
+        "technologies": [
+          "React.js",
+          "Material UI",
+          "ML/DL models",
+          "HERE & Geoapify API",
+          "Open Al"
+        ],
+        "start_date": null,
+        "end_date": null,
+        "link": null
+      },
+      {
+        "name": "Karnataka State Police Dashboard",
+        "description": "Developed an interactive dashboard with KPI monitoring for real-time visualization, enabling informed decision-making. Employed demographic analysis and feature engineering to predict criminal behavior and establish a feedback loop for continuous model improvement, boosting prediction accuracy.",
+        "technologies": [
+          "React.js",
+          "Material-UI",
+          "Open Al",
+          "Django",
+          "SQLlite",
+          "Python",
+          "ML/DL Models"
+        ],
+        "start_date": null,
+        "end_date": null,
+        "link": null
+      }
+    ]
+  },
+  "REsumeDebanjan.pdf": {
+    "contact_info": {
+      "full_name": "DEBANJAN MONDAL",
+      "email": "debanjanmondalk2005@gmail.com",
+      "phone": "6289896305",
+      "location": "kolkata",
+      "linkedin": null
+    },
+    "education": [
+      {
+        "degree": "Bachelor in CSE",
+        "institution": "Sister Nivedita University",
+        "graduation_year": 2027,
+        "gpa": null,
+        "honors": null
+      }
+    ],
+    "work_experience": [],
+    "skills": {
+      "technical_skills": [
+        "React",
+        "Next.js",
+        "Node.js",
+        "Express",
+        "C++",
+        "Serverless Architecture",
+        "PostgreSQL",
+        "Prisma",
+        "Docker",
+        "AWS",
+        "JavaScript",
+        "C"
+      ],
+      "soft_skills": [
+        "Communication skills"
+      ],
+      "certifications": null
+    },
+    "summary": "I'm a second-year undergrad passionate about full stack development and open source. My expertise spans Next.js, the MERN stack, MySQL, PostgreSQL, AWS, and Docker. Driven by curiosity and a proactive mindset, I build innovative and scalable web applications.",
+    "projects": [
+      {
+        "name": "BLOG APP",
+        "description": "I built a Blog App using React and integrated ZOD validation by deploying my own npm package. The app includes signup and signin routes, allowing users to upload their own blog posts.",
+        "technologies": [
+          "MERN"
+        ],
+        "start_date": null,
+        "end_date": null,
+        "link": "https://blog-app-fullstack-gamma.vercel.app/signup"
+      },
+      {
+        "name": "CONFO Video Conferencing App",
+        "description": "I built CONFO, a video conferencing app using Next.js and TypeScript, integrating Clerk for authentication and getstream for real-time functionality. The app includes features such as starting, scheduling, and recording meetings, giving users full control over their online interactions.",
+        "technologies": [
+          "Next.js",
+          "TypeScript",
+          "Clerk",
+          "getstream",
+          "shadcn",
+          "Tailwind CSS"
+        ],
+        "start_date": null,
+        "end_date": null,
+        "link": "https://confo.vercel.app/"
+      },
+      {
+        "name": "TRADE STRATEGY",
+        "description": "Developed a simple application that provides the market prices of BTC and SOL in INR and USD. The app also calculates potential profit from reselling in different currencies (USD to INR and vice versa).",
+        "technologies": [
+          "Typescript"
+        ],
+        "start_date": null,
+        "end_date": null,
+        "link": "https://github.com/Debanjannnn/TRADE-STRATEGY"
+      }
+    ]
+  }
+}

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Resume Analysis</title>
+    <title>Multi-Resume Analysis</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -36,7 +36,7 @@
             background-color: #0056b3;
             transform: translateY(-2px);
         }
-        #selectedFileName {
+        #selectedFiles {
             margin-top: 15px;
             font-style: italic;
             color: #666;
@@ -77,84 +77,144 @@
         .success {
             color: #28a745;
         }
+        #fileList {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 15px;
+            gap: 10px;
+        }
+        .file-chip {
+            background-color: #e9ecef;
+            padding: 5px 10px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .remove-file {
+            color: #dc3545;
+            cursor: pointer;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
     <div class="upload-container">
-        <h1>Resume Analysis Tool</h1>
+        <h1>Multi-Resume Analysis Tool</h1>
         
-        <input type="file" id="fileInput" accept=".pdf">
+        <input type="file" id="fileInput" accept=".pdf" multiple>
         <label for="fileInput" class="file-label">
-            Choose Resume PDF
+            Choose Resume PDFs
         </label>
         
-        <div id="selectedFileName"></div>
+        <div id="selectedFiles"></div>
+        <div id="fileList"></div>
         
-        <button id="uploadButton" disabled>Analyze Resume</button>
+        <button id="uploadButton" disabled>Analyze Resumes</button>
         
         <div id="status"></div>
         
         <pre id="analysisOutput"></pre>
     </div>
-
     <script>
         const fileInput = document.getElementById('fileInput');
-        const selectedFileName = document.getElementById('selectedFileName');
+        const selectedFiles = document.getElementById('selectedFiles');
+        const fileList = document.getElementById('fileList');
         const uploadButton = document.getElementById('uploadButton');
         const statusDiv = document.getElementById('status');
         const analysisOutput = document.getElementById('analysisOutput');
-
-        let selectedFile = null;
+        
+        let selectedFilesList = [];
 
         fileInput.addEventListener('change', function(event) {
-            selectedFile = event.target.files[0];
-            if (selectedFile) {
-                selectedFileName.textContent = `Selected file: ${selectedFile.name}`;
-                uploadButton.disabled = false;
-            }
+            // Convert FileList to Array and filter out non-PDF files
+            const newFiles = Array.from(event.target.files)
+                .filter(file => file.name.toLowerCase().endsWith('.pdf'));
+            
+            // Add new files, avoiding duplicates
+            newFiles.forEach(file => {
+                if (!selectedFilesList.some(f => f.name === file.name)) {
+                    selectedFilesList.push(file);
+                }
+            });
+
+            updateFileList();
         });
 
+        function updateFileList() {
+            // Clear existing file list
+            fileList.innerHTML = '';
+            
+            // Populate file list with chips
+            selectedFilesList.forEach((file, index) => {
+                const fileChip = document.createElement('div');
+                fileChip.className = 'file-chip';
+                
+                const fileNameSpan = document.createElement('span');
+                fileNameSpan.textContent = file.name;
+                
+                const removeSpan = document.createElement('span');
+                removeSpan.textContent = '×';
+                removeSpan.className = 'remove-file';
+                removeSpan.onclick = () => {
+                    selectedFilesList.splice(index, 1);
+                    updateFileList();
+                };
+                
+                fileChip.appendChild(fileNameSpan);
+                fileChip.appendChild(removeSpan);
+                fileList.appendChild(fileChip);
+            });
+
+            // Update button state and selected files text
+            uploadButton.disabled = selectedFilesList.length === 0;
+            selectedFiles.textContent = `${selectedFilesList.length} file(s) selected`;
+        }
+
         uploadButton.addEventListener('click', async () => {
-            if (!selectedFile) {
-                statusDiv.textContent = 'Please select a PDF file first.';
+            if (selectedFilesList.length === 0) {
+                statusDiv.textContent = 'Please select PDF file(s) first.';
                 statusDiv.className = 'error';
                 return;
             }
-
+            
             // Reset previous state
             statusDiv.textContent = 'Uploading and Analyzing...';
             statusDiv.className = '';
             analysisOutput.textContent = '';
             uploadButton.disabled = true;
-
+            
             try {
-                // Establish WebSocket connection to resume analysis endpoint
-                const socket = new WebSocket('ws://localhost:8000/resume-analyze');
-
+                // Establish WebSocket connection to multi-upload endpoint
+                const socket = new WebSocket('wss://rbd6wn7l-8000.inc1.devtunnels.ms/multi-upload');
+                
                 socket.onopen = async () => {
-                    // Send file metadata
+                    // Send number of files
                     socket.send(JSON.stringify({
-                        filename: selectedFile.name
+                        num_files: selectedFilesList.length
                     }));
-
-                    // Read and send file in chunks
-                    const reader = new FileReader();
-                    reader.onload = async (e) => {
-                        const arrayBuffer = e.target.result;
+                    
+                    // Process each file
+                    for (const file of selectedFilesList) {
+                        // Send file metadata
+                        socket.send(JSON.stringify({
+                            filename: file.name
+                        }));
+                        
+                        // Read and send file in chunks
+                        const arrayBuffer = await file.arrayBuffer();
                         const chunkSize = 1024; // 1KB chunks
-
                         for (let i = 0; i < arrayBuffer.byteLength; i += chunkSize) {
                             const chunk = arrayBuffer.slice(i, i + chunkSize);
                             socket.send(chunk);
                         }
-
+                        
                         // Send EOF signal
                         socket.send(new Uint8Array([69, 79, 70])); // 'EOF' in bytes
-                    };
-
-                    reader.readAsArrayBuffer(selectedFile);
+                    }
                 };
-
+                
                 socket.onmessage = (event) => {
                     try {
                         // Attempt to parse and prettify JSON
@@ -167,19 +227,19 @@
                         // If JSON parsing fails, show raw data
                         analysisOutput.textContent = event.data;
                         statusDiv.textContent = 'Analysis received (non-JSON format)';
-                        console.log(event.data)
+                        console.log(event.data);
                         statusDiv.className = 'error';
                     }
                     
                     uploadButton.disabled = false;
                 };
-
+                
                 socket.onerror = (error) => {
                     statusDiv.textContent = `Error: ${error}`;
                     statusDiv.className = 'error';
                     uploadButton.disabled = false;
                 };
-
+                
                 socket.onclose = () => {
                     if (statusDiv.textContent === 'Uploading and Analyzing...') {
                         statusDiv.textContent = 'Connection closed unexpectedly';
@@ -187,7 +247,6 @@
                     }
                     uploadButton.disabled = false;
                 };
-
             } catch (error) {
                 statusDiv.textContent = `Error: ${error.message}`;
                 statusDiv.className = 'error';
