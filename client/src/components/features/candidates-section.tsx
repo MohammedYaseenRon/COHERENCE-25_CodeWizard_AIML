@@ -1,41 +1,4 @@
-// "use client"
-
-// import Link from "next/link"
-// import type { Candidate } from "@/types"
-// import { CandidateCard } from "./candidate-card"
-
-// interface CandidatesSectionProps {
-//   candidates: Candidate[]
-//   onSaveCandidate: (id: string) => void
-// }
-
-// export function CandidatesSection({ candidates, onSaveCandidate }: CandidatesSectionProps) {
-//   return (
-//     <div className="bg-[#1a2235] rounded-lg p-6">
-//       <div className="flex items-center justify-between mb-6">
-//         <h3 className="text-xl font-bold">Top Matching Candidates</h3>
-//         <Link href="#" className="text-sm bg-gray-800 px-3 py-1 rounded-md hover:bg-gray-700 transition-colors">
-//           View All
-//         </Link>
-//       </div>
-
-//       {candidates.length > 0 ? (
-//         <div className="space-y-4">
-//           {candidates.map((candidate, index) => (
-//             <CandidateCard key={candidate.id} candidate={candidate} index={index} onSave={onSaveCandidate} />
-//           ))}
-//         </div>
-//       ) : (
-//         <div className="text-center py-8 text-gray-400">
-//           <p>No matching candidates found.</p>
-//           <p className="text-sm mt-2">Try adjusting your filters or scan a resume.</p>
-//         </div>
-//       )}
-//     </div>
-//   )
-// }
-
-import React from 'react'
+import React, { useState } from 'react'
 
 interface Candidate {
   match_percentage?: number
@@ -76,11 +39,13 @@ interface Candidate {
   }
   saved?: boolean
   rank?: number
+  selected?: boolean
 }
 
 interface CandidatesSectionProps {
   candidates: Candidate[]
   onSaveCandidate: (id: string) => void
+  onSendMail?: (selectedCandidates: Candidate[]) => void
   analysisResults?: any
   rankingResults?: any
 }
@@ -88,13 +53,14 @@ interface CandidatesSectionProps {
 export const CandidatesSection: React.FC<CandidatesSectionProps> = ({ 
   candidates, 
   onSaveCandidate, 
+  onSendMail,
   analysisResults,
   rankingResults 
 }) => {
+  const [selectedCandidates, setSelectedCandidates] = useState<Candidate[]>([])
+  const [isAllSelected, setIsAllSelected] = useState(false)
+
   const renderCandidateDetails = (candidate: Candidate) => {
-    // Try to get additional details from analysis results
-    // const candidateAnalysis = analysisResults?.[candidate.name];
-    
     return (
       <div className="space-y-2">
         {candidate.rank && (
@@ -118,17 +84,57 @@ export const CandidatesSection: React.FC<CandidatesSectionProps> = ({
     )
   }
 
+  const handleSelectCandidate = (candidate: Candidate) => {
+    setSelectedCandidates(prev => 
+      prev.some(c => c.filename === candidate.filename)
+        ? prev.filter(c => c.filename !== candidate.filename)
+        : [...prev, candidate]
+    )
+  }
+
+  const handleSelectAll = () => {
+    setIsAllSelected(!isAllSelected)
+    setSelectedCandidates(!isAllSelected ? [...candidates] : [])
+  }
+
+  const handleSendMail = () => {
+    if (onSendMail && selectedCandidates.length > 0) {
+      onSendMail(selectedCandidates)
+    }
+  }
+
   return (
     <div className="bg-[#1b2537] p-6 rounded-lg">
       <div className="flex justify-between items-center mb-4">
-        <h3 className="text-lg font-semibold">
-          Top Matching Candidates 
-          {rankingResults?.ranking_method && 
-            ` (${rankingResults.ranking_method})`}
-        </h3>
-        <span className="text-sm text-gray-400">
-          {candidates.length} Candidates
-        </span>
+        <div className="flex items-center space-x-4">
+          <h3 className="text-lg font-semibold">
+            Top Matching Candidates 
+            {rankingResults?.ranking_method && 
+              ` (${rankingResults.ranking_method})`}
+          </h3>
+          <label className="flex items-center space-x-2 text-sm">
+            <input 
+              type="checkbox"
+              checked={isAllSelected}
+              onChange={handleSelectAll}
+              className="form-checkbox h-8 w-8 text-blue-600 bg-gray-800 border-gray-700 rounded"
+            />
+            <span>Select All</span>
+          </label>
+        </div>
+        <div className="flex items-center space-x-4">
+          <span className="text-sm text-gray-400">
+            {candidates.length} Candidates
+          </span>
+          {selectedCandidates.length > 0 && (
+            <button 
+              onClick={handleSendMail}
+              className="bg-green-600 hover:bg-green-700 text-white py-1 px-3 rounded text-sm"
+            >
+              Send Mail ({selectedCandidates.length})
+            </button>
+          )}
+        </div>
       </div>
 
       {candidates.length === 0 ? (
@@ -142,9 +148,17 @@ export const CandidatesSection: React.FC<CandidatesSectionProps> = ({
               key={candidate.filename} 
               className="bg-[#2c3646] p-4 rounded-lg flex justify-between items-center"
             >
-              <div>
-                <div className="font-semibold">{candidate.full_resume?.contact_info?.full_name}</div>
-                {renderCandidateDetails(candidate)}
+              <div className="flex items-center space-x-4">
+                <input 
+                  type="checkbox"
+                  checked={selectedCandidates.some(c => c.filename === candidate.filename)}
+                  onChange={() => handleSelectCandidate(candidate)}
+                  className="form-checkbox h-4 w-4 text-blue-600 bg-gray-800 border-gray-700 rounded"
+                />
+                <div>
+                  <div className="font-semibold">{candidate.full_resume?.contact_info?.full_name}</div>
+                  {renderCandidateDetails(candidate)}
+                </div>
               </div>
               
               <button 

@@ -1,0 +1,11 @@
+{
+  "New Resume.pdf": {
+    "error": "Error processing file: 'NoneType' object has no attribute 'upper'"
+  },
+  "My Resume.pdf": {
+    "error": "Error processing file: 'NoneType' object has no attribute 'upper'"
+  },
+  "Resume Mohammed.pdf": {
+    "error": "Error processing file: 'NoneType' object has no attribute 'upper'"
+  }
+}

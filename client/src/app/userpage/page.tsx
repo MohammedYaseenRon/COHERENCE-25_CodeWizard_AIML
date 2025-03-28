@@ -159,7 +159,7 @@ export default function ResumeScannerApp() {
     setUploadStatus('Ranking resumes...');
 
     try {
-      const response = await fetch('https://rbd6wn7l-8000.inc1.devtunnels.ms/rank-resumes', {
+      const response = await fetch('https://v7wv74fx-8000.inc1.devtunnels.ms/rank-resumes', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
