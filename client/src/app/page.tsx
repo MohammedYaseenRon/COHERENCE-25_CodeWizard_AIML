@@ -95,7 +95,7 @@ export default function ResumeScannerApp() {
   return (
     <div className="flex h-screen bg-[#0f1520] text-white">
       {/* Sidebar */}
-      <Sidebar activeTab={activeTab} onTabChange={setActiveTab} />
+      <Sidebar  />
 
       {/* Main content */}
       <div className="flex-1 overflow-auto">
