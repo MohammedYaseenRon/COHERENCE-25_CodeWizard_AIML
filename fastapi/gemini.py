@@ -12,6 +12,7 @@ from pydantic import BaseModel, Field
 from fastapi.middleware.cors import CORSMiddleware
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
+from ranker import ResumeRankingService
 
 # Load environment variables
 load_dotenv()
@@ -27,7 +28,7 @@ app.add_middleware(
 
 class JobDescriptionRequest(BaseModel):
     job_description: str
-    resumes_file: str = 'resume_analysis_results.json'
+    resumes_file: str = "resume_analysis_results.json"
 
 class ContactInfo(BaseModel):
     full_name: str = Field(..., description="Full name of the candidate")
@@ -326,6 +327,40 @@ class ResumeAnalysisServer:
             except Exception as e:
                 print(f"Unexpected error: {e}")
                 await websocket.send_text(f"Unexpected error: {str(e)}")
+
+        @self.app.post("/rank-resumes")
+        async def rank_resumes(request: JobDescriptionRequest):
+            """
+            Endpoint to rank resumes against a job description
+            """
+            ranking_service = ResumeRankingService()
+            # Load resumes from file
+            resumes = ranking_service.load_resumes(request.resumes_file)
+            if not resumes:
+                resumes = "resume_analysis_results.json"
+
+            # First try Gemini-based ranking
+            try:
+                gemini_ranked_resumes = await ranking_service.rank_resumes_with_gemini(
+                    request.job_description, 
+                    resumes
+                )
+                return {
+                    "ranking_method": "Gemini AI",
+                    "ranked_resumes": gemini_ranked_resumes
+                }
+            except Exception as e:
+                # Fallback to cosine similarity if Gemini ranking fails
+                print(f"Gemini ranking failed: {e}. Falling back to cosine similarity.")
+                cosine_ranked_resumes = ranking_service.rank_resumes_with_cosine_similarity(
+                    request.job_description, 
+                    resumes
+                )
+                return {
+                    "ranking_method": "Cosine Similarity",
+                    "ranked_resumes": cosine_ranked_resumes
+                }
+
 
     def rank_resumes(job_description, resumes):
         # Combine job description with resumes
