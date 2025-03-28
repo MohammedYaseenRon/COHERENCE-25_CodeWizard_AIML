@@ -3,7 +3,7 @@ import os
 import pathlib
 import websockets
 import tempfile
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect,UploadFile, File, HTTPException
 from google import genai
 from dotenv import load_dotenv
 import json
@@ -12,6 +12,11 @@ from pydantic import BaseModel, Field
 from fastapi.middleware.cors import CORSMiddleware
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
+from fastapi.responses import JSONResponse
+import PyPDF2 
+import traceback
+
+
 
 # Load environment variables
 load_dotenv()
@@ -81,6 +86,18 @@ def clean_json_response(text: str) -> dict:
         text = text[:-3].strip()
     return json.loads(text)
 
+def extract_pdf_text(file_path):
+    try:
+        with open(file_path, 'rb') as file:
+            reader = PyPDF2.PdfReader(file)
+            text = ""
+            for page in reader.pages:
+                text += page.extract_text()
+            return text.strip()
+    except Exception as e:
+        print(f"PDF Text Extraction Error: {e}")
+        return None
+
 @app.websocket("/upload")
 async def websocket_endpoint(websocket: WebSocket):
     await websocket.accept()
@@ -135,6 +152,97 @@ async def websocket_endpoint(websocket: WebSocket):
         print(f"Unexpected error: {e}")
         await websocket.send_text(f"Unexpected error: {str(e)}")
 
+@app.post("/multi-upload")
+async def multi_file_upload(files: List[UploadFile] = File(...)):
+    """
+    HTTP endpoint to upload and analyze multiple resume PDFs.
+    Returns a JSON object with analysis results for each file.
+    """
+    if not files:
+        raise HTTPException(status_code=400, detail="No files provided")
+
+    # Dictionary to store analysis results
+    analysis_results: Dict[str, Dict] = {}
+
+    try:
+        # Initialize Gemini client
+        client = genai.Client(api_key=os.getenv("GOOGLE_API_KEY"))
+
+        # Process each uploaded file
+        for file in files:
+            filename = file.filename or f"uploaded_file_{id(file)}.pdf"
+            
+            # Save file to temporary location
+            with tempfile.NamedTemporaryFile(delete=False, suffix='.pdf') as temp_file:
+                # Write file contents
+                temp_file.write(await file.read())
+                temp_file_path = pathlib.Path(temp_file.name)
+
+            try:
+                # First, validate PDF text extraction
+                pdf_text = extract_pdf_text(temp_file_path)
+                if not pdf_text:
+                    analysis_results[filename] = {
+                        "error": "Unable to extract text from PDF. File might be scanned, encrypted, or corrupted."
+                    }
+                    os.unlink(temp_file_path)
+                    continue
+
+                # Upload file to Gemini
+                sample_file = client.files.upload(file=temp_file_path)
+
+                # Detailed prompt for comprehensive analysis
+                prompt = """
+                Perform a COMPREHENSIVE analysis of this resume.
+                CRITICAL INSTRUCTIONS:
+                1. Extract EVERY single detail from the document
+                2. Do NOT skip or summarize - provide FULL information
+                3. If any section is incomplete, explicitly state what's missing
+                4. Ensure maximum detail and precision
+                
+                Extraction Depth:
+                - Contact Info: Full details
+                - Education: Complete academic history
+                - Work Experience: Detailed role descriptions
+                - Skills: Exhaustive technical and soft skills
+                - Projects: All notable projects
+                - Certifications: Complete list
+                """
+
+                # Generate content with JSON schema
+                response = client.models.generate_content(
+                    model='gemini-2.0-flash',
+                    contents=[sample_file, prompt],
+                    config={
+                        'response_mime_type': 'application/json',
+                        'response_schema': ResumeProfile,
+                    },
+                )
+
+                # Store analysis result
+                analysis_results[filename] = response.parsed.model_dump()
+
+            except Exception as e:
+                # Detailed error logging
+                error_details = {
+                    "error": f"Error processing file: {str(e)}",
+                    "traceback": traceback.format_exc()
+                }
+                print(f"Error processing {filename}: {error_details}")
+                analysis_results[filename] = error_details
+
+            finally:
+                # Clean up temporary file
+                try:
+                    os.unlink(temp_file_path)
+                except Exception:
+                    pass
+
+        # Return compiled results
+        return JSONResponse(content=analysis_results)
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Unexpected error: {str(e)}")
 
 class ResumeAnalysisServer:
     def __init__(self):
