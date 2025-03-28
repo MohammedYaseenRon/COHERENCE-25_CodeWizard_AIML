@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import Sidebar from "@/components/layout/sidebar"
+
 import { Header } from "@/components/layout/header"
 import { FilterSection } from "@/components/features/filter-section"
 import { ResumeScanner } from "@/components/features/resume-scanner"
@@ -9,7 +9,10 @@ import { CandidatesSection } from "@/components/features/candidates-section"
 import { JobDescriptionSection } from "@/components/features/job-description"
 import type { Candidate, FilterOptions } from "@/types"
 import { getCandidates, scanResume, saveCandidate } from "@/lib/data-service"
-
+import dynamic from "next/dynamic";
+const Sidebar = dynamic(() => import("@/components/layout/sidebar"), {
+  ssr: false,
+});
 
 export default function ResumeScannerApp() {
   // App state
@@ -18,6 +21,7 @@ export default function ResumeScannerApp() {
   const [filterTab, setFilterTab] = useState("matches")
   const [isScanning, setIsScanning] = useState(false)
   const [isAnalyzing, setIsAnalyzing] = useState(false)
+  const [isSidebarExpanded, setIsSidebarExpanded] = useState(true)
 
   // Data state
   const [candidates, setCandidates] = useState<Candidate[]>([])
@@ -95,10 +99,20 @@ export default function ResumeScannerApp() {
   return (
     <div className="flex h-screen bg-[#0f1520] text-white">
       {/* Sidebar */}
-      <Sidebar activeTab={activeTab} onTabChange={setActiveTab} />
+      <Sidebar 
+        activeTab={activeTab} 
+        onTabChange={setActiveTab} 
+        isExpanded={isSidebarExpanded}
+        onToggleExpand={() => setIsSidebarExpanded(!isSidebarExpanded)}
+      />
 
-      {/* Main content */}
-      <div className="flex-1 overflow-auto">
+      {/* Main content with dynamic margin based on sidebar width */}
+      <div 
+        className={`
+          flex-1 overflow-auto transition-all duration-300
+          ${isSidebarExpanded ? 'ml-64' : 'ml-16'}
+        `}
+      >
         {/* Header */}
         <Header userInitials="JS" />
 
@@ -137,4 +151,3 @@ export default function ResumeScannerApp() {
     </div>
   )
 }
-
