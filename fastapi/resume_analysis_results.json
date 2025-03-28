@@ -7,5 +7,14 @@
   },
   "Resume Mohammed.pdf": {
     "error": "Error processing file: 'NoneType' object has no attribute 'upper'"
+  },
+  "Resume-pranav-kulkarni.pdf": {
+    "error": "Error processing file: 'NoneType' object has no attribute 'upper'"
+  },
+  "template.cv.pdf": {
+    "error": "Error processing file: 'NoneType' object has no attribute 'upper'"
+  },
+  "Yaseenron.pdf": {
+    "error": "Error processing file: 'NoneType' object has no attribute 'upper'"
   }
 }
