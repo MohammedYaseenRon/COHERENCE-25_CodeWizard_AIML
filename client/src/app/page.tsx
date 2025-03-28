@@ -153,6 +153,8 @@
 // }
 
 "use client"
+import LandingPage from "@/components/landing-page"
+import { ScrollIndicator } from "@/components/scroll-indicator"
 
 import { useState, useEffect, useCallback } from "react"
 
@@ -446,3 +448,4 @@ export default function ResumeScannerApp() {
     </div>
   )
 }
+
