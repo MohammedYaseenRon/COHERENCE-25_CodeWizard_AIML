@@ -38,10 +38,42 @@
 import React from 'react'
 
 interface Candidate {
-  id: string
-  name: string
-  skills?: string[]
-  experience?: string
+  match_percentage?: number
+  matching_skills?: string[]
+  gaps?: string[]
+  reasoning?: string
+  filename?: string
+  full_resume?: {
+    contact_info?: {
+      full_name?: string
+      email?: string
+      phone?: string
+      location?: string | null
+      linkedin?: string | null
+    }
+    education?: Array<{
+      degree?: string
+      institution?: string
+      graduation_year?: number
+      gpa?: number
+      honors?: string | null
+    }>
+    work_experience?: Array<{
+      company?: string
+      job_title?: string
+      start_date?: string
+      end_date?: string
+      responsibilities?: string[]
+      technologies?: string[] | null
+    }>
+    skills?: {
+      technical_skills?: string[]
+      soft_skills?: string[] | null
+      certifications?: string[] | null
+    }
+    summary?: string
+    projects?: string[] | null
+  }
   saved?: boolean
   rank?: number
 }
@@ -61,7 +93,7 @@ export const CandidatesSection: React.FC<CandidatesSectionProps> = ({
 }) => {
   const renderCandidateDetails = (candidate: Candidate) => {
     // Try to get additional details from analysis results
-    const candidateAnalysis = analysisResults?.[candidate.name];
+    // const candidateAnalysis = analysisResults?.[candidate.name];
     
     return (
       <div className="space-y-2">
@@ -71,15 +103,15 @@ export const CandidatesSection: React.FC<CandidatesSectionProps> = ({
           </div>
         )}
         
-        {candidateAnalysis?.contact_info && (
+        {candidate.full_resume?.contact_info?.phone && (
           <div className="text-xs text-gray-400">
-            <strong>Contact:</strong> {candidateAnalysis.contact_info.email}
+            <strong>Contact:</strong> {candidate.full_resume.contact_info.phone}
           </div>
         )}
         
-        {candidate.skills && (
+        {candidate.full_resume?.skills?.technical_skills && (
           <div className="text-xs">
-            <strong>Skills:</strong> {candidate.skills.join(', ')}
+            <strong>Skills:</strong> {candidate.full_resume?.skills?.technical_skills.join(', ')}
           </div>
         )}
       </div>
@@ -107,19 +139,19 @@ export const CandidatesSection: React.FC<CandidatesSectionProps> = ({
         <ul className="space-y-4">
           {candidates.map((candidate) => (
             <li 
-              key={candidate.id} 
+              key={candidate.filename} 
               className="bg-[#2c3646] p-4 rounded-lg flex justify-between items-center"
             >
               <div>
-                <div className="font-semibold">{candidate.name}</div>
+                <div className="font-semibold">{candidate.full_resume?.contact_info?.full_name}</div>
                 {renderCandidateDetails(candidate)}
               </div>
               
               <button 
-                onClick={() => onSaveCandidate(candidate.id)}
+                onClick={() => onSaveCandidate(candidate.filename || '')}
                 className={`
                   py-1 px-3 rounded text-sm
-                  ${candidate.saved 
+                  ${candidate.saved
                     ? 'bg-green-600 hover:bg-green-700' 
                     : 'bg-blue-600 hover:bg-blue-700'
                   }

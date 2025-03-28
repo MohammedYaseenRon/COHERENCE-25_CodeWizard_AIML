@@ -28,6 +28,7 @@ class ResumeRankingService:
     async def rank_resumes_with_gemini(self, job_description, resumes):
         """
         Rank resumes using Gemini's advanced matching capabilities
+        Includes full resume analysis for each ranked resume
         """
         ranked_resumes = []
 
@@ -74,7 +75,11 @@ class ResumeRankingService:
 
                 # Parse Gemini's response
                 match_data = json.loads(response.text)
+                
+                # Add full resume data
                 match_data['filename'] = filename
+                match_data['full_resume'] = resume_data
+                
                 ranked_resumes.append(match_data)
 
             except Exception as e:
@@ -82,7 +87,6 @@ class ResumeRankingService:
 
         # Sort resumes by match percentage in descending order
         return sorted(ranked_resumes, key=lambda x: x.get('match_percentage', 0), reverse=True)
-
     def _convert_resume_to_text(self, resume_data):
         if resume_data is None:
             return ""
