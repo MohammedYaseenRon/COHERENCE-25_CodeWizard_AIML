@@ -7,7 +7,7 @@ from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from google import genai
 from dotenv import load_dotenv
 import json
-from typing import List, Optional
+from typing import List, Optional, Dict
 from pydantic import BaseModel, Field
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -212,6 +212,90 @@ class ResumeAnalysisServer:
                 finally:
                     # Clean up temporary file
                     os.unlink(temp_file.name)
+            
+            except WebSocketDisconnect:
+                print("WebSocket connection closed")
+            except Exception as e:
+                print(f"Unexpected error: {e}")
+                await websocket.send_text(f"Unexpected error: {str(e)}")
+
+        @self.app.websocket("/multi-upload")
+        async def multi_file_upload_endpoint(websocket: WebSocket):
+            await websocket.accept()
+            
+            try:
+                # Dictionary to store results for multiple files
+                analysis_results: Dict[str, Dict] = {}
+                
+                # Receive initial metadata about file upload
+                file_metadata = await websocket.receive_json()
+                num_files = file_metadata.get('num_files', 1)
+                
+                # Process multiple files
+                for _ in range(num_files):
+                    # Receive file metadata for each file
+                    current_file_metadata = await websocket.receive_json()
+                    filename = current_file_metadata.get('filename', f'uploaded_file_{_}.pdf')
+                    
+                    # Create a temporary file to save the uploaded PDF
+                    with tempfile.NamedTemporaryFile(delete=False, suffix='.pdf') as temp_file:
+                        # Receive file chunks
+                        while True:
+                            file_chunk = await websocket.receive_bytes()
+                            if file_chunk == b'EOF':
+                                break
+                            temp_file.write(file_chunk)
+                    
+                    try:
+                        # Upload file to Gemini
+                        client = genai.Client(api_key=os.getenv("GOOGLE_API_KEY"))
+                        file_path = pathlib.Path(temp_file.name)
+                        
+                        # Upload the file to Gemini
+                        sample_file = client.files.upload(file=file_path)
+                        
+                        # Detailed prompt for comprehensive analysis
+                        prompt = """
+                        Perform a COMPREHENSIVE analysis of this resume.
+                        CRITICAL INSTRUCTIONS:
+                        1. Extract EVERY single detail from the document
+                        2. Do NOT skip or summarize - provide FULL information
+                        3. If any section is incomplete, explicitly state what's missing
+                        4. Ensure maximum detail and precision
+                        
+                        Extraction Depth:
+                        - Contact Info: Full details
+                        - Education: Complete academic history
+                        - Work Experience: Detailed role descriptions
+                        - Skills: Exhaustive technical and soft skills
+                        - Projects: All notable projects
+                        - Certifications: Complete list
+                        """
+                        
+                        # Generate content with JSON schema
+                        response = client.models.generate_content(
+                            model='gemini-2.0-flash',
+                            contents=[sample_file, prompt],
+                            config={
+                                'response_mime_type': 'application/json',
+                                'response_schema': ResumeProfile,
+                            },
+                        )
+                        
+                        # Store analysis results with filename as key
+                        analysis_results[filename] = response.parsed.model_dump()
+                    
+                    except Exception as e:
+                        analysis_results[filename] = {
+                            "error": f"Error processing file: {str(e)}"
+                        }
+                    
+                    finally:
+                        # Clean up temporary file
+                        os.unlink(temp_file.name)
+                
+                # Send compiled results
+                await websocket.send_text(json.dumps(analysis_results, indent=2))
             
             except WebSocketDisconnect:
                 print("WebSocket connection closed")
