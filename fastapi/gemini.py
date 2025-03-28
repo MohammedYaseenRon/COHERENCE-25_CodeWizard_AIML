@@ -15,14 +15,6 @@ from sklearn.metrics.pairwise import cosine_similarity
 
 # Load environment variables
 load_dotenv()
-
-# origins = [
-#     "http://localhost.tiangolo.com",
-#     "https://localhost.tiangolo.com",
-#     "http://localhost",
-#     "http://localhost:8080",
-# ]
-
 app = FastAPI()
 
 app.add_middleware(
