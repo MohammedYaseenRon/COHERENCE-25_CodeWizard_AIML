@@ -13,6 +13,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 from ranker import ResumeRankingService
+from helpers.FileHandler import FileUploadHandler
+import aiofiles
 
 # Load environment variables
 load_dotenv()
@@ -248,6 +250,7 @@ class ResumeAnalysisServer:
         @self.app.websocket("/multi-upload")
         async def multi_file_upload_endpoint(websocket: WebSocket):
             await websocket.accept()
+            file_handler = FileUploadHandler()
             
             try:
                 # Receive initial metadata about file upload
@@ -260,19 +263,22 @@ class ResumeAnalysisServer:
                     current_file_metadata = await websocket.receive_json()
                     filename = current_file_metadata.get('filename', f'uploaded_file_{_}.pdf')
                     
-                    # Create a temporary file to save the uploaded PDF
-                    with tempfile.NamedTemporaryFile(delete=False, suffix='.pdf') as temp_file:
+                    # Prepare file path
+                    destination_path, safe_filename = await file_handler.save_uploaded_file(filename)
+                    
+                    # Asynchronously save the file
+                    async with aiofiles.open(destination_path, 'wb') as dest_file:
                         # Receive file chunks
                         while True:
                             file_chunk = await websocket.receive_bytes()
                             if file_chunk == b'EOF':
                                 break
-                            temp_file.write(file_chunk)
+                            await dest_file.write(file_chunk)
                     
                     try:
                         # Upload file to Gemini
                         client = genai.Client(api_key=os.getenv("GOOGLE_API_KEY"))
-                        file_path = pathlib.Path(temp_file.name)
+                        file_path = pathlib.Path(destination_path)
                         
                         # Upload the file to Gemini
                         sample_file = client.files.upload(file=file_path)
@@ -307,17 +313,13 @@ class ResumeAnalysisServer:
                         
                         # Get parsed data and update results
                         resume_data = response.parsed.model_dump()
-                        self.update_results(filename, resume_data)
+                        self.update_results(safe_filename, resume_data)
                         
                     except Exception as e:
                         error_data = {
                             "error": f"Error processing file: {str(e)}"
                         }
-                        self.update_results(filename, error_data)
-                    
-                    finally:
-                        # Clean up temporary file
-                        os.unlink(temp_file.name)
+                        self.update_results(safe_filename, error_data)
                 
                 # Send compiled results
                 await websocket.send_text(json.dumps(self.analysis_results, indent=2))
