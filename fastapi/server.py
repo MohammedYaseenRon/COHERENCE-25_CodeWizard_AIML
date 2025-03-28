@@ -240,12 +240,8 @@ class ResumeAnalysisServer:
                     - Skills: Exhaustive technical and soft skills
                     - Projects: All notable projects
                     - Certifications: Complete list
-<<<<<<< HEAD:fastapi/server.py
                     - Achievements: All awards, publications, etc.
                     - Summary: A brief overview of the candidate's profile
-=======
-                    - Achievements: Complete list
->>>>>>> 511d1734b37d410c7abac1b5e97e8d6862e84ea0:fastapi/gemini.py
                     """
                     
                     # Generate content with JSON schema
@@ -285,10 +281,11 @@ class ResumeAnalysisServer:
                 num_files = file_metadata.get('num_files', 1)
                 
                 # Process multiple files
-                for _ in range(num_files):
+                for i in range(num_files):
+                    await websocket.send_text(f"Processing file {i + 1} of {num_files}")
                     # Receive file metadata for each file
                     current_file_metadata = await websocket.receive_json()
-                    filename = current_file_metadata.get('filename', f'uploaded_file_{_}.pdf')
+                    filename = current_file_metadata.get('filename', f'uploaded_file_{i}.pdf')
                     
                     # Prepare file path
                     destination_path, safe_filename = await file_handler.save_uploaded_file(filename)
