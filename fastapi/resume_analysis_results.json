@@ -94,7 +94,19 @@
         "end_date": null,
         "link": null
       }
-    ]
+    ],
+    "achievements": {
+      "professional_awards": [
+        "GNEC 2024/3rd prize Hosted by GNEC 2024",
+        "Codeathon (DSA) /3rd prize Vidyavardhini College, Vasai 2024"
+      ],
+      "publications": null,
+      "conference_presentations": null,
+      "patents": null,
+      "volunteer_work": null,
+      "leadership_roles": null,
+      "community_involvement": null
+    }
   },
   "My Resume.pdf": {
     "contact_info": {
@@ -179,7 +191,8 @@
       "certifications": null
     },
     "summary": "UX Designer blending data-driven storytelling with unique design frameworks and product strategies to create intuitive, impactful user experiences.",
-    "projects": null
+    "projects": null,
+    "achievements": null
   },
   "Resume-pranav-kulkarni.pdf": {
     "contact_info": {

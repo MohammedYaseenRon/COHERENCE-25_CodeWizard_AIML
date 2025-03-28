@@ -55,6 +55,8 @@ coverage.xml
 # celery beat schedule file
 celerybeat-schedule
 
+resume_analysis_results.json
+
 # dotenv
 .env
 .env.*
