@@ -13,22 +13,21 @@ interface CandidateCardProps {
 
 export function CandidateCard({ candidate, index, onSave }: CandidateCardProps) {
     const getMatchVariant = (match: number) => {
-        if (match >= 90) return "default";      // Best match -> default
-        if (match >= 80) return "secondary";    // Good match -> secondary
+        if (match >= 90) return "success";      // Best match -> default
+        if (match >= 80) return "success";      // Good match -> green
         if (match >= 70) return "outline";      // Okay match -> outline
-        return "destructive";                   // Bad match -> destructive
-      };
-      
+        return "destructive";                   // Bad match -> red
+    };
 
-  return (
+    return (
     <motion.div 
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.1 }}
-      className="bg-[#0f1520] rounded-lg p-4"
+      className="bg-gray-900 rounded-lg p-4"
     >
       <div className="flex justify-between items-start mb-2">
-        <h4 className="font-bold">{candidate.name}</h4>
+        <h4 className="font-bold text-white">{candidate.name}</h4>
         <Badge variant={getMatchVariant(candidate.match)}>
           {candidate.match}% Match
         </Badge>
@@ -66,14 +65,14 @@ export function CandidateCard({ candidate, index, onSave }: CandidateCardProps) 
       <div className="flex justify-between mt-4">
         <button 
           className={`text-sm flex items-center ${
-            candidate.saved ? 'text-yellow-400' : 'text-blue-400 hover:text-blue-300'
+            candidate.saved ? 'text-yellow-400' : 'text-gray-300 hover:text-white'
           }`}
           onClick={() => onSave(candidate.id)}
         >
           <Star size={14} className={`mr-1 ${candidate.saved ? 'fill-yellow-400' : ''}`} />
           {candidate.saved ? 'Saved' : 'Save'}
         </button>
-        <button className="flex items-center bg-gray-800 text-sm px-3 py-1 rounded-md hover:bg-gray-700 transition-colors">
+        <button className="flex items-center bg-gray-800 text-white text-sm px-3 py-1 rounded-md hover:bg-gray-700 transition-colors">
           <FileText size={14} className="mr-1" />
           Download Resume
         </button>
