@@ -147,7 +147,7 @@ async def websocket_endpoint(websocket: WebSocket):
 class ResumeAnalysisServer:
     def __init__(self):
         load_dotenv()
-        self.app = FastAPI()
+        self.app = app
         self.setup_routes()
 
     def setup_routes(self):

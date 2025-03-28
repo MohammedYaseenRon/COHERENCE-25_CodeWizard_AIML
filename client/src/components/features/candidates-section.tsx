@@ -1,12 +1,12 @@
-"use client"
-
-import Link from "next/link"
-import type { Candidate } from "@/types"
-import { CandidateCard } from "./candidate-card"
+// candidates-section.tsx
+"use client";
+import Link from "next/link";
+import type { Candidate } from "@/types";
+import { CandidateCard } from "./candidate-card";
 
 interface CandidatesSectionProps {
-  candidates: Candidate[]
-  onSaveCandidate: (id: string) => void
+  candidates: Candidate[];
+  onSaveCandidate: (id: string) => void;
 }
 
 export function CandidatesSection({ candidates, onSaveCandidate }: CandidatesSectionProps) {
@@ -32,6 +32,5 @@ export function CandidatesSection({ candidates, onSaveCandidate }: CandidatesSec
         </div>
       )}
     </div>
-  )
+  );
 }
-

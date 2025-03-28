@@ -1,130 +1,160 @@
-"use client"
-
-import { useState, useEffect } from "react"
-
-import { Header } from "@/components/layout/header"
-import { FilterSection } from "@/components/features/filter-section"
-import { ResumeScanner } from "@/components/features/resume-scanner"
-import { CandidatesSection } from "@/components/features/candidates-section"
-import { JobDescriptionSection } from "@/components/features/job-description"
-import type { Candidate, FilterOptions } from "@/types"
-import { getCandidates, scanResume, saveCandidate } from "@/lib/data-service"
+// ResumeScannerApp.jsx
+"use client";
+import { useState, useEffect } from "react";
+import { Header } from "@/components/layout/header";
+import { FilterSection } from "@/components/features/filter-section";
+import { ResumeScanner } from "@/components/features/resume-scanner";
+import { CandidatesSection } from "@/components/features/candidates-section";
+import { JobDescriptionSection } from "@/components/features/job-description";
+import type { Candidate, FilterOptions } from "@/types";
 import dynamic from "next/dynamic";
+
 const Sidebar = dynamic(() => import("@/components/layout/sidebar"), {
   ssr: false,
 });
 
 export default function ResumeScannerApp() {
-  // App state
-  const [activeTab, setActiveTab] = useState("dashboard")
-  const [filterOpen, setFilterOpen] = useState(false)
-  const [filterTab, setFilterTab] = useState("matches")
-  const [isScanning, setIsScanning] = useState(false)
-  const [isAnalyzing, setIsAnalyzing] = useState(false)
-  const [isSidebarExpanded, setIsSidebarExpanded] = useState(true)
-
-  // Data state
-  const [candidates, setCandidates] = useState<Candidate[]>([])
+  const [activeTab, setActiveTab] = useState("dashboard");
+  const [filterOpen, setFilterOpen] = useState(false);
+  const [filterTab, setFilterTab] = useState("matches");
+  const [isScanning, setIsScanning] = useState(false);
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [isSidebarExpanded, setIsSidebarExpanded] = useState(true);
+  const [candidates, setCandidates] = useState<Candidate[]>([]);
   const [filterOptions, setFilterOptions] = useState<FilterOptions>({
     skills: [],
     experience: [],
     education: [],
-  })
+  });
 
-  // Load initial data
-  useEffect(() => {
-    const loadCandidates = async () => {
-      const data = await getCandidates()
-      setCandidates(data)
-    }
+  const WS_URL = "wss://rbd6wn7l-8000.inc1.devtunnels.ms";
 
-    loadCandidates()
-  }, [])
+  const connectWebSocket = (endpoint: string) => {
+    return new WebSocket(`${WS_URL}${endpoint}`);
+  };
 
-  // Handle filter changes
-  useEffect(() => {
-    const applyFilters = async () => {
-      const filtered = await getCandidates(filterOptions)
-      setCandidates(filtered)
-    }
+  // Transform ResumeProfile to Candidate
+  const mapResumeProfileToCandidate = (profile: any): Candidate => {
+    const yearsOfExperience = profile.work_experience.reduce((total: number, job: any) => {
+      const start = new Date(job.start_date);
+      const end = job.end_date ? new Date(job.end_date) : new Date();
+      const years = (end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24 * 365);
+      return total + years;
+    }, 0);
 
-    applyFilters()
-  }, [filterOptions])
+    return {
+      id: `${profile.contact_info.full_name}-${Date.now()}`, // Ensure unique ID
+      name: profile.contact_info.full_name || "Unknown",
+      years: Math.round(yearsOfExperience),
+      location: profile.contact_info.location || "Unknown",
+      education: profile.education[0]?.degree + " from " + profile.education[0]?.institution || "Not specified",
+      skills: profile.skills.technical_skills || [],
+      highlights: profile.work_experience.flatMap((job: any) => job.responsibilities) || [],
+      match: Math.floor(Math.random() * 31) + 70, // Mock match percentage
+      saved: false,
+      email: profile.contact_info.email || "Not provided", // Added from API
+      experience: Math.round(yearsOfExperience), // Assuming experience is same as years, adjust if needed
+      matchScore: Math.floor(Math.random() * 31) + 70, // Assuming matchScore is same as match, adjust if different
+    };
+  };
 
-  // Handle resume scanning
+  // Handle resume scanning with WebSocket
   const handleScanResume = async (resumeFiles: File[], jobDescription: string) => {
-    setIsScanning(true)
+    setIsScanning(true);
+    const ws = connectWebSocket("/multi-upload");
 
-    try {
-      // Process all files 
-      const results = await Promise.all(
-        resumeFiles.map(file => scanResume(file, jobDescription))
-      )
-      // Flatten results if needed
-      const flattenedResults = results.flat()
-      setCandidates(flattenedResults)
-    } catch (error) {
-      console.error("Error scanning resume:", error)
-      // In a real app, you would show an error message
-    } finally {
-      setIsScanning(false)
-    }
-  }
-  // Handle job description analysis
+    ws.onopen = async () => {
+      await ws.send(JSON.stringify({ num_files: resumeFiles.length }));
+
+      for (const file of resumeFiles) {
+        await ws.send(JSON.stringify({ filename: file.name }));
+        const reader = new FileReader();
+        reader.onload = async (e) => {
+          const arrayBuffer = e.target?.result as ArrayBuffer;
+          const chunkSize = 1024 * 1024;
+          const totalChunks = Math.ceil(arrayBuffer.byteLength / chunkSize);
+
+          for (let i = 0; i < totalChunks; i++) {
+            const start = i * chunkSize;
+            const end = Math.min(start + chunkSize, arrayBuffer.byteLength);
+            const chunk = arrayBuffer.slice(start, end);
+            ws.send(chunk);
+          }
+          ws.send("EOF");
+        };
+        reader.readAsArrayBuffer(file);
+      }
+    };
+
+    ws.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      const results = Object.values(data).map((result: any) =>
+        mapResumeProfileToCandidate(result)
+      );
+      setCandidates(results);
+      setIsScanning(false);
+      ws.close();
+    };
+
+    ws.onerror = (error) => {
+      console.error("WebSocket error:", error);
+      setIsScanning(false);
+    };
+  };
+
+  // Handle job description analysis (mock for now, adjust as needed)
   const handleAnalyzeJob = async (description: string) => {
-    setIsAnalyzing(true)
+    setIsAnalyzing(true);
+    const ws = connectWebSocket("/resume-analyze");
 
-    try {
-      const results = await scanResume(null, description)
-      setCandidates(results)
-    } catch (error) {
-      console.error("Error analyzing job:", error)
-      // In a real app, you would show an error message
-    } finally {
-      setIsAnalyzing(false)
-    }
-  }
+    ws.onopen = () => {
+      ws.send(JSON.stringify({ filename: "job_description.txt" }));
+      ws.send(description);
+      ws.send("EOF");
+    };
 
-  // Handle saving a candidate
+    ws.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      const candidate = mapResumeProfileToCandidate(data); // Assuming single resume analysis
+      setCandidates([candidate]);
+      setIsAnalyzing(false);
+      ws.close();
+    };
+
+    ws.onerror = (error) => {
+      console.error("WebSocket error:", error);
+      setIsAnalyzing(false);
+    };
+  };
+
   const handleSaveCandidate = async (id: string) => {
-    try {
-      await saveCandidate(id)
-
-      // Update the local state
-      setCandidates(
-        candidates.map((candidate) => (candidate.id === id ? { ...candidate, saved: !candidate.saved } : candidate)),
+    setCandidates(
+      candidates.map((candidate) =>
+        candidate.id === id ? { ...candidate, saved: !candidate.saved } : candidate
       )
-    } catch (error) {
-      console.error("Error saving candidate:", error)
-      // In a real app, you would show an error message
-    }
-  }
+    );
+  };
+
+  useEffect(() => {
+    // Add filtering logic if needed
+  }, [filterOptions]);
 
   return (
     <div className="flex h-screen bg-[#0f1520] text-white">
-      {/* Sidebar */}
-      <Sidebar 
-        activeTab={activeTab} 
-        onTabChange={setActiveTab} 
+      <Sidebar
+        activeTab={activeTab}
+        onTabChange={setActiveTab}
         isExpanded={isSidebarExpanded}
         onToggleExpand={() => setIsSidebarExpanded(!isSidebarExpanded)}
       />
-
-      {/* Main content with dynamic margin based on sidebar width */}
-      <div 
-        className={`
-          flex-1 overflow-auto transition-all duration-300
-          ${isSidebarExpanded ? 'ml-64' : 'ml-16'}
-        `}
+      <div
+        className={`flex-1 overflow-auto transition-all duration-300 ${
+          isSidebarExpanded ? "ml-64" : "ml-16"
+        }`}
       >
-        {/* Header */}
         <Header userInitials="JS" />
-
-        {/* Dashboard content */}
         <main className="p-6">
           <h2 className="text-2xl font-bold mb-6">Resume Scanning Dashboard</h2>
-
-          {/* Filter section */}
           <FilterSection
             isOpen={filterOpen}
             toggleOpen={() => setFilterOpen(!filterOpen)}
@@ -133,19 +163,13 @@ export default function ResumeScannerApp() {
             filterOptions={filterOptions}
             setFilterOptions={setFilterOptions}
           />
-
-          {/* Main content grid */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* Left column - Resume Scanner */}
             <div className="lg:col-span-2">
               <div className="grid grid-cols-1 gap-6">
                 <ResumeScanner onScan={handleScanResume} isScanning={isScanning} />
-
                 <JobDescriptionSection onSubmit={handleAnalyzeJob} isLoading={isAnalyzing} />
               </div>
             </div>
-
-            {/* Right column - Top Matching Candidates */}
             <div>
               <CandidatesSection candidates={candidates} onSaveCandidate={handleSaveCandidate} />
             </div>
@@ -153,5 +177,5 @@ export default function ResumeScannerApp() {
         </main>
       </div>
     </div>
-  )
+  );
 }
