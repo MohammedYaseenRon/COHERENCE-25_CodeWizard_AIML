@@ -67,13 +67,15 @@ const Sidebar: React.FC<SidebarProps> = ({
   onToggleExpand 
 }) => {
   const sidebarItems = [
-    { icon: <Home />, label: 'Dashboard' },
-    { icon: <FileText />, label: 'Resumes' },
-    { icon: <Briefcase />, label: 'Jobs' },
-    { icon: <Users />, label: 'Candidates' },
-    { icon: <MessageSquare />, label: 'Messages' },
-    { icon: <BarChart />, label: 'Analytics' }
+    { icon: <Home />, label: 'Dashboard', key: 'dashboard' },
+    { icon: <FileText />, label: 'Resumes', key: 'resumes' },
+    { icon: <Briefcase />, label: 'Jobs', key: 'jobs' },
+    { icon: <Users />, label: 'Candidates', key: 'candidates' },
+    { icon: <MessageSquare />, label: 'Messages', key: 'messages' },
+    { icon: <BarChart />, label: 'Analytics', key: 'analytics' }
   ];
+
+  
 
   return (
     <div 

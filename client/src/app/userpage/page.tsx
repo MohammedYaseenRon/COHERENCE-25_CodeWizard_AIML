@@ -1,5 +1,7 @@
 "use client"
+
 import { useState, useEffect, useCallback } from "react"
+import { motion, AnimatePresence } from "framer-motion"
 
 import { Header } from "@/components/layout/header"
 import { FilterSection } from "@/components/features/filter-section"
@@ -9,6 +11,7 @@ import { JobDescriptionSection } from "@/components/features/job-description"
 import type { Candidate, FilterOptions } from "@/types"
 import { getCandidates, saveCandidate } from "@/lib/data-service"
 import dynamic from "next/dynamic";
+
 const Sidebar = dynamic(() => import("@/components/layout/sidebar"), {
   ssr: false,
 });
@@ -21,6 +24,9 @@ export default function ResumeScannerApp() {
   const [isScanning, setIsScanning] = useState(false)
   const [isAnalyzing, setIsAnalyzing] = useState(false)
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(true)
+  
+  // View management state
+  const [currentView, setCurrentView] = useState<'initial' | 'candidates'>('initial')
 
   // WebSocket state
   const [uploadSocket, setUploadSocket] = useState<WebSocket | null>(null)
@@ -38,8 +44,7 @@ export default function ResumeScannerApp() {
 
   // WebSocket connection setup
   const setupWebSocket = useCallback(() => {
-    // Note: Replace with your actual WebSocket server URL
-    const socket = new WebSocket('wss://rbd6wn7l-8000.inc1.devtunnels.ms/multi-upload');
+    const socket = new WebSocket('wss://v7wv74fx-8000.inc1.devtunnels.ms/multi-upload');
 
     socket.onopen = () => {
       console.log('WebSocket connection established');
@@ -52,6 +57,7 @@ export default function ResumeScannerApp() {
         setAnalysisResults(parsedData);
         setUploadStatus('Analysis Complete');
         setIsScanning(false);
+        setCurrentView('candidates');
       } catch (error) {
         console.error('Error parsing WebSocket message:', error);
         setUploadStatus('Error processing analysis');
@@ -79,7 +85,7 @@ export default function ResumeScannerApp() {
   useEffect(() => {
     const cleanup = setupWebSocket();
     return cleanup;
-  }, [setupWebSocket]);
+  }, [setupWebSocket])
 
   // Load initial data
   useEffect(() => {
@@ -101,8 +107,8 @@ export default function ResumeScannerApp() {
     applyFilters()
   }, [filterOptions])
 
-  // Handle resume scanning (multi-file upload)
-  const handleScanResume = async (resumeFiles: File[] | null) => {
+  // Handle resume scanning
+  const handleScanResume = async (resumeFiles: File[] | null, jobDescription?: string) => {
     if (!resumeFiles || resumeFiles.length === 0 || !uploadSocket) {
       setUploadStatus('No files selected or WebSocket not connected');
       return;
@@ -136,13 +142,13 @@ export default function ResumeScannerApp() {
         uploadSocket.send(new Uint8Array([69, 79, 70])); // 'EOF' in bytes
       }
     } catch (error) {
-      console.error('Error scanning resumes:', error);
+      console.error("Error scanning resume:", error)
       setUploadStatus('Error uploading files');
       setIsScanning(false);
     }
-  };
+  }
 
-  // Handle job description analysis and resume ranking
+  // Handle job description analysis
   const handleAnalyzeJob = async (description: string) => {
     if (!description) {
       setUploadStatus('Please provide a job description');
@@ -153,7 +159,6 @@ export default function ResumeScannerApp() {
     setUploadStatus('Ranking resumes...');
 
     try {
-      // Note: Replace with your actual API endpoint
       const response = await fetch('https://rbd6wn7l-8000.inc1.devtunnels.ms/rank-resumes', {
         method: 'POST',
         headers: {
@@ -173,6 +178,7 @@ export default function ResumeScannerApp() {
       setResumeRankings(rankingData);
       setUploadStatus('Resume Ranking Complete');
       setIsAnalyzing(false);
+      setCurrentView('candidates');
 
       // Update candidates based on ranking if possible
       if (rankingData.ranked_resumes) {
@@ -183,11 +189,11 @@ export default function ResumeScannerApp() {
         setCandidates(rankedCandidates);
       }
     } catch (error) {
-      console.error('Error analyzing job description:', error);
+      console.error("Error analyzing job:", error)
       setUploadStatus('Error ranking resumes');
       setIsAnalyzing(false);
     }
-  };
+  }
 
   // Handle saving a candidate
   const handleSaveCandidate = async (id: string) => {
@@ -204,8 +210,29 @@ export default function ResumeScannerApp() {
     }
   }
 
+  // Loading overlay component
+  const LoadingOverlay = () => (
+    <motion.div 
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/80"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+    >
+      <motion.div
+        className="w-16 h-16 border-4 border-transparent border-t-purple-500 border-r-purple-500 rounded-full animate-spin"
+        initial={{ rotate: 0 }}
+        animate={{ rotate: 360 }}
+        transition={{ 
+          repeat: Infinity, 
+          duration: 1,
+          ease: "linear"
+        }}
+      />
+    </motion.div>
+  )
+
   return (
-    <div className="flex h-screen bg-[#0f1520] text-white">
+    <div className="flex h-screen bg-black text-white">
       {/* Sidebar */}
       <Sidebar 
         activeTab={activeTab} 
@@ -238,44 +265,54 @@ export default function ResumeScannerApp() {
             </div>
           )}
 
-          {/* Filter section */}
-          <FilterSection
-            isOpen={filterOpen}
-            toggleOpen={() => setFilterOpen(!filterOpen)}
-            activeTab={filterTab}
-            setActiveTab={setFilterTab}
-            filterOptions={filterOptions}
-            setFilterOptions={setFilterOptions}
-          />
-
-          {/* Main content grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* Left column - Resume Scanner */}
-            <div className="lg:col-span-2">
-              <div className="grid grid-cols-1 gap-6">
+          {/* Conditional rendering based on current view */}
+          <AnimatePresence>
+            {currentView === 'initial' && (
+              <motion.div 
+                key="initial-view"
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 50 }}
+                className="grid grid-cols-1 lg:grid-cols-2 gap-6"
+              >
                 <ResumeScanner 
                   onScan={handleScanResume} 
                   isScanning={isScanning} 
-                  multiple={true}  // Allow multiple file upload
+                  multiple={true}
                 />
 
                 <JobDescriptionSection 
                   onSubmit={handleAnalyzeJob} 
                   isLoading={isAnalyzing} 
                 />
-              </div>
-            </div>
+              </motion.div>
+            )}
 
-            {/* Right column - Top Matching Candidates */}
-            <div>
-              <CandidatesSection 
-                candidates={candidates} 
-                onSaveCandidate={handleSaveCandidate} 
-                analysisResults={analysisResults}
-                rankingResults={resumeRankings}
-              />
-            </div>
-          </div>
+            {currentView === 'candidates' && (
+              <motion.div 
+                key="candidates-view"
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 50 }}
+              >
+                <button 
+                  onClick={() => setCurrentView('initial')}
+                  className="mb-4 bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded"
+                >
+                  Back to Scanner
+                </button>
+                <CandidatesSection 
+                  candidates={candidates} 
+                  onSaveCandidate={handleSaveCandidate} 
+                  analysisResults={analysisResults}
+                  rankingResults={resumeRankings}
+                />
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Conditional loading overlay */}
+          {(isScanning || isAnalyzing) && <LoadingOverlay />}
 
           {/* Optional: Analysis Results Display */}
           {analysisResults && (

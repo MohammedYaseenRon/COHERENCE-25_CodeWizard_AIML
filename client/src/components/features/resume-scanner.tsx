@@ -1,9 +1,30 @@
 import React, { useState, useRef } from 'react'
+import { motion } from 'framer-motion'
 
 interface ResumeScannerProps {
   onScan: (files: File[] | null) => void
   isScanning: boolean
   multiple?: boolean
+}
+
+function Spinner(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg
+      {...props}
+      className={`animate-spin ${props.className || ""}`}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M21 12a9 9 0 1 1-6.219-8.56" />
+    </svg>
+  )
 }
 
 export const ResumeScanner: React.FC<ResumeScannerProps> = ({ 
@@ -20,7 +41,7 @@ export const ResumeScanner: React.FC<ResumeScannerProps> = ({
       const fileArray = Array.from(files)
       setSelectedFiles(fileArray)
     }
-  }
+  };
 
   const handleScan = () => {
     if (selectedFiles.length > 0) {
@@ -96,6 +117,25 @@ export const ResumeScanner: React.FC<ResumeScannerProps> = ({
           {isScanning ? 'Scanning...' : 'Scan Resumes'}
         </button>
       </div>
+
+      {/* Scan Button */}
+      <motion.button
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.98 }}
+        className={`w-full mt-4 py-3 rounded-md font-medium transition-colors flex items-center justify-center
+            ${isScanning || selectedFiles.length === 0 ? "bg-gray-600 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"}`}
+        onClick={handleScan}
+        disabled={isScanning || selectedFiles.length === 0}
+      >
+        {isScanning ? (
+          <>
+            <Spinner className="mr-2" />
+            Scanning...
+          </>
+        ) : (
+          "Scan Resume(s)"
+        )}
+      </motion.button>
     </div>
   )
 }

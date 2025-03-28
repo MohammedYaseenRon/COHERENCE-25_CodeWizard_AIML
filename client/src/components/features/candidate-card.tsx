@@ -1,14 +1,14 @@
-"use client"
-
-import { motion } from "framer-motion"
-import { Briefcase, GraduationCap, Star, FileText } from 'lucide-react'
-import { Badge } from "@/components/ui/badge"
-import { Candidate } from "@/types"
+// candidate-card.tsx
+"use client";
+import { motion } from "framer-motion";
+import { Briefcase, GraduationCap, Star, FileText } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Candidate } from "@/types";
 
 interface CandidateCardProps {
-  candidate: Candidate
-  index: number
-  onSave: (id: string) => void
+  candidate: Candidate;
+  index: number;
+  onSave: (id: string) => void;
 }
 
 export function CandidateCard({ candidate, index, onSave }: CandidateCardProps) {
@@ -32,45 +32,45 @@ export function CandidateCard({ candidate, index, onSave }: CandidateCardProps) 
           {candidate.match}% Match
         </Badge>
       </div>
-      
+
       <div className="flex items-center text-sm text-gray-400 mb-2">
         <Briefcase size={14} className="mr-1" />
         <span>{candidate.years} years</span>
         <span className="mx-2">•</span>
         <span>{candidate.location}</span>
       </div>
-      
+
       <div className="flex items-center text-sm text-gray-400 mb-3">
         <GraduationCap size={14} className="mr-1" />
         <span>{candidate.education}</span>
       </div>
-      
+
       <div className="flex flex-wrap gap-2 mb-3">
-        {candidate.skills.map((skill, i) => (
+        {candidate.skills.slice(0, 5).map((skill, i) => ( // Limit to 5 skills for brevity
           <Badge key={i} variant="default">
             {skill}
           </Badge>
         ))}
       </div>
-      
+
       <div>
         <p className="text-sm text-gray-400 mb-1">Highlights:</p>
         <ul className="list-disc list-inside text-sm text-gray-300 space-y-1">
-          {candidate.highlights.map((highlight, i) => (
+          {candidate.highlights.slice(0, 3).map((highlight, i) => ( // Limit to 3 highlights
             <li key={i}>{highlight}</li>
           ))}
         </ul>
       </div>
-      
+
       <div className="flex justify-between mt-4">
-        <button 
+        <button
           className={`text-sm flex items-center ${
             candidate.saved ? 'text-yellow-400' : 'text-gray-300 hover:text-white'
           }`}
           onClick={() => onSave(candidate.id)}
         >
-          <Star size={14} className={`mr-1 ${candidate.saved ? 'fill-yellow-400' : ''}`} />
-          {candidate.saved ? 'Saved' : 'Save'}
+          <Star size={14} className={`mr-1 ${candidate.saved ? "fill-yellow-400" : ""}`} />
+          {candidate.saved ? "Saved" : "Save"}
         </button>
         <button className="flex items-center bg-gray-800 text-white text-sm px-3 py-1 rounded-md hover:bg-gray-700 transition-colors">
           <FileText size={14} className="mr-1" />
