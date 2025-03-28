@@ -1,104 +1,4 @@
 {
-  "Resume Mohammed.pdf": {
-    "contact_info": {
-      "full_name": "Mohammed Usmani",
-      "email": "usmanimohammed12@gmail.com",
-      "phone": "+91 86899 08731",
-      "location": "Bhayandar, Thane 401101, India",
-      "linkedin": "LinkedIn"
-    },
-    "education": [
-      {
-        "degree": "B.E. IN CSE (AIML)",
-        "institution": "VIVA INSTITUTE OF TECHNOLOGY, VIRAR",
-        "graduation_year": 2026,
-        "gpa": null,
-        "honors": null
-      },
-      {
-        "degree": "DIPLOMA IN ENGINEERING",
-        "institution": "PRAVIN PATIL POLYTECHNIC, BHAYANDAR",
-        "graduation_year": 2023,
-        "gpa": 81.33,
-        "honors": null
-      }
-    ],
-    "work_experience": [
-      {
-        "company": "YBI FOUNDATION",
-        "job_title": "DATA SCIENCE INTERN",
-        "start_date": "JUNE 2024",
-        "end_date": "JULY 2024",
-        "responsibilities": [
-          "Assisted in data collection, cleaning, and preprocessing to ensure high-quality datasets for analysis.",
-          "Conducted exploratory data analysis (EDA) to uncover patterns, trends, and insights.",
-          "Assessed and optimized machine learning models using key metrics such as accuracy, precision, recall, and F1-score."
-        ],
-        "technologies": null
-      }
-    ],
-    "skills": {
-      "technical_skills": [
-        "JavaScript",
-        "TypeScript",
-        "MERN Stack (MongoDB, Express, React JS, Node JS)",
-        "Supabase",
-        "Firebase",
-        "Prisma ORM",
-        "Zustand",
-        "PostgreSQL",
-        "Vercel",
-        "Tailwind",
-        "React Native",
-        "Git",
-        "Python",
-        "FastAPI",
-        "Django",
-        "Machine Learning"
-      ],
-      "soft_skills": null,
-      "certifications": null
-    },
-    "summary": "Computer Science Engineering student specializing in AI/ML with expertise in full-stack development. Developed award-winning projects, including a Community Improvement App (3rd place, GNEC Fall Competition 2024) and an Al-powered Education Platform (Mumbai Hacks). Proficient in MERN stack, Firebase, Supabase, and machine learning. Strong problem-solving skills, teamwork abilities, and hackathon experience. Eager to drive innovation in software and AI.",
-    "projects": [
-      {
-        "name": "CityFix",
-        "description": "Cross-Platform Community Collaboration App",
-        "technologies": [
-          "React Native",
-          "Expo",
-          "Firebase",
-          "Node.js",
-          "Express",
-          "Railway",
-          "Zustand",
-          "GitHub"
-        ],
-        "start_date": null,
-        "end_date": null,
-        "link": null
-      },
-      {
-        "name": "EduTech Website",
-        "description": "Al-Powered Educational Platform",
-        "technologies": [
-          "Next.js",
-          "Supabase",
-          "TypeScript",
-          "Node.js",
-          "Tailwind",
-          "Ollama",
-          "Llama 3.2",
-          "Python",
-          "FastAPI",
-          "GitHub"
-        ],
-        "start_date": null,
-        "end_date": null,
-        "link": null
-      }
-    ]
-  },
   "New Resume.pdf": {
     "contact_info": {
       "full_name": "MOHAMMED USMANI",
@@ -261,7 +161,7 @@
         "Machine Learning for UX Insights",
         "Personalization",
         "Al-Assisted Design",
-        "Data-Driven UI",
+        "Data-Driven Ul",
         "Data Analysis (Pandas, NumPy)",
         "Figma",
         "InVision",

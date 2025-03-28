@@ -15,6 +15,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 from ranker import ResumeRankingService
 from helpers.FileHandler import FileUploadHandler
 import aiofiles
+from fastapi.responses import JSONResponse
 
 # Load environment variables
 load_dotenv()
@@ -22,10 +23,12 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[
+        "*"
+    ],
     allow_credentials=True,
     allow_methods=["*"],
-    allow_headers=["*"],
+    allow_headers=["*"]
 )
 
 class JobDescriptionRequest(BaseModel):
@@ -146,7 +149,7 @@ async def websocket_endpoint(websocket: WebSocket):
 class ResumeAnalysisServer:
     def __init__(self, results_file='resume_analysis_results.json'):
         load_dotenv()
-        self.app = FastAPI()
+        self.app = app
         self.setup_routes()
 
         self.results_file = results_file
@@ -329,6 +332,18 @@ class ResumeAnalysisServer:
             except Exception as e:
                 print(f"Unexpected error: {e}")
                 await websocket.send_text(f"Unexpected error: {str(e)}")
+
+        @self.app.options("/rank-resumes")
+        async def options_rank_resumes():
+            return JSONResponse(
+                status_code=200, 
+                headers={
+                    "Access-Control-Allow-Origin": "http://localhost:3000",
+                    "Access-Control-Allow-Methods": "POST, OPTIONS",
+                    "Access-Control-Allow-Headers": "Content-Type, Authorization"
+                },
+                content={"message": "OK"}
+            )
 
         @self.app.post("/rank-resumes")
         async def rank_resumes(request: JobDescriptionRequest):
