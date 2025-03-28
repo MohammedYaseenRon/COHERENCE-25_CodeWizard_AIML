@@ -25,6 +25,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+class JobDescriptionRequest(BaseModel):
+    job_description: str
+    resumes_file: str = 'resume_analysis_results.json'
+
 class ContactInfo(BaseModel):
     full_name: str = Field(..., description="Full name of the candidate")
     email: str = Field(..., description="Professional email address")
@@ -137,10 +141,37 @@ async def websocket_endpoint(websocket: WebSocket):
 
 
 class ResumeAnalysisServer:
-    def __init__(self):
+    def __init__(self, results_file='resume_analysis_results.json'):
         load_dotenv()
         self.app = FastAPI()
         self.setup_routes()
+
+        self.results_file = results_file
+        self.load_results()
+
+    def load_results(self):
+        """
+        Load existing results from JSON file or create a new empty dictionary
+        """
+        try:
+            with open(self.results_file, 'r') as f:
+                self.analysis_results = json.load(f)
+        except FileNotFoundError:
+            self.analysis_results = {}
+
+    def save_results(self):
+        """
+        Save current analysis results to JSON file
+        """
+        with open(self.results_file, 'w') as f:
+            json.dump(self.analysis_results, f, indent=2)
+
+    def update_results(self, filename, resume_data):
+        """
+        Update results dictionary and save to file
+        """
+        self.analysis_results[filename] = resume_data
+        self.save_results()
 
     def setup_routes(self):
         @self.app.websocket("/resume-analyze")
@@ -218,9 +249,6 @@ class ResumeAnalysisServer:
             await websocket.accept()
             
             try:
-                # Dictionary to store results for multiple files
-                analysis_results: Dict[str, Dict] = {}
-                
                 # Receive initial metadata about file upload
                 file_metadata = await websocket.receive_json()
                 num_files = file_metadata.get('num_files', 1)
@@ -276,20 +304,22 @@ class ResumeAnalysisServer:
                             },
                         )
                         
-                        # Store analysis results with filename as key
-                        analysis_results[filename] = response.parsed.model_dump()
-                    
+                        # Get parsed data and update results
+                        resume_data = response.parsed.model_dump()
+                        self.update_results(filename, resume_data)
+                        
                     except Exception as e:
-                        analysis_results[filename] = {
+                        error_data = {
                             "error": f"Error processing file: {str(e)}"
                         }
+                        self.update_results(filename, error_data)
                     
                     finally:
                         # Clean up temporary file
                         os.unlink(temp_file.name)
                 
                 # Send compiled results
-                await websocket.send_text(json.dumps(analysis_results, indent=2))
+                await websocket.send_text(json.dumps(self.analysis_results, indent=2))
             
             except WebSocketDisconnect:
                 print("WebSocket connection closed")
@@ -297,16 +327,16 @@ class ResumeAnalysisServer:
                 print(f"Unexpected error: {e}")
                 await websocket.send_text(f"Unexpected error: {str(e)}")
 
-            def rank_resumes(job_description, resumes):
-                # Combine job description with resumes
-                documents = [job_description] + resumes
-                vectorizer = TfidfVectorizer().fit_transform(documents)
-                vectors = vectorizer.toarray()
+    def rank_resumes(job_description, resumes):
+        # Combine job description with resumes
+        documents = [job_description] + resumes
+        vectorizer = TfidfVectorizer().fit_transform(documents)
+        vectors = vectorizer.toarray()
 
-                # Calculate cosine similarity
-                job_description_vector = vectors[0]
-                resume_vectors = vectors[1:]
-                cosine_similarities = cosine_similarity([job_description_vector], resume_vectors).flatten()
+        # Calculate cosine similarity
+        job_description_vector = vectors[0]
+        resume_vectors = vectors[1:]
+        cosine_similarities = cosine_similarity([job_description_vector], resume_vectors).flatten()
 
     def run(self):
         import uvicorn
