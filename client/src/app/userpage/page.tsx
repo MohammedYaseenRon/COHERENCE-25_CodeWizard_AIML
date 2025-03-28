@@ -44,7 +44,7 @@ export default function ResumeScannerApp() {
 
   // WebSocket connection setup
   const setupWebSocket = useCallback(() => {
-    const socket = new WebSocket('wss://v7wv74fx-8000.inc1.devtunnels.ms/multi-upload');
+    const socket = new WebSocket('wss://rbd6wn7l-8000.inc1.devtunnels.ms/multi-upload');
 
     socket.onopen = () => {
       console.log('WebSocket connection established');

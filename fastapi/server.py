@@ -62,6 +62,14 @@ class Skills(BaseModel):
     soft_skills: Optional[List[str]] = Field(None, description="Soft skills and interpersonal abilities")
     certifications: Optional[List[str]] = Field(None, description="Professional certifications")
 
+class Achievements(BaseModel):
+    professional_awards: Optional[List[str]] = Field(None, description="Professional awards and recognitions")
+    publications: Optional[List[str]] = Field(None, description="Academic or professional publications")
+    conference_presentations: Optional[List[str]] = Field(None, description="Conference talks or presentations")
+    patents: Optional[List[str]] = Field(None, description="Patents or inventions")
+    volunteer_work: Optional[List[str]] = Field(None, description="Significant volunteer contributions")
+    leadership_roles: Optional[List[str]] = Field(None, description="Leadership positions held")
+    community_involvement: Optional[List[str]] = Field(None, description="Community and social impact activities")
 
 class Project(BaseModel):
     name: str = Field(..., description="Project name")
@@ -232,7 +240,12 @@ class ResumeAnalysisServer:
                     - Skills: Exhaustive technical and soft skills
                     - Projects: All notable projects
                     - Certifications: Complete list
+<<<<<<< HEAD:fastapi/server.py
+                    - Achievements: All awards, publications, etc.
+                    - Summary: A brief overview of the candidate's profile
+=======
                     - Achievements: Complete list
+>>>>>>> 511d1734b37d410c7abac1b5e97e8d6862e84ea0:fastapi/gemini.py
                     """
                     
                     # Generate content with JSON schema
