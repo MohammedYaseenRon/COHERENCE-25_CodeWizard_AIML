@@ -1,0 +1,194 @@
+{
+  "summary_stats": {
+    "total_resumes": 2,
+    "total_skills": 35,
+    "total_projects": 6
+  },
+  "skills_data": {
+    "top_skills": [
+      {
+        "name": "CI/CD",
+        "count": 2
+      },
+      {
+        "name": "Kubernetes",
+        "count": 2
+      },
+      {
+        "name": "HTML",
+        "count": 1
+      },
+      {
+        "name": "Java script",
+        "count": 1
+      },
+      {
+        "name": "React",
+        "count": 1
+      },
+      {
+        "name": "Tailwind CSS",
+        "count": 1
+      },
+      {
+        "name": "Node.js",
+        "count": 1
+      },
+      {
+        "name": "Express(EX)",
+        "count": 1
+      },
+      {
+        "name": "Hono",
+        "count": 1
+      },
+      {
+        "name": "Zod",
+        "count": 1
+      }
+    ],
+    "skill_distribution": [
+      {
+        "name": "Frontend",
+        "value": 9
+      },
+      {
+        "name": "Backend",
+        "value": 7
+      },
+      {
+        "name": "DevOps",
+        "value": 3
+      },
+      {
+        "name": "Database",
+        "value": 6
+      }
+    ]
+  },
+  "experience_data": [
+    {
+      "name": "Entry",
+      "value": 0
+    },
+    {
+      "name": "Junior",
+      "value": 2
+    },
+    {
+      "name": "Mid-level",
+      "value": 0
+    },
+    {
+      "name": "Senior",
+      "value": 0
+    },
+    {
+      "name": "Expert",
+      "value": 0
+    }
+  ],
+  "education_data": [
+    {
+      "name": "Information Technology",
+      "count": 1
+    },
+    {
+      "name": "Bachelors",
+      "count": 1
+    },
+    {
+      "name": "Higher Secondary Education",
+      "count": 1
+    }
+  ],
+  "technology_data": {
+    "top_technologies": [
+      {
+        "name": "Express",
+        "count": 2
+      },
+      {
+        "name": "React",
+        "count": 2
+      },
+      {
+        "name": "Java",
+        "count": 2
+      },
+      {
+        "name": "Node.js",
+        "count": 1
+      },
+      {
+        "name": "MongoDB",
+        "count": 1
+      },
+      {
+        "name": "Tailwind CSS",
+        "count": 1
+      },
+      {
+        "name": "TypeScript",
+        "count": 1
+      },
+      {
+        "name": "NextJs",
+        "count": 1
+      }
+    ],
+    "technology_distribution": [
+      {
+        "name": "Frontend",
+        "value": 5
+      },
+      {
+        "name": "Backend",
+        "value": 4
+      },
+      {
+        "name": "DevOps",
+        "value": 0
+      },
+      {
+        "name": "Database",
+        "value": 1
+      }
+    ]
+  },
+  "resume_comparison": [
+    {
+      "name": "PRANAV KULKARNI",
+      "skills_count": 16,
+      "projects_count": 2,
+      "experience_count": 1,
+      "education": [
+        {
+          "degree": "Information Technology",
+          "institution": "International institute of Information Technology IIIT pune",
+          "year": 2026
+        }
+      ],
+      "experience_level": "Junior"
+    },
+    {
+      "name": "Sumeet Mourya",
+      "skills_count": 21,
+      "projects_count": 4,
+      "experience_count": 0,
+      "education": [
+        {
+          "degree": "Bachelors in Information Engineering",
+          "institution": "Technical University of Munich",
+          "year": 2027
+        },
+        {
+          "degree": "Higher Secondary Education",
+          "institution": "S.V.P Junior College of Science and Commerce",
+          "year": 2022
+        }
+      ],
+      "experience_level": "Junior"
+    }
+  ]
+}

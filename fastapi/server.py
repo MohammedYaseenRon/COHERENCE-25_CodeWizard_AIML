@@ -114,6 +114,21 @@ async def websocket_endpoint(websocket: WebSocket):
     await websocket.accept()
     
     try:
+        pass  # Add your code here
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        pass  # Add your code here
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        pass  # Add your code here
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        pass  # Add your code here
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        pass  # Add your code here
+    except Exception as e:
+        print(f"An error occurred: {e}")
         file_metadata = await websocket.receive_json()
         filename = file_metadata.get('filename', 'uploaded_file.pdf')
         
@@ -240,12 +255,7 @@ class ResumeAnalysisServer:
                     - Skills: Exhaustive technical and soft skills
                     - Projects: All notable projects
                     - Certifications: Complete list
-<<<<<<< HEAD:fastapi/server.py
-                    - Achievements: All awards, publications, etc.
-                    - Summary: A brief overview of the candidate's profile
-=======
                     - Achievements: Complete list
->>>>>>> 511d1734b37d410c7abac1b5e97e8d6862e84ea0:fastapi/gemini.py
                     """
                     
                     # Generate content with JSON schema
@@ -401,9 +411,203 @@ class ResumeAnalysisServer:
                     "ranking_method": "Cosine Similarity",
                     "ranked_resumes": cosine_ranked_resumes
                 }
+            
+        @self.app.get("/generate-chart-data")
+        async def generate_chart_data():
+            """
+            Generate aggregated chart data from all resumes and save to chart.json
+            """
+            try:
+                # Load the latest analysis results
+                self.load_results()
+                
+                if not self.analysis_results:
+                    return JSONResponse(
+                        status_code=404,
+                        content={"message": "No resume data available for analysis"}
+                    )
+                
+                # Initialize aggregation data structure
+                chart_data = {
+                    "total_resumes": len(self.analysis_results),
+                    "total_skills": set(),
+                    "total_projects": 0,
+                    "skill_frequency": {},
+                    "education_levels": {},
+                    "experience_levels": {
+                        "Entry": 0,
+                        "Junior": 0,
+                        "Mid-level": 0,
+                        "Senior": 0,
+                        "Expert": 0
+                    },
+                    "common_technologies": {},
+                    "degree_types": {},
+                    "resumes": []
+                }
+                
+                # Process each resume
+                for filename, resume in self.analysis_results.items():
+                    # Basic resume info
+                    resume_info = {
+                        "name": resume["contact_info"]["full_name"],
+                        "skills_count": len(resume["skills"]["technical_skills"]),
+                        "projects_count": len(resume.get("projects", [])),
+                        "experience_count": len(resume.get("work_experience", [])),
+                        "education": [],
+                        "experience_level": None
+                    }
+                    
+                    # Calculate experience score
+                    project_count = len(resume.get("projects", []))
+                    skill_count = len(resume["skills"]["technical_skills"])
+                    work_exp_count = len(resume.get("work_experience", []))
+                    experience_score = (project_count * 2) + (skill_count * 0.5) + (work_exp_count * 5)
+                    
+                    # Determine experience level
+                    if experience_score >= 40:
+                        experience_level = "Expert"
+                    elif experience_score >= 30:
+                        experience_level = "Senior"
+                    elif experience_score >= 20:
+                        experience_level = "Mid-level"
+                    elif experience_score >= 10:
+                        experience_level = "Junior"
+                    else:
+                        experience_level = "Entry"
+                    
+                    resume_info["experience_level"] = experience_level
+                    chart_data["experience_levels"][experience_level] += 1
+                    
+                    # Process education
+                    for edu in resume["education"]:
+                        degree_type = edu["degree"].split(" in ")[0]  # e.g. "Bachelors" from "Bachelors in CS"
+                        chart_data["degree_types"][degree_type] = chart_data["degree_types"].get(degree_type, 0) + 1
+                        resume_info["education"].append({
+                            "degree": edu["degree"],
+                            "institution": edu["institution"],
+                            "year": edu["graduation_year"]
+                        })
+                    
+                    # Process skills
+                    for skill in resume["skills"]["technical_skills"]:
+                        chart_data["total_skills"].add(skill)
+                        chart_data["skill_frequency"][skill] = chart_data["skill_frequency"].get(skill, 0) + 1
+                    
+                    # Process projects
+                    chart_data["total_projects"] += len(resume.get("projects", []))
+                    for project in resume.get("projects", []):
+                        for tech in project.get("technologies", []):
+                            chart_data["common_technologies"][tech] = chart_data["common_technologies"].get(tech, 0) + 1
+                    
+                    chart_data["resumes"].append(resume_info)
+                
+                # Convert sets to counts
+                chart_data["total_skills"] = len(chart_data["total_skills"])
+                
+                # Prepare top skills data (sorted by frequency)
+                top_skills = sorted(
+                    chart_data["skill_frequency"].items(),
+                    key=lambda x: x[1],
+                    reverse=True
+                )[:10]  # Top 10 skills
+                
+                # Prepare top technologies data
+                top_tech = sorted(
+                    chart_data["common_technologies"].items(),
+                    key=lambda x: x[1],
+                    reverse=True
+                )[:8]  # Top 8 technologies
+                
+                # Final chart data structure
+                # Final chart data structure
+                final_chart_data = {
+                    "summary_stats": {
+                        "total_resumes": chart_data["total_resumes"],
+                        "total_skills": chart_data["total_skills"],
+                        "total_projects": chart_data["total_projects"]
+                    },
+                    "skills_data": {
+                        "top_skills": [{"name": skill, "count": count} for skill, count in top_skills],
+                        "skill_distribution": [
+                            {
+                                "name": "Frontend",
+                                "value": sum(1 for skill in chart_data["skill_frequency"] 
+                                            if any(tech in skill.lower() for tech in ["html", "css", "javascript", "react"]))
+                            },
+                            {
+                                "name": "Backend",
+                                "value": sum(1 for skill in chart_data["skill_frequency"] 
+                                            if any(tech in skill.lower() for tech in ["node", "express", "python", "java", "spring"]))
+                            },
+                            {
+                                "name": "DevOps",
+                                "value": sum(1 for skill in chart_data["skill_frequency"] 
+                                            if any(tech in skill.lower() for tech in ["docker", "kubernetes", "aws", "azure", "ci/cd"]))
+                            },
+                            {
+                                "name": "Database",
+                                "value": sum(1 for skill in chart_data["skill_frequency"] 
+                                            if any(tech in skill.lower() for tech in ["sql", "mysql", "postgres", "mongodb", "redis"]))
+                            }
+                        ]
+                    },
+                    "experience_data": [
+                        {"name": level, "value": count} 
+                        for level, count in chart_data["experience_levels"].items()
+                    ],
+                    "education_data": [
+                        {"name": degree, "count": count} 
+                        for degree, count in chart_data["degree_types"].items()
+                    ],
+                    "technology_data": {
+                        "top_technologies": [{"name": tech, "count": count} for tech, count in top_tech],
+                        "technology_distribution": [
+                            {
+                                "name": "Frontend",
+                                "value": sum(1 for tech in chart_data["common_technologies"] 
+                                            if any(t in tech.lower() for t in ["html", "css", "javascript", "react"]))
+                            },
+                            {
+                                "name": "Backend",
+                                "value": sum(1 for tech in chart_data["common_technologies"] 
+                                            if any(t in tech.lower() for t in ["node", "express", "python", "java"]))
+                            },
+                            {
+                                "name": "DevOps",
+                                "value": sum(1 for tech in chart_data["common_technologies"] 
+                                            if any(t in tech.lower() for t in ["docker", "kubernetes", "aws"]))
+                            },
+                            {
+                                "name": "Database",
+                                "value": sum(1 for tech in chart_data["common_technologies"] 
+                                            if any(t in tech.lower() for t in ["sql", "mysql", "mongodb"]))
+                            }
+                        ]
+                    },
+                    "resume_comparison": chart_data["resumes"]
+                }
+
+                # Save to chart.json
+                with open("chart.json", "w") as f:
+                    json.dump(final_chart_data, f, indent=2)
+
+                return JSONResponse(
+                status_code=200,
+                content={
+                    "message": "Chart data generated successfully",
+                    "chart_data": final_chart_data
+                }
+            )
+
+            except Exception as e:
+                return JSONResponse(
+                status_code=500,
+                content={"message": f"Error generating chart data: {str(e)}"}
+            )
 
 
-    def rank_resumes(job_description, resumes):
+    def rank_resumes(self, job_description, resumes):
         # Combine job description with resumes
         documents = [job_description] + resumes
         vectorizer = TfidfVectorizer().fit_transform(documents)
@@ -414,9 +618,16 @@ class ResumeAnalysisServer:
         resume_vectors = vectors[1:]
         cosine_similarities = cosine_similarity([job_description_vector], resume_vectors).flatten()
 
+        # Rank resumes based on similarity to job description
+        ranked_resumes = sorted(zip(resumes, cosine_similarities), key=lambda x: x[1], reverse=True)
+        return ranked_resumes
+
+       
+
     def run(self):
         import uvicorn
         uvicorn.run(self.app, host="0.0.0.0", port=8000)
+
 
 if __name__ == "__main__":
     server = ResumeAnalysisServer()
