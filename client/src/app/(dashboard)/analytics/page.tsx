@@ -1,459 +1,481 @@
 "use client"
 
-import { useMemo } from "react"
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  PieChart,
-  Pie,
-  Cell,
-  RadarChart,
-  Radar,
-  PolarGrid,
-  PolarAngleAxis,
-  PolarRadiusAxis,
-  ResponsiveContainer,
+import { useState } from "react"
+import { 
+  BarChart, 
+  Bar, 
+  XAxis, 
+  YAxis, 
+  CartesianGrid, 
+  Tooltip, 
+  Legend, 
+  PieChart, 
+  Pie, 
+  Cell, 
+  ResponsiveContainer 
 } from "recharts"
-import { AlertTriangle, BarChart2, Users, MapPin, Calendar, BookOpen, Briefcase } from "lucide-react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { AlertTriangle, Users, MapPin, Calendar, BookOpen, Briefcase, GraduationCap } from "lucide-react"
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Textarea } from "@/components/ui/textarea"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 
-interface ContactInfo {
-  full_name: string
-  email: string
-  phone: string
-  location: string
-  linkedin: string | null
+// Type definitions
+interface Representation {
+  [key: string]: number;
 }
 
-interface Education {
-  degree: string
-  institution: string
-  graduation_year: number
-  gpa: string | null
-  honors: string | null
+interface IndustryBenchmark {
+  [key: string]: number;
 }
 
-interface WorkExperience {
-  company: string
-  job_title: string
-  start_date: string
-  end_date: string | null
-  responsibilities: string[]
-  technologies: string | null
+interface BiasMetric {
+  representation: Representation;
+  industry_benchmark: IndustryBenchmark;
+  findings: string;
+  recommendations: string;
 }
 
-interface Skills {
-  technical_skills: string[]
-  soft_skills: string | null
-  certifications: string | null
+interface BiasMetrics {
+  gender: BiasMetric;
+  age: BiasMetric;
+  ethnicity?: BiasMetric;
+  education: BiasMetric;
+  experience: BiasMetric;
 }
 
-interface Project {
-  name: string
-  description: string
-  technologies: string[]
-  start_date: string | null
-  end_date: string | null
-  link: string | null
+interface BiasAnalysisResult {
+  summary: string;
+  fairness_score: number;
+  bias_metrics: BiasMetrics;
+  recommendations: string[];
 }
 
-interface ResumeProfile {
-  contact_info: ContactInfo
-  education: Education[]
-  work_experience: WorkExperience[]
-  skills: Skills
-  summary: string
-  projects: Project[]
-  achievements: string | null
+interface ChartDataPoint {
+  name: string;
+  value: number;
 }
 
-// Sample resume data
-const resumeData: {
-  [key: string]: { resume_id: string; profile: ResumeProfile; selection_reason: string; selection_date: string }
-} = {
-  "1": {
-    resume_id: "1",
-    profile: {
-      contact_info: {
-        full_name: "PRANAV KULKARNI",
-        email: "kulkarnipranav901@gmail.com",
-        phone: "9403579863",
-        location: "PIMPRI-CHINCHWAD PUNE-411017",
-        linkedin: null,
+export default function BiasAnalysisPage(): JSX.Element {
+  const [jobTitle, setJobTitle] = useState<string>("")
+  const [jobDescription, setJobDescription] = useState<string>("")
+  const [analysisResult, setAnalysisResult] = useState<BiasAnalysisResult | null>(null)
+  const [isAnalyzing, setIsAnalyzing] = useState<boolean>(false)
+
+  const sampleBiasData: BiasAnalysisResult = {
+    "summary": "Based on the limited profile data provided (2 candidates), a comprehensive bias analysis is challenging. The primary limitation is the lack of information regarding gender, age, and ethnicity. Both profiles appear to be for the same candidate, based on the identical name, email, and other data. There is also a significant lack of experience. The 'education' and 'experience' categories present the most readily identifiable potential biases given the job description.",
+    "fairness_score": 3.0,
+    "bias_metrics": {
+      "gender": {
+        "representation": {
+          "male": 100,
+          "female": 0,
+          "other": 0
+        },
+        "industry_benchmark": {
+          "male": 60,
+          "female": 35,
+          "other": 5
+        },
+        "findings": "Assuming 'Pranav' is a male name, there is a complete lack of female representation in the candidate pool. This is a potential bias.",
+        "recommendations": "Actively source female candidates through targeted outreach and partnerships with organizations promoting women in tech. Consider anonymizing resumes to reduce unconscious bias during the initial screening process."
       },
-      education: [
-        {
-          degree: "Information Technology",
-          institution: "International institute of Information Technology IIIT pune",
-          graduation_year: 2026,
-          gpa: null,
-          honors: null,
+      "age": {
+        "representation": {
+          "unknown": 100
         },
-      ],
-      work_experience: [
-        {
-          company: "INTERNSHIP",
-          job_title: "Web Development training",
-          start_date: "N/A",
-          end_date: null,
-          responsibilities: ["Web Development training"],
-          technologies: null,
+        "industry_benchmark": {
+          "25-34": 40,
+          "35-44": 30,
+          "45-54": 20,
+          "55+": 10
         },
-      ],
-      skills: {
-        technical_skills: [
-          "HTML",
-          "Java script",
-          "React",
-          "Tailwind CSS",
-          "Node.js",
-          "Express(EX)",
-          "Hono",
-          "Zod",
-          "Next.js",
-          "RESTful APIs",
-          "MongoDB",
-          "PostgreSQL",
-          "MySQL",
-          "CI/CD",
-          "Pipelines",
-          "Kubernetes",
-        ],
-        soft_skills: null,
-        certifications: null,
+        "findings": "Age is not discernible from the provided data. However, given the graduation year of 2026, it is highly unlikely that the candidate possesses the 5+ years of experience requested.",
+        "recommendations": "Consider including age ranges in your diversity metrics, or collecting graduation years to infer age, while being mindful of data privacy regulations. Ensure that age-related assumptions do not influence candidate selection."
       },
-      summary: "A passionate Full Stack Developer with expertise in frontend, backend, and DevOps technologies...",
-      projects: [
-        {
-          name: "Todo Application",
-          description: "Developing a to-do app with Node.js, MongoDB, Express, and React...",
-          technologies: ["Node.js", "MongoDB", "Express", "React"],
-          start_date: null,
-          end_date: null,
-          link: "https://github.com/Praxxav/Todo-app",
+      "ethnicity": {
+        "representation": {
+          "unknown": 100
         },
-        {
-          name: "Dukkan Web Interface",
-          description: "Developed Dukkan interface using Tailwind CSS...",
-          technologies: ["Tailwind CSS"],
-          start_date: null,
-          end_date: null,
-          link: "https://github.com/Praxxav/dukkan",
+        "industry_benchmark": {
+          "white": 50,
+          "asian": 30,
+          "black": 10,
+          "hispanic": 10
         },
-      ],
-      achievements: null,
+        "findings": "Ethnicity cannot be determined from the available data (name and location).",
+        "recommendations": "Collect ethnicity data through voluntary self-identification, ensuring anonymity and compliance with privacy regulations. Use this data to track representation and identify potential disparities. Be aware of name-based biases, which may disproportionately disadvantage candidates from certain ethnic backgrounds."
+      },
+      "education": {
+        "representation": {
+          "bachelor_degree": 0,
+          "in_progress": 100
+        },
+        "industry_benchmark": {
+          "bachelor_degree": 90,
+          "master_degree": 10
+        },
+        "findings": "Both candidates are currently pursuing their bachelor's degree. This does not align with the job requirements.",
+        "recommendations": "Prioritize candidates with completed degrees, as specified in the job description. If considering candidates currently enrolled, carefully evaluate their experience and skills against the requirements."
+      },
+      "experience": {
+        "representation": {
+          "five_plus_years": 0,
+          "less_than_one_year": 100
+        },
+        "industry_benchmark": {
+          "five_plus_years": 80,
+          "less_than_five_years": 20
+        },
+        "findings": "The provided profiles indicate a lack of the 5+ years of professional experience required for a senior role. The candidate only indicates an internship.",
+        "recommendations": "Ensure that candidates meet the minimum experience requirements outlined in the job description. Weigh experience more heavily in the selection process for senior-level positions."
+      }
     },
-    selection_reason: "Fit for role",
-    selection_date: "29-03-2025",
-  },
-  "2": {
-    resume_id: "2",
-    profile: {
-      contact_info: {
-        full_name: "PRIYA SHARMA",
-        email: "priya.sharma@gmail.com",
-        phone: "9876543210",
-        location: "MUMBAI-400001",
-        linkedin: null,
-      },
-      education: [
-        {
-          degree: "Computer Science",
-          institution: "Mumbai University",
-          graduation_year: 2025,
-          gpa: null,
-          honors: null,
-        },
-      ],
-      work_experience: [
-        {
-          company: "TECH CORP",
-          job_title: "Software Intern",
-          start_date: "06-2024",
-          end_date: "12-2024",
-          responsibilities: ["Developed web applications"],
-          technologies: null,
-        },
-      ],
-      skills: {
-        technical_skills: ["HTML", "CSS", "JavaScript", "React", "Node.js", "MongoDB", "Express"],
-        soft_skills: null,
-        certifications: null,
-      },
-      summary: "Enthusiastic developer with experience in web development...",
-      projects: [
-        {
-          name: "E-commerce Platform",
-          description: "Built an e-commerce platform using React and Node.js...",
-          technologies: ["React", "Node.js", "MongoDB"],
-          start_date: null,
-          end_date: null,
-          link: null,
-        },
-      ],
-      achievements: null,
-    },
-    selection_reason: "Strong technical skills",
-    selection_date: "29-03-2025",
-  },
-}
-
-export default function BiasAnalyticsDashboard() {
-  // Extract profiles for easier access
-  const profiles = useMemo(() => {
-    return Object.values(resumeData).map((item) => item.profile)
-  }, [])
-
-  // Helper function to infer gender from name
-  const inferGender = (name: string): string => {
-    const firstName = name.split(" ")[0].toLowerCase()
-    if (firstName.includes("pranav")) return "Male"
-    if (firstName.includes("priya")) return "Female"
-    return "Unknown"
+    "recommendations": [
+      "Collect demographic data (gender, ethnicity, age) through voluntary self-identification to track representation and identify potential disparities, ensuring compliance with privacy regulations.",
+      "Actively source candidates from underrepresented groups through targeted outreach and partnerships with diversity-focused organizations.",
+      "Prioritize candidates who meet the minimum qualifications outlined in the job description, particularly regarding education and experience."
+    ]
   }
 
-  // Helper to parse location into city
-  const getCity = (location: string): string => {
-    if (!location) return "Unknown"
-    const cityMatch = location.match(/(PUNE|MUMBAI|DELHI|BANGALORE|CHENNAI|HYDERABAD)/i)
-    return cityMatch ? cityMatch[0] : "Other"
-  }
+  const COLORS: string[] = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#8884D8", "#82CA9D"]
 
-  // Analyze potential biases
-  const biasAnalysis = useMemo(() => {
-    const genderData = profiles.reduce(
-      (acc, profile) => {
-        const gender = inferGender(profile.contact_info.full_name)
-        acc[gender] = (acc[gender] || 0) + 1
-        return acc
-      },
-      {} as { [key: string]: number },
-    )
-
-    const locationData = profiles.reduce(
-      (acc, profile) => {
-        const city = getCity(profile.contact_info.location)
-        acc[city] = (acc[city] || 0) + 1
-        return acc
-      },
-      {} as { [key: string]: number },
-    )
-
-    const gradYearData = profiles.reduce(
-      (acc, profile) => {
-        profile.education.forEach((edu) => {
-          const year = edu.graduation_year
-          if (year) {
-            acc[year] = (acc[year] || 0) + 1
-          }
-        })
-        return acc
-      },
-      {} as { [key: string]: number },
-    )
-
-    const institutionData = profiles.reduce(
-      (acc, profile) => {
-        profile.education.forEach((edu) => {
-          const inst = edu.institution
-          if (inst) {
-            const simplifiedInst = inst.includes("IIIT") ? "IIIT" : inst.includes("Mumbai") ? "Mumbai University" : inst
-            acc[simplifiedInst] = (acc[simplifiedInst] || 0) + 1
-          }
-        })
-        return acc
-      },
-      {} as { [key: string]: number },
-    )
-
-    const allSkills = profiles.flatMap((profile) => profile.skills.technical_skills || [])
-
-    const uniqueSkills = [...new Set(allSkills)]
-    const skillsByCandidate = profiles.map((profile) => ({
-      name: profile.contact_info.full_name,
-      skillCount: (profile.skills.technical_skills || []).length,
-      uniqueSkillCount: new Set(profile.skills.technical_skills || []).size,
-    }))
-
-    const projectsByCandidate = profiles.map((profile) => ({
-      name: profile.contact_info.full_name,
-      projectCount: (profile.projects || []).length,
-    }))
-
-    return {
-      genderData: Object.entries(genderData).map(([name, value]) => ({ name, value })),
-      locationData: Object.entries(locationData).map(([name, value]) => ({ name, value })),
-      gradYearData: Object.entries(gradYearData)
-        .map(([name, value]) => ({ name: String(name), value }))
-        .sort((a, b) => a.name.localeCompare(b.name)),
-
-      institutionData: Object.entries(institutionData).map(([name, value]) => ({ name, value })),
-      skillsByCandidate,
-      projectsByCandidate,
-      uniqueSkillsCount: uniqueSkills.length,
+  const handleAnalyze = (): void => {
+    if (!jobTitle || !jobDescription) {
+      alert("Please fill both job title and job description fields")
+      return
     }
-  }, [profiles])
 
-  const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#8884D8", "#82CA9D"]
+    setIsAnalyzing(true)
+    
+    // Simulate API call delay
+    setTimeout(() => {
+      setAnalysisResult(sampleBiasData)
+      setJobTitle("")
+      setJobDescription("")
+      setIsAnalyzing(false)
+    }, 1500)
+  }
+
+  const renderGenderChart = (): JSX.Element | null => {
+    if (!analysisResult) return null
+    
+    const genderData: ChartDataPoint[] = Object.entries(analysisResult.bias_metrics.gender.representation).map(
+      ([name, value]) => ({ name: name.charAt(0).toUpperCase() + name.slice(1), value })
+    )
+    
+    return (
+      <Card>
+        <CardHeader className="flex flex-row items-center gap-2">
+          <Users className="h-5 w-5 text-primary" />
+          <CardTitle className="text-lg">Gender Distribution</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <ResponsiveContainer width="100%" height={300}>
+            <PieChart>
+              <Pie
+                data={genderData}
+                dataKey="value"
+                nameKey="name"
+                cx="50%"
+                cy="50%"
+                outerRadius={100}
+                label={({name, percent}: {name: string, percent: number}) => `${name} ${(percent * 100).toFixed(0)}%`}
+              >
+                {genderData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                ))}
+              </Pie>
+              <Tooltip formatter={(value) => [`${value}%`, "Percentage"]} />
+              <Legend />
+            </PieChart>
+          </ResponsiveContainer>
+          <div className="mt-4 space-y-2">
+            <p className="text-sm font-medium">Finding:</p>
+            <p className="text-sm text-gray-600">{analysisResult.bias_metrics.gender.findings}</p>
+            <p className="text-sm font-medium mt-2">Recommendation:</p>
+            <p className="text-sm text-gray-600">{analysisResult.bias_metrics.gender.recommendations}</p>
+          </div>
+        </CardContent>
+      </Card>
+    )
+  }
+
+  const renderAgeChart = (): JSX.Element | null => {
+    if (!analysisResult) return null
+    
+    const names = ['Yaseen', 'Sumeet', 'Ujjwal', 'Mohammed'];
+    const ageData: ChartDataPoint[] = Object.entries(analysisResult.bias_metrics.age.representation).map(
+      ([name, value], index) => ({ 
+      name: names[index % names.length],
+      value 
+      })
+    )
+    
+    return (
+      <Card>
+        <CardHeader className="flex flex-row items-center gap-2">
+          <Calendar className="h-5 w-5 text-primary" />
+          <CardTitle className="text-lg">Age Distribution</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <ResponsiveContainer width="100%" height={300}>
+            <BarChart data={ageData}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="name" />
+              <YAxis domain={[0, 100]} />
+              <Tooltip formatter={(value) => [`${value}%`, "Percentage"]} />
+              <Legend />
+              <Bar dataKey="value" name="Percentage" fill="#FF8042" />
+            </BarChart>
+          </ResponsiveContainer>
+          <div className="mt-4 space-y-2">
+            <p className="text-sm font-medium">Finding:</p>
+            <p className="text-sm text-gray-600">{analysisResult.bias_metrics.age.findings}</p>
+            <p className="text-sm font-medium mt-2">Recommendation:</p>
+            <p className="text-sm text-gray-600">{analysisResult.bias_metrics.age.recommendations}</p>
+          </div>
+        </CardContent>
+      </Card>
+    )
+  }
+
+  const renderEthnicityChart = (): JSX.Element | null => {
+    if (!analysisResult || !analysisResult.bias_metrics.ethnicity) return null
+    
+    const names = ['Yaseen', 'Sumeet', 'Ujjwal', 'Mohammed'];
+    const ethnicityData: ChartDataPoint[] = Object.entries(analysisResult.bias_metrics.ethnicity.representation).map(
+      ([name, value], index) => ({ 
+      name: names[index % names.length],
+      value 
+      })
+    )
+    
+    return (
+      <Card>
+        <CardHeader className="flex flex-row items-center gap-2">
+          <MapPin className="h-5 w-5 text-primary" />
+          <CardTitle className="text-lg">Ethnicity Distribution</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <ResponsiveContainer width="100%" height={300}>
+            <BarChart data={ethnicityData}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="name" />
+              <YAxis domain={[0, 100]} />
+              <Tooltip formatter={(value) => [`${value}%`, "Percentage"]} />
+              <Legend />
+              <Bar dataKey="value" name="Percentage" fill="#FFBB28" />
+            </BarChart>
+          </ResponsiveContainer>
+          <div className="mt-4 space-y-2">
+            <p className="text-sm font-medium">Finding:</p>
+            <p className="text-sm text-gray-600">{analysisResult.bias_metrics.ethnicity.findings}</p>
+            <p className="text-sm font-medium mt-2">Recommendation:</p>
+            <p className="text-sm text-gray-600">{analysisResult.bias_metrics.ethnicity.recommendations}</p>
+          </div>
+        </CardContent>
+      </Card>
+    )
+  }
+
+  const renderEducationChart = (): JSX.Element | null => {
+    if (!analysisResult) return null
+    
+    const names = ['Yaseen', 'Sumeet', 'Ujjwal', 'Mohammed'];
+    const educationData: ChartDataPoint[] = Object.entries(analysisResult.bias_metrics.education.representation).map(
+      ([name, value], index) => ({ 
+      name: names[index % names.length],
+      value 
+      })
+    )
+    
+    return (
+      <Card>
+        <CardHeader className="flex flex-row items-center gap-2">
+          <GraduationCap className="h-5 w-5 text-primary" />
+          <CardTitle className="text-lg">Education Distribution</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <ResponsiveContainer width="100%" height={300}>
+            <BarChart data={educationData}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="name" />
+              <YAxis domain={[0, 100]} />
+              <Tooltip formatter={(value) => [`${value}%`, "Percentage"]} />
+              <Legend />
+              <Bar dataKey="value" name="Percentage" fill="#8884d8" />
+            </BarChart>
+          </ResponsiveContainer>
+          <div className="mt-4 space-y-2">
+            <p className="text-sm font-medium">Finding:</p>
+            <p className="text-sm text-gray-600">{analysisResult.bias_metrics.education.findings}</p>
+            <p className="text-sm font-medium mt-2">Recommendation:</p>
+            <p className="text-sm text-gray-600">{analysisResult.bias_metrics.education.recommendations}</p>
+          </div>
+        </CardContent>
+      </Card>
+    )
+  }
+
+  const renderExperienceChart = (): JSX.Element | null => {
+    if (!analysisResult) return null
+    
+    const names = ['Yaseen', 'Sumeer', 'Ujjwal', 'Mohammed'];
+    const experienceData: ChartDataPoint[] = Object.entries(analysisResult.bias_metrics.experience.representation).map(
+      ([name, value], index) => ({ 
+        name: names[index % names.length],
+        value 
+      })
+    )
+    
+    return (
+      <Card>
+        <CardHeader className="flex flex-row items-center gap-2">
+          <Briefcase className="h-5 w-5 text-primary" />
+          <CardTitle className="text-lg">Experience Distribution</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <ResponsiveContainer width="100%" height={300}>
+            <BarChart data={experienceData}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="name" />
+              <YAxis domain={[0, 100]} />
+              <Tooltip formatter={(value) => [`${value}%`, "Percentage"]} />
+              <Legend />
+              <Bar dataKey="value" name="Percentage" fill="#00C49F" />
+            </BarChart>
+          </ResponsiveContainer>
+          <div className="mt-4 space-y-2">
+            <p className="text-sm font-medium">Finding:</p>
+            <p className="text-sm text-gray-600">{analysisResult.bias_metrics.experience.findings}</p>
+            <p className="text-sm font-medium mt-2">Recommendation:</p>
+            <p className="text-sm text-gray-600">{analysisResult.bias_metrics.experience.recommendations}</p>
+          </div>
+        </CardContent>
+      </Card>
+    )
+  }
+
+  const renderFairnessScore = (): JSX.Element | null => {
+    if (!analysisResult) return null
+
+    return (
+      <Card>
+        <CardHeader className="flex flex-row items-center gap-2">
+          <AlertTriangle className={`h-5 w-5 ${analysisResult.fairness_score < 3 ? 'text-red-500' : analysisResult.fairness_score < 4 ? 'text-amber-500' : 'text-green-500'}`} />
+          <CardTitle className="text-lg">Fairness Score</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex flex-col items-center justify-center space-y-2">
+            <div className={`text-4xl font-bold ${analysisResult.fairness_score < 3 ? 'text-red-500' : analysisResult.fairness_score < 4 ? 'text-amber-500' : 'text-green-500'}`}>
+              {analysisResult.fairness_score.toFixed(1)}/5.0
+            </div>
+            <div className="w-full bg-gray-200 rounded-full h-2.5 mt-2">
+              <div 
+                className={`h-2.5 rounded-full ${analysisResult.fairness_score < 3 ? 'bg-red-500' : analysisResult.fairness_score < 4 ? 'bg-amber-500' : 'bg-green-500'}`} 
+                style={{ width: `${(analysisResult.fairness_score / 5) * 100}%` }}
+              ></div>
+            </div>
+            <p className="text-sm text-gray-600 mt-4">
+              {analysisResult.fairness_score < 3 
+                ? "High risk of bias detected in your candidate selection process. Immediate action recommended."
+                : analysisResult.fairness_score < 4 
+                ? "Moderate risk of bias detected. Consider addressing the recommendations provided."
+                : "Low risk of bias detected. Continue monitoring and implementing best practices."}
+            </p>
+          </div>
+        </CardContent>
+      </Card>
+    )
+  }
+
+  const renderOverallSummary = (): JSX.Element | null => {
+    if (!analysisResult) return null
+
+    return (
+      <Card className="col-span-2">
+        <CardHeader>
+          <CardTitle>Analysis Summary</CardTitle>
+          <CardDescription>Overall assessment of potential biases in your candidate selection</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <p className="text-gray-700 mb-4">{analysisResult.summary}</p>
+          <div className="mt-4">
+            <h3 className="font-semibold mb-2">Key Recommendations:</h3>
+            <ul className="list-disc pl-6 space-y-2">
+              {analysisResult.recommendations.map((rec, index) => (
+                <li key={index} className="text-gray-700">{rec}</li>
+              ))}
+            </ul>
+          </div>
+        </CardContent>
+      </Card>
+    )
+  }
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
       <div className="mb-6">
-        <h1 className="text-3xl font-bold text-gray-800">Resume Bias Analytics Dashboard</h1>
-        <p className="text-gray-600 mt-2">Analyzing potential biases in candidate selection process</p>
+        <h1 className="text-3xl font-bold text-gray-800">Hiring Bias Analysis</h1>
+        <p className="text-gray-600 mt-2">Analyze potential biases in your candidate selection process</p>
       </div>
 
       <Card className="mb-6">
-        <CardHeader className="flex flex-row items-center gap-2">
-          <AlertTriangle className="text-amber-500" />
-          <CardTitle>Bias Risk Indicators</CardTitle>
+        <CardHeader>
+          <CardTitle>Job Information</CardTitle>
+          <CardDescription>Enter details about the position you're hiring for</CardDescription>
         </CardHeader>
         <CardContent>
-          <p className="text-gray-700">
-            This dashboard analyzes potential biases in the selection process. The visualizations help identify patterns
-            that might indicate unfair advantages or disadvantages based on factors like gender, location, education
-            institution, or graduation year.
-          </p>
+          <div className="grid gap-6">
+            <div className="grid grid-cols-1 gap-4">
+              <div>
+                <Label htmlFor="jobTitle">Job Title</Label>
+                <Input 
+                  id="jobTitle" 
+                  placeholder="e.g. Senior Frontend Developer" 
+                  value={jobTitle}
+                  onChange={(e) => setJobTitle(e.target.value)}
+                />
+              </div>
+              <div>
+                <Label htmlFor="jobDescription">Job Description</Label>
+                <Textarea 
+                  id="jobDescription" 
+                  placeholder="Paste your job description here..."
+                  rows={6}
+                  value={jobDescription}
+                  onChange={(e) => setJobDescription(e.target.value)}
+                />
+              </div>
+            </div>
+            <Button 
+              onClick={handleAnalyze} 
+              disabled={isAnalyzing}
+              className="w-full md:w-auto"
+            >
+              {isAnalyzing ? "Analyzing..." : "Analyze Potential Bias"}
+            </Button>
+          </div>
         </CardContent>
       </Card>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {/* Gender Distribution */}
-        <Card>
-          <CardHeader className="flex flex-row items-center gap-2">
-            <Users className="h-5 w-5 text-primary" />
-            <CardTitle className="text-lg">Gender Distribution</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={biasAnalysis.genderData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis />
-                <Tooltip />
-                <Legend />
-                <Bar dataKey="value" fill="#8884d8" />
-              </BarChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
-
-        {/* Location Distribution */}
-        <Card>
-          <CardHeader className="flex flex-row items-center gap-2">
-            <MapPin className="h-5 w-5 text-primary" />
-            <CardTitle className="text-lg">Location Distribution</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
-              <PieChart>
-                <Pie
-                  data={biasAnalysis.locationData}
-                  dataKey="value"
-                  nameKey="name"
-                  cx="50%"
-                  cy="50%"
-                  outerRadius={100}
-                  label
-                >
-                  {biasAnalysis.locationData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                  ))}
-                </Pie>
-                <Tooltip />
-                <Legend />
-              </PieChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
-
-        {/* Graduation Year Distribution */}
-        <Card>
-          <CardHeader className="flex flex-row items-center gap-2">
-            <Calendar className="h-5 w-5 text-primary" />
-            <CardTitle className="text-lg">Graduation Year Distribution</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
-              <RadarChart outerRadius={90} data={biasAnalysis.gradYearData}>
-                <PolarGrid />
-                <PolarAngleAxis dataKey="name" />
-                <PolarRadiusAxis />
-                <Radar name="Candidates" dataKey="value" stroke="#8884d8" fill="#8884d8" fillOpacity={0.6} />
-                <Tooltip />
-                <Legend />
-              </RadarChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
-
-        {/* Institution Distribution */}
-        <Card>
-          <CardHeader className="flex flex-row items-center gap-2">
-            <BookOpen className="h-5 w-5 text-primary" />
-            <CardTitle className="text-lg">Institution Distribution</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={biasAnalysis.institutionData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis />
-                <Tooltip />
-                <Legend />
-                <Bar dataKey="value" fill="#00C49F" />
-              </BarChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
-
-        {/* Skills Analysis */}
-        <Card>
-          <CardHeader className="flex flex-row items-center gap-2">
-            <BarChart2 className="h-5 w-5 text-primary" />
-            <CardTitle className="text-lg">Skills Analysis</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={biasAnalysis.skillsByCandidate}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis />
-                <Tooltip />
-                <Legend />
-                <Bar dataKey="skillCount" name="Total Skills" fill="#FFBB28" />
-                <Bar dataKey="uniqueSkillCount" name="Unique Skills" fill="#FF8042" />
-              </BarChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
-
-        {/* Projects Analysis */}
-        <Card>
-          <CardHeader className="flex flex-row items-center gap-2">
-            <Briefcase className="h-5 w-5 text-primary" />
-            <CardTitle className="text-lg">Projects Analysis</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={biasAnalysis.projectsByCandidate}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis />
-                <Tooltip />
-                <Legend />
-                <Bar dataKey="projectCount" name="Number of Projects" fill="#8884D8" />
-              </BarChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
-      </div>
+      {analysisResult && (
+        <>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            {renderFairnessScore()}
+            {renderGenderChart()}
+            {renderAgeChart()}
+            {renderEthnicityChart()}
+            {renderEducationChart()}
+            {renderExperienceChart()}
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {renderOverallSummary()}
+          </div>
+        </>
+      )}
     </div>
   )
 }
-
