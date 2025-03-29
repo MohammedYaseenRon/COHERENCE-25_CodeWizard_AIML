@@ -11,6 +11,7 @@ import { JobDescriptionSection } from "@/components/features/job-description"
 import type { Candidate, FilterOptions } from "@/types"
 import { getCandidates, saveCandidate } from "@/lib/data-service"
 import dynamic from "next/dynamic";
+import ResumeAnalysisCharts from "@/components/ResumeAnalysisCharts"
 
 const Sidebar = dynamic(() => import("@/components/layout/sidebar"), {
   ssr: false,
@@ -53,11 +54,13 @@ export default function ResumeScannerApp() {
 
     socket.onmessage = (event) => {
       try {
-        const parsedData = JSON.parse(event.data);
-        setAnalysisResults(parsedData);
-        setUploadStatus('Analysis Complete');
-        setIsScanning(false);
-        setCurrentView('candidates');
+        if (!event.data.startsWith('Processing')){
+          const parsedData = JSON.parse(event.data);
+          setAnalysisResults(parsedData);
+          setUploadStatus('Analysis Complete');
+          setIsScanning(false);
+          setCurrentView('candidates');
+        }
       } catch (error) {
         console.error('Error parsing WebSocket message:', error);
         setUploadStatus('Error processing analysis');
@@ -86,16 +89,6 @@ export default function ResumeScannerApp() {
     const cleanup = setupWebSocket();
     return cleanup;
   }, [setupWebSocket])
-
-  // Load initial data
-  useEffect(() => {
-    const loadCandidates = async () => {
-      const data = await getCandidates()
-      setCandidates(data)
-    }
-
-    loadCandidates()
-  }, [])
 
   // Handle filter changes
   useEffect(() => {
@@ -159,7 +152,7 @@ export default function ResumeScannerApp() {
     setUploadStatus('Ranking resumes...');
 
     try {
-      const response = await fetch('https://v7wv74fx-8000.inc1.devtunnels.ms/rank-resumes', {
+      const response = await fetch('https://rbd6wn7l-8000.inc1.devtunnels.ms/rank-resumes', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -316,12 +309,7 @@ export default function ResumeScannerApp() {
 
           {/* Optional: Analysis Results Display */}
           {analysisResults && (
-            <div className="mt-6 bg-gray-800 p-4 rounded">
-              <h3 className="text-xl font-semibold mb-2">Analysis Results</h3>
-              <pre className="text-xs overflow-x-auto">
-                {JSON.stringify(analysisResults, null, 2)}
-              </pre>
-            </div>
+            <ResumeAnalysisCharts analysisResults={analysisResults} />
           )}
         </main>
       </div>
