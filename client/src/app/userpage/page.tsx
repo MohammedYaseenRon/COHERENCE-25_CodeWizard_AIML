@@ -294,12 +294,12 @@ export default function ResumeScannerApp() {
                 >
                   Back to Scanner
                 </button>
-                <CandidatesSection 
+                {/* <CandidatesSection 
                   candidates={candidates} 
                   onSaveCandidate={handleSaveCandidate} 
                   analysisResults={analysisResults}
                   rankingResults={resumeRankings}
-                />
+                /> */}
               </motion.div>
             )}
           </AnimatePresence>
@@ -309,7 +309,7 @@ export default function ResumeScannerApp() {
 
           {/* Optional: Analysis Results Display */}
           {analysisResults && (
-            <ResumeAnalysisCharts analysisResults={analysisResults} />
+            <ResumeAnalysisCharts />
           )}
         </main>
       </div>
