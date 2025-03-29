@@ -1,64 +1,82 @@
-import React, { useState } from 'react'
+"use client"
+import React, { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'; // Updated import
+import { usePathname, useSearchParams } from 'next/navigation'; // Import hooks
 
 interface Candidate {
-  match_percentage?: number
-  matching_skills?: string[]
-  gaps?: string[]
-  reasoning?: string
-  filename?: string
+  match_percentage?: number;
+  matching_skills?: string[];
+  gaps?: string[];
+  reasoning?: string;
+  filename?: string;
   full_resume?: {
     contact_info?: {
-      full_name?: string
-      email?: string
-      phone?: string
-      location?: string | null
-      linkedin?: string | null
-    }
+      full_name?: string;
+      email?: string;
+      phone?: string;
+      location?: string | null;
+      linkedin?: string | null;
+    };
     education?: Array<{
-      degree?: string
-      institution?: string
-      graduation_year?: number
-      gpa?: number
-      honors?: string | null
-    }>
+      degree?: string;
+      institution?: string;
+      graduation_year?: number;
+      gpa?: number;
+      honors?: string | null;
+    }>;
     work_experience?: Array<{
-      company?: string
-      job_title?: string
-      start_date?: string
-      end_date?: string
-      responsibilities?: string[]
-      technologies?: string[] | null
-    }>
+      company?: string;
+      job_title?: string;
+      start_date?: string;
+      end_date?: string;
+      responsibilities?: string[];
+      technologies?: string[] | null;
+    }>;
     skills?: {
-      technical_skills?: string[]
-      soft_skills?: string[] | null
-      certifications?: string[] | null
-    }
-    summary?: string
-    projects?: string[] | null
-  }
-  saved?: boolean
-  rank?: number
-  selected?: boolean
+      technical_skills?: string[];
+      soft_skills?: string[] | null;
+      certifications?: string[] | null;
+    };
+    summary?: string;
+    projects?: string[] | null;
+  };
+  saved?: boolean;
+  rank?: number;
+  selected?: boolean;
 }
 
 interface CandidatesSectionProps {
-  candidates: Candidate[]
-  onSaveCandidate: (id: string) => void
-  onSendMail?: (selectedCandidates: Candidate[]) => void
-  analysisResults?: any
-  rankingResults?: any
+  candidates: Candidate[];
+  onSaveCandidate: (id: string) => void;
+  onSendMail?: (selectedCandidates: Candidate[]) => void;
+  analysisResults?: any;
+  rankingResults?: any;
 }
 
-export const CandidatesSection: React.FC<CandidatesSectionProps> = ({ 
-  candidates, 
-  onSaveCandidate, 
+export const CandidatesSection: React.FC<CandidatesSectionProps> = ({
+  candidates,
+  onSaveCandidate,
   onSendMail,
   analysisResults,
-  rankingResults 
+  rankingResults,
 }) => {
-  const [selectedCandidates, setSelectedCandidates] = useState<Candidate[]>([])
-  const [isAllSelected, setIsAllSelected] = useState(false)
+  const [selectedCandidates, setSelectedCandidates] = useState<Candidate[]>([]);
+  const [isAllSelected, setIsAllSelected] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
+  const router = useRouter();
+  const pathname = usePathname(); // Use usePathname hook
+  const searchParams = useSearchParams(); // Use useSearchParams hook
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  const handleViewCandidate = (candidate: Candidate) => {
+    if (isMounted) {
+      const url = `/interview?filename=${candidate.filename}&name=${candidate.full_resume?.contact_info?.full_name || ''}`;
+      router.push(url);
+    }
+  };
 
   const renderCandidateDetails = (candidate: Candidate) => {
     return (
@@ -68,38 +86,38 @@ export const CandidatesSection: React.FC<CandidatesSectionProps> = ({
             Ranking: #{candidate.rank}
           </div>
         )}
-        
+
         {candidate.full_resume?.contact_info?.phone && (
           <div className="text-xs text-gray-400">
             <strong>Contact:</strong> {candidate.full_resume.contact_info.phone}
           </div>
         )}
-        
+
         {candidate.full_resume?.skills?.technical_skills && (
           <div className="text-xs">
             <strong>Skills:</strong> {candidate.full_resume?.skills?.technical_skills.join(', ')}
           </div>
         )}
       </div>
-    )
-  }
+    );
+  };
 
   const handleSelectCandidate = (candidate: Candidate) => {
-    setSelectedCandidates(prev => 
-      prev.some(c => c.filename === candidate.filename)
-        ? prev.filter(c => c.filename !== candidate.filename)
+    setSelectedCandidates((prev) =>
+      prev.some((c) => c.filename === candidate.filename)
+        ? prev.filter((c) => c.filename !== candidate.filename)
         : [...prev, candidate]
-    )
-  }
+    );
+  };
 
   const handleSelectAll = () => {
-    setIsAllSelected(!isAllSelected)
-    setSelectedCandidates(!isAllSelected ? [...candidates] : [])
-  }
+    setIsAllSelected(!isAllSelected);
+    setSelectedCandidates(!isAllSelected ? [...candidates] : []);
+  };
 
   const handleSendMail = async () => {
-    console.log("Sending mail to selected candidates:", selectedCandidates);
-    
+    console.log('Sending mail to selected candidates:', selectedCandidates);
+
     if (selectedCandidates.length > 0) {
       try {
         const response = await fetch('https://rbd6wn7l-8000.inc1.devtunnels.ms/send-email/bulk', {
@@ -107,21 +125,17 @@ export const CandidatesSection: React.FC<CandidatesSectionProps> = ({
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ ranked_resumes : selectedCandidates })
+          body: JSON.stringify({ ranked_resumes: selectedCandidates }),
         });
 
         if (!response.ok) {
           throw new Error('Failed to send emails');
         }
-
-        // if (onSendMail) {
-        //   onSendMail(selectedCandidates);
-        // }
       } catch (error) {
         console.error('Error sending emails:', error);
       }
     }
-  }
+  };
 
   return (
     <div className="bg-[#1b2537] p-6 rounded-lg">
@@ -194,19 +208,16 @@ export const CandidatesSection: React.FC<CandidatesSectionProps> = ({
               >
                 {candidate.saved ? 'Saved' : 'Save'}
               </button>
+              
+              <button 
+                onClick={() => handleViewCandidate(candidate)} 
+                className="ml-4 text-blue-600 hover:text-blue-700"
+              >
+                View Candidate Details
+              </button>
             </li>
           ))}
         </ul>
-      )}
-
-      {/* Optional: Comprehensive Analysis Details */}
-      {analysisResults && (
-        <details className="mt-4 text-xs bg-[#2c3646] p-2 rounded">
-          <summary>Full Analysis Details</summary>
-          <pre className="overflow-x-auto">
-            {JSON.stringify(analysisResults, null, 2)}
-          </pre>
-        </details>
       )}
     </div>
   )
