@@ -3,12 +3,12 @@ import os
 import pathlib
 import websockets
 import tempfile
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect, HTTPException
 from google import genai
 from dotenv import load_dotenv
 import json
-from typing import List, Optional, Dict
-from pydantic import BaseModel, Field
+from typing import List, Optional, Dict, Any, Union
+from pydantic import BaseModel, Field, ConfigDict
 from fastapi.middleware.cors import CORSMiddleware
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
@@ -41,6 +41,8 @@ class ContactInfo(BaseModel):
     phone: Optional[str] = Field(None, description="Phone number with country code")
     location: Optional[str] = Field(None, description="City, State, Country")
     linkedin: Optional[str] = Field(None, description="LinkedIn profile URL")
+    github: Optional[str] = Field(None, description="GitHub profile URL")
+    website: Optional[str] = Field(None, description="Personal website or portfolio URL")
 
 class Education(BaseModel):
     degree: str = Field(..., description="Degree or certification name")
@@ -79,15 +81,6 @@ class Project(BaseModel):
     end_date: Optional[str] = Field(None, description="Project end date")
     link: Optional[str] = Field(None, description="Project link or repository")
 
-class Achievements(BaseModel):
-    professional_awards: Optional[List[str]] = Field(None, description="Professional awards and recognitions")
-    publications: Optional[List[str]] = Field(None, description="Academic or professional publications")
-    conference_presentations: Optional[List[str]] = Field(None, description="Conference talks or presentations")
-    patents: Optional[List[str]] = Field(None, description="Patents or inventions")
-    volunteer_work: Optional[List[str]] = Field(None, description="Significant volunteer contributions")
-    leadership_roles: Optional[List[str]] = Field(None, description="Leadership positions held")
-    community_involvement: Optional[List[str]] = Field(None, description="Community and social impact activities")
-
 class ResumeProfile(BaseModel):
     contact_info: ContactInfo = Field(..., description="Candidate's contact information")
     education: List[Education] = Field(..., description="Educational background")
@@ -96,6 +89,23 @@ class ResumeProfile(BaseModel):
     summary: Optional[str] = Field(None, description="Professional summary or objective")
     projects: Optional[List[Project]] = Field(None, description="Notable projects")
     achievements: Optional[Achievements] = Field(None, description="Professional and personal achievements")
+
+class SelectedPersonnel(BaseModel):
+    resume_id: str = Field(..., description="Unique identifier for the resume")
+    profile: Dict[str, Any] = Field(..., description="The complete resume profile in JSON format")
+    selection_reason: Optional[str] = Field(None, description="Reason for selection")
+    selection_date: str = Field(..., description="Date when the candidate was selected")
+# Updated bias analysis request model
+class BiasAnalysisRequest(BaseModel):
+    job_title: str = Field(..., description="Job title for which bias analysis is needed")
+    job_description: str = Field(..., description="Complete job description")
+    analysis_types: List[str] = Field(
+        default=["gender", "age", "ethnicity", "education", "experience"],
+        description="Types of biases to analyze"
+    )
+
+    class Config:
+        extra = "allow"
 
 def clean_json_response(text: str) -> dict:
     """
@@ -137,7 +147,7 @@ async def websocket_endpoint(websocket: WebSocket):
             # Generate summary
             prompt = "Summarize this document"
             response = client.models.generate_content(
-                model="gemini-2.0-flash",
+                model="gemini-2.5-pro-exp-03-25",
                 contents=[sample_file, prompt]
             )
             
@@ -246,7 +256,7 @@ class ResumeAnalysisServer:
                     
                     # Generate content with JSON schema
                     response = client.models.generate_content(
-                        model='gemini-2.0-flash',
+                        model='gemini-2.5-pro-exp-03-25',
                         contents=[sample_file, prompt],
                         config={
                             'response_mime_type': 'application/json',
@@ -327,7 +337,7 @@ class ResumeAnalysisServer:
                         
                         # Generate content with JSON schema
                         response = client.models.generate_content(
-                            model='gemini-2.0-flash',
+                            model='gemini-2.5-pro-exp-03-25',
                             contents=[sample_file, prompt],
                             config={
                                 'response_mime_type': 'application/json',
@@ -398,18 +408,159 @@ class ResumeAnalysisServer:
                     "ranking_method": "Cosine Similarity",
                     "ranked_resumes": cosine_ranked_resumes
                 }
+        
+        @self.app.post("/selected-personnel/upload")
+        async def upload_selected_personnel(personnel: SelectedPersonnel):
+            """
+            Endpoint to upload a selected personnel's resume to the selected candidates pool
+            """
+            try:
+                # Load existing selected personnel
+                selected_file = "selected_personnel.json"
+                try:
+                    with open(selected_file, 'r') as f:
+                        selected_personnel = json.load(f)
+                except FileNotFoundError:
+                    selected_personnel = {}
+                
+                # Add or update the selected personnel
+                selected_personnel[personnel.resume_id] = personnel.model_dump()
+                
+                # Save updated selection
+                with open(selected_file, 'w') as f:
+                    json.dump(selected_personnel, f, indent=2)
+                
+                return {"status": "success", "message": f"Personnel with ID {personnel.resume_id} added to selected pool"}
+            
+            except Exception as e:
+                raise HTTPException(status_code=500, detail=f"Error uploading selected personnel: {str(e)}")
+        
+        @self.app.get("/selected-personnel")
+        async def get_selected_personnel():
+            """
+            Endpoint to retrieve all selected personnel
+            """
+            try:
+                selected_file = "selected_personnel.json"
+                try:
+                    with open(selected_file, 'r') as f:
+                        selected_personnel = json.load(f)
+                except FileNotFoundError:
+                    selected_personnel = {}
+                
+                return selected_personnel
+            
+            except Exception as e:
+                raise HTTPException(status_code=500, detail=f"Error retrieving selected personnel: {str(e)}")
+        
+        @self.app.post("/bias-analysis")
+        async def analyze_bias(request: BiasAnalysisRequest):
+            """
+            Endpoint to analyze potential biases in the selection process using Gemini
+            """
+            try:
+                # Load selected personnel
+                selected_file = "selected_personnel.json"
+                try:
+                    with open(selected_file, 'r') as f:
+                        selected_personnel = json.load(f)
+                except FileNotFoundError:
+                    raise HTTPException(status_code=404, detail="No selected personnel found for analysis")
+                
+                # Prepare data for Gemini - extract profiles from numbered keys
+                # Your JSON structure uses numerical keys as the top level
+                selected_profiles = []
+                for key in selected_personnel:
+                    if "profile" in selected_personnel[key]:
+                        selected_profiles.append(selected_personnel[key]["profile"])
+                
+                # Prepare additional context from selection metadata
+                selection_metadata = []
+                for key in selected_personnel:
+                    if "selection_reason" in selected_personnel[key]:
+                        selection_metadata.append({
+                            "resume_id": selected_personnel[key].get("resume_id", key),
+                            "selection_reason": selected_personnel[key].get("selection_reason", "Unknown"),
+                            "selection_date": selected_personnel[key].get("selection_date", "Unknown")
+                        })
+                
+                # Initialize Gemini client
+                client = genai.Client(api_key=os.getenv("GOOGLE_API_KEY"))
+                
+                # Create a prompt for bias analysis
+                prompt = f"""
+                Analyze the following set of selected candidate profiles for a {request.job_title} position 
+                for potential biases. The job description is:
+                
+                "{request.job_description}"
+                
+                Return your analysis in the following JSON structure ONLY:
+                {{
+                    "summary": "Overall summary of the bias analysis",
+                    "fairness_score": 7.5, // A score from 1-10
+                    "bias_metrics": {{
+                        "gender": {{
+                            "representation": {{
+                                "male": 65,
+                                "female": 30,
+                                "other": 5
+                            }},
+                            "industry_benchmark": {{
+                                "male": 60,
+                                "female": 35,
+                                "other": 5
+                            }},
+                            "findings": "Description of gender-related patterns or imbalances",
+                            "recommendations": "Suggestions to improve gender diversity"
+                        }},
+                        // Repeat this structure for each requested analysis type
+                    }},
+                    "recommendations": [
+                        "Recommendation 1",
+                        "Recommendation 2",
+                        "Recommendation 3"
+                    ]
+                }}
 
+                Ensure your analysis covers these requested bias categories: {', '.join(request.analysis_types)}
 
-    def rank_resumes(job_description, resumes):
-        # Combine job description with resumes
-        documents = [job_description] + resumes
-        vectorizer = TfidfVectorizer().fit_transform(documents)
-        vectors = vectorizer.toarray()
-
-        # Calculate cosine similarity
-        job_description_vector = vectors[0]
-        resume_vectors = vectors[1:]
-        cosine_similarities = cosine_similarity([job_description_vector], resume_vectors).flatten()
+                
+                For each category:
+                1. Identify any patterns or imbalances in the selected candidates
+                2. Quantify the representation (e.g., percentages, ratios)
+                3. Compare against industry standards or expected distributions
+                4. Suggest improvements to reduce unintentional bias
+                5. Provide a summary of the analysis and a fairness score from 1-10
+                
+                Ensure that the analysis is data-driven and based on the provided profiles.
+                
+                IMPORTANT: Be objective, data-driven, and fair in your analysis. Do not make assumptions 
+                beyond what's in the data. If certain information is not available for some candidates, 
+                note that in your analysis as a potential source of bias itself.
+                """
+                
+                # Send request to Gemini with both profiles and selection metadata
+                analysis_content = {
+                    "profiles": selected_profiles,
+                    "selection_metadata": selection_metadata,
+                    "job_title": request.job_title,
+                    "job_description": request.job_description,
+                    "analysis_types": request.analysis_types
+                }
+                
+                # Send request to Gemini
+                response = client.models.generate_content(
+                    model="gemini-2.5-pro-exp-03-25",
+                    contents=prompt + "\n\nAnalysis Data: " + json.dumps(analysis_content),
+                    config={'response_mime_type': 'application/json'}
+                )
+                
+                # Parse and return the response
+                bias_analysis = clean_json_response(response.text)
+                return bias_analysis
+                
+            except Exception as e:
+                raise HTTPException(status_code=500, detail=f"Error analyzing bias: {str(e)}")
 
     def run(self):
         import uvicorn

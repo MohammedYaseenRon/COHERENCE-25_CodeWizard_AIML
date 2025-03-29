@@ -5,7 +5,9 @@
       "email": "kulkarnipranav901@gmail.com",
       "phone": "9403579863",
       "location": "PIMPRI-CHINCHWAD PUNE-411017",
-      "linkedin": null
+      "linkedin": null,
+      "github": "https://github.com/Praxxav",
+      "website": null
     },
     "education": [
       {
@@ -20,7 +22,7 @@
       {
         "company": "INTERNSHIP",
         "job_title": "Web Development training",
-        "start_date": "NA",
+        "start_date": "Missing",
         "end_date": null,
         "responsibilities": [
           "Web Development training"
@@ -50,11 +52,11 @@
       "soft_skills": null,
       "certifications": null
     },
-    "summary": "A passionate Full Stack Developer with expertise in frontend, backend, and\nDevOps technologies. I excel in creating seamless and dynamic web applications.\nTransform your vision into stunning digital reality with expert development services\ntailored to your unique business needs.",
+    "summary": "A passionate Full Stack Developer with expertise in frontend, backend, and DevOps technologies. I excel in creating seamless and dynamic web applications. Transform your vision into stunning digital reality with expert development services tailored to your unique business needs.",
     "projects": [
       {
         "name": "Todo Application",
-        "description": "Developing a to-do app with Node.js, MongoDB, Express, and React involves creating a backend\nwith Node.js and Express for API endpoints, using MongoDB for database storage, and building a\nfrontend with React for a responsive user interface. Integrating these technologies allows for a\nfull-stack application capable of managing tasks efficiently.",
+        "description": "Developing a to-do app with Node.js, MongoDB, Express, and React involves creating a backend with Node.js and Express for API endpoints, using MongoDB for database storage, and building a frontend with React for a responsive user interface. Integrating these technologies allows for a full-stack application capable of managing tasks efficiently.",
         "technologies": [
           "Node.js",
           "MongoDB",
@@ -67,7 +69,7 @@
       },
       {
         "name": "Dukkan Web Interface",
-        "description": "Developed Dukkan interface using Tailwind CSS, optimizing Ul for enhanced user experience.\nImplemented responsive design principles to ensure compatibility across devices. Enhanced\nfrontend functionality for improved usability and performance.",
+        "description": "Developed Dukkan interface using Tailwind CSS, optimizing UI for enhanced user experience. Implemented responsive design principles to ensure compatibility across devices. Enhanced frontend functionality for improved usability and performance.",
         "technologies": [
           "Tailwind CSS"
         ],
@@ -84,13 +86,15 @@
       "email": "mouryasumeet5@gmail.com",
       "phone": "(+49) 01628900637",
       "location": "M\u00fchlstra\u00dfe 22, 74080 Heilbronn (Germany)",
-      "linkedin": "https://www.linkedin.com/in/sumeet-mourya-ab79422a3/"
+      "linkedin": "https://www.linkedin.com/in/sumeet-mourya-ab79422a3/",
+      "github": "https://github.com/Sumeet-2023",
+      "website": null
     },
     "education": [
       {
         "degree": "Bachelors in Information Engineering",
         "institution": "Technical University of Munich",
-        "graduation_year": 2023,
+        "graduation_year": 2027,
         "gpa": null,
         "honors": null
       },
@@ -98,8 +102,10 @@
         "degree": "Higher Secondary Education",
         "institution": "S.V.P Junior College of Science and Commerce",
         "graduation_year": 2022,
-        "gpa": 86.0,
-        "honors": null
+        "gpa": null,
+        "honors": [
+          "Final grade: 86%"
+        ]
       }
     ],
     "work_experience": [],
@@ -125,10 +131,27 @@
         "CI/CD",
         "Database management (SQL, NoSQL)",
         "Vercel",
-        "ML Tools(Tensorflow,Keras)"
+        "ML Tools(Tensorflow,Keras)",
+        "TypeScript",
+        "NextJs (Frontend & Backend)",
+        "Express",
+        "Postgres",
+        "Tailwind",
+        "Prisma ORM",
+        "Turborepo",
+        "NextAuth",
+        "React",
+        "Figma",
+        "JUnit5",
+        "EasyMock",
+        "LibGDX"
       ],
-      "soft_skills": [],
-      "certifications": []
+      "soft_skills": null,
+      "certifications": [
+        "Full Stack Web Development (https://app.100xdevs.com/certificate/verify/BFC6YRCT)",
+        "Career Essentials in Software Development by Microsoft and LinkedIn (https://www.linkedin.com/learning/certificates/188035b8b307139570e73d8cbd0a2de4aac180d261988d48e7a38fab64337229)",
+        "Machine Learning Specialization (Supervised Machine Learning: Regression and Classification, Advanced Learning Algorithms, Unsupervised Learning, Recommenders, Reinforcement Learning) (https://www.coursera.org/account/accomplishments/specialization/QRRJ678ZWCZM)"
+      ]
     },
     "summary": "I am a dedicated and ambitious computer science student currently pursuing a Bachelor's degree in Information Engineering at the Technical University of Munich. My passion for technologies drives me to continuously expand my knowledge and skills in software development, particularly in web technologies and machine learning. With hands-on experience in developing full stack web applications using TypeScript, Node.js, and Next.js, I am well-versed in building maintainable, reusable, and testable code.",
     "projects": [
@@ -137,7 +160,7 @@
         "description": "Banking application were user can add/remove money to/from wallet created using TypeScript, NextJs (Frontend & Backend), Express, Postgres, Tailwind, Prisma ORM where application is managed by Turborepo. User can SignIn with LogIn with credential using NextAuth. Perform transaction, view balance and transaction history with status of Succeed or Failure. Contains webhook handler were Banking API can talk.",
         "technologies": [
           "TypeScript",
-          "NextJs",
+          "NextJs (Frontend & Backend)",
           "Express",
           "Postgres",
           "Tailwind",
@@ -164,8 +187,8 @@
         "link": "https://shorturl.at/rYO7c"
       },
       {
-        "name": "Software Development",
-        "description": "Library Management System, A centralized platform for library staff to efficiently manage library resources and provide seamless services to customer. The system supports functionalities such as adding, editing, and deleting books from the inventory, managing customer information, facilitating borrowing, and returning of book copies, generating reports, and more. It aims to enhance the overall efficiency and effectiveness of library operations developed using Java. Includes Requirements Analysis, Use Case diagram, TDD with JUnit5 and EasyMock guarantees reliability and accuracy of the system.",
+        "name": "Software Development Library Management System",
+        "description": "A centralized platform for library staff to efficiently manage library resources and provide seamless services to customer. The system supports functionalities such as adding, editing, and deleting books from the inventory, managing customer information, facilitating borrowing, and returning of book copies, generating reports, and more. It aims to enhance the overall efficiency and effectiveness of library operations developed using Java. Includes Requirements Analysis, Use Case diagram, TDD with JUnit5 and EasyMock guarantees reliability and accuracy of the system.",
         "technologies": [
           "Java",
           "JUnit5",
@@ -176,8 +199,8 @@
         "link": null
       },
       {
-        "name": "Game Development",
-        "description": "2D Top-Down Game, 2D Adventure game developed in Java using the LibGDX framework. Set in a series of increasingly complex mazes, players must navigate through various challenges, avoiding dynamic enemies, overcoming static obstacles and solving puzzles to progress through levels.",
+        "name": "Game Development 2D Top-Down Game",
+        "description": "2D Adventure game developed in Java using the LibGDX framework. Set in a series of increasingly complex mazes, players must navigate through various challenges, avoiding dynamic enemies, overcoming static obstacles and solving puzzles to progress through levels.",
         "technologies": [
           "Java",
           "LibGDX"
@@ -188,13 +211,16 @@
       }
     ],
     "achievements": {
-      "professional_awards": [],
-      "publications": [],
-      "conference_presentations": [],
-      "patents": [],
-      "volunteer_work": [],
-      "leadership_roles": [],
-      "community_involvement": []
+      "professional_awards": [
+        "Joint Entrance Exam (JEE): 97.24 Percentile (Physics, Chemistry, Math)",
+        "MHT-CET State Entrance Exam: 99.43 Percentile (Physics, Chemistry, Math)"
+      ],
+      "publications": null,
+      "conference_presentations": null,
+      "patents": null,
+      "volunteer_work": null,
+      "leadership_roles": null,
+      "community_involvement": null
     }
   },
   "Yaseenron.pdf": {
@@ -203,7 +229,9 @@
       "email": "yaseenron070@gmail.com",
       "phone": "91-7208455991",
       "location": null,
-      "linkedin": "www.linkedin.com/in/yaseen-ron-36319b305"
+      "linkedin": "www.linkedin.com/in/yaseen-ron-36319b305",
+      "github": "https://github.com/MohammedYaseenRon",
+      "website": null
     },
     "education": [
       {
@@ -243,7 +271,8 @@
     ],
     "skills": {
       "technical_skills": [
-        "C/C++",
+        "C",
+        "C++",
         "Html",
         "CSS",
         "JavaScript",
@@ -261,7 +290,9 @@
         "Vercel"
       ],
       "soft_skills": null,
-      "certifications": null
+      "certifications": [
+        "Full Stack Development:100xDevs"
+      ]
     },
     "summary": null,
     "projects": [
@@ -276,8 +307,7 @@
           "Prisma ORM",
           "Tailwind CSS",
           "Turborepo",
-          "NextAuth",
-          "webhook"
+          "NextAuth"
         ],
         "start_date": null,
         "end_date": null,
@@ -738,6 +768,227 @@
         "link": "https://github.com/Debanjannnn/TRADE-STRATEGY"
       }
     ],
+    "achievements": null
+  },
+  "New Resume.pdf": {
+    "contact_info": {
+      "full_name": "MOHAMMED USMANI",
+      "email": "usmanimohammed12@gmail.com",
+      "phone": "+91 86899 08731",
+      "location": "Bhayandar, Maharashtra, India",
+      "linkedin": "https://www.linkedin.com/in/mohammed-usmani-927a96286",
+      "github": null,
+      "website": null
+    },
+    "education": [
+      {
+        "degree": "Bachelor's degree",
+        "institution": "VIT (Virar), Mumbai University",
+        "graduation_year": 2026,
+        "gpa": 8.25,
+        "honors": null
+      },
+      {
+        "degree": "Diploma In Engineering",
+        "institution": "Pravin Patil College, MSBTE",
+        "graduation_year": 2023,
+        "gpa": null,
+        "honors": [
+          "81.33% score"
+        ]
+      }
+    ],
+    "work_experience": [
+      {
+        "company": "YBI Foundation",
+        "job_title": "Data Science Intern",
+        "start_date": "June 2024",
+        "end_date": "July 2024",
+        "responsibilities": [
+          "Collected, cleaned, and pre-processed large datasets for accurate analysis.",
+          "Conducted Exploratory Data Analysis (EDA) to identify patterns and insights.",
+          "Evaluated and optimized machine learning models using performance metrics like accuracy, precision, recall, and F1-score.",
+          "Collaborated with the team to deliver data-driven solutions for real-world problems.",
+          "Documented findings and presented analytical insights to stakeholders."
+        ],
+        "technologies": null
+      }
+    ],
+    "skills": {
+      "technical_skills": [
+        "MERN Stack",
+        "Firebase",
+        "Supabase",
+        "Redux",
+        "React Native",
+        "SQL",
+        "Machine Learning",
+        "AI/ML integration",
+        "Next.js",
+        "Expo",
+        "Node.js",
+        "Zustand",
+        "Tailwind CSS",
+        "FastAPI",
+        "TypeScript"
+      ],
+      "soft_skills": null,
+      "certifications": null
+    },
+    "summary": "Skilled MERN stack and React Native developer with expertise in AI/ML integration. Experienced in building scalable web and mobile apps, optimizing performance, and deploying ML models.",
+    "projects": [
+      {
+        "name": "CityFix \u2013 Community Collaboration App",
+        "description": "Built a React Native app for issue reporting and project management. Achievement: 3rd place at GNEC 2024 Fall Competition.",
+        "technologies": [
+          "React Native",
+          "Expo",
+          "Firebase",
+          "Node.js",
+          "Zustand"
+        ],
+        "start_date": null,
+        "end_date": null,
+        "link": null
+      },
+      {
+        "name": "Game Website \u2013 Gaming Platform",
+        "description": "Developed a platform with admin controls for game and user management.",
+        "technologies": [
+          "Next.js",
+          "Supabase",
+          "Zustand",
+          "Tailwind CSS"
+        ],
+        "start_date": null,
+        "end_date": null,
+        "link": null
+      },
+      {
+        "name": "EdTech Website \u2013 Al Educational Platform",
+        "description": "Built an Al-driven platform for study planning and academic tasks.",
+        "technologies": [
+          "Next.js",
+          "FastAPI",
+          "Supabase",
+          "TypeScript"
+        ],
+        "start_date": null,
+        "end_date": null,
+        "link": null
+      }
+    ],
+    "achievements": {
+      "professional_awards": [
+        "GNEC 2024/3rd prize (Hosted by GNEC, 2024)",
+        "Codeathon (DSA) /3rd prize (Vidyavardhini College, Vasai, 2024)",
+        "3rd place at GNEC 2024 Fall Competition (for CityFix project)"
+      ],
+      "publications": null,
+      "conference_presentations": null,
+      "patents": null,
+      "volunteer_work": null,
+      "leadership_roles": null,
+      "community_involvement": null
+    }
+  },
+  "My Resume.pdf": {
+    "contact_info": {
+      "full_name": "Mayuresh Pawar",
+      "email": "mayurpawar130904@gmail.com",
+      "phone": "9168206706 | 766053559",
+      "location": null,
+      "linkedin": null,
+      "github": null,
+      "website": null
+    },
+    "education": [
+      {
+        "degree": "Bachelor of Engineering (CSE AI/ML)",
+        "institution": "Mumbai University",
+        "graduation_year": 2026,
+        "gpa": 7.85,
+        "honors": null
+      }
+    ],
+    "work_experience": [
+      {
+        "company": "Neural Labs",
+        "job_title": "Product Design Intern",
+        "start_date": "May 2024",
+        "end_date": "Jan 2025",
+        "responsibilities": [
+          "Designed a healthcare application, integrating AI-powered insights, improving doctors' workflow efficiency by 45%.",
+          "Conducted ethnographic research and diary studies, leading to a refined app UI with a 50% boost in engagement.",
+          "Created interactive data visualizations for medical reports, reducing cognitive load by 35% and improving doctor-patient communication.",
+          "Collaborated with data scientists to develop an NLP-based chatbot, reducing customer support queries by 30%."
+        ],
+        "technologies": [
+          "AI",
+          "NLP"
+        ]
+      },
+      {
+        "company": "Oneture Technologies",
+        "job_title": "UX Design Intern",
+        "start_date": "Oct 2023",
+        "end_date": "Mar 2024",
+        "responsibilities": [
+          "Designed an accessibility-focused redesign, aligning with WCAG 2.1 compliance and improving usability scores by 25%.",
+          "Developed a UX performance dashboard using Python (Pandas, Matplotlib) and GA4, providing real-time insights for stakeholders.",
+          "Executed data-driven user research, analyzing 50+ user sessions to refine onboarding flows, reducing drop-off rates by 23%.",
+          "Leveraged A/B testing and behavioral analytics, optimizing key UI elements and increasing conversion rates by 20%."
+        ],
+        "technologies": [
+          "Python",
+          "Pandas",
+          "Matplotlib",
+          "GA4",
+          "A/B Testing"
+        ]
+      }
+    ],
+    "skills": {
+      "technical_skills": [
+        "Design Thinking",
+        "Wireframing",
+        "Information Architecture",
+        "Heuristic Evaluation",
+        "Usability Testing",
+        "Accessibility & Inclusive Design",
+        "A/B Testing",
+        "Funnel Optimization",
+        "User Journey Mapping",
+        "GA4 (Google Analytics)",
+        "Ethnographic Research",
+        "High-Fidelity Mockups",
+        "Rapid Prototyping",
+        "Micro-Interactions",
+        "Predictive Analytics",
+        "Machine Learning for UX Insights",
+        "Personalization",
+        "AI-Assisted Design",
+        "Data-Driven UI",
+        "Data Analysis (Pandas, NumPy)",
+        "Figma",
+        "InVision",
+        "Adobe XD",
+        "Sketch",
+        "Python (Pandas, NumPy, Matplotlib)",
+        "SQL",
+        "Tableau",
+        "AI & ML in UX",
+        "NLP-based UX Solutions"
+      ],
+      "soft_skills": [
+        "Data-driven Storytelling",
+        "Collaboration",
+        "Communication"
+      ],
+      "certifications": null
+    },
+    "summary": "UX Designer blending data-driven storytelling with unique design frameworks and product strategies to create intuitive, impactful user experiences.",
+    "projects": null,
     "achievements": null
   }
 }
