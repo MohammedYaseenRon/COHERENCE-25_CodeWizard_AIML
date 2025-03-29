@@ -3,7 +3,7 @@ import os
 import pathlib
 import websockets
 import tempfile
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect, HTTPException
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect, HTTPException, Body
 from google import genai
 from dotenv import load_dotenv
 import json
@@ -16,6 +16,7 @@ from ranker import ResumeRankingService
 from helpers.FileHandler import FileUploadHandler
 import aiofiles
 from fastapi.responses import JSONResponse
+from mailer import EmailGenerator
 
 # Load environment variables
 load_dotenv()
@@ -118,61 +119,6 @@ def clean_json_response(text: str) -> dict:
     if text.endswith("```"):
         text = text[:-3].strip()
     return json.loads(text)
-
-@app.websocket("/upload")
-async def websocket_endpoint(websocket: WebSocket):
-    await websocket.accept()
-    
-    try:
-        file_metadata = await websocket.receive_json()
-        filename = file_metadata.get('filename', 'uploaded_file.pdf')
-        
-        # Create a temporary file to save the uploaded PDF
-        with tempfile.NamedTemporaryFile(delete=False, suffix='.pdf') as temp_file:
-            # Receive file chunks
-            while True:
-                file_chunk = await websocket.receive_bytes()
-                if file_chunk == b'EOF':
-                    break
-                temp_file.write(file_chunk)
-        
-        # Upload file to Gemini
-        client = genai.Client(api_key=os.getenv("GOOGLE_API_KEY"))
-        file_path = pathlib.Path(temp_file.name)
-        
-        try:
-            # Upload the file to Gemini
-            sample_file = client.files.upload(file=file_path)
-            
-            # Generate summary
-            prompt = "Summarize this document"
-            response = client.models.generate_content(
-                model="gemini-2.5-pro-exp-03-25",
-                contents=[sample_file, prompt]
-            )
-            
-            cleaned_response = response.text
-            if cleaned_response.startswith("```json"):
-                try:
-                    json_obj = clean_json_response(cleaned_response)
-                    cleaned_response = json.dumps(json_obj, indent=2)
-                except Exception as e:
-                    cleaned_response = f"Error cleaning JSON: {str(e)}"
-            await websocket.send_text(cleaned_response)
-        
-        except Exception as e:
-            await websocket.send_text(f"Error processing file: {str(e)}")
-        
-        finally:
-            # Clean up temporary file
-            os.unlink(temp_file.name)
-    
-    except WebSocketDisconnect:
-        print("WebSocket connection closed")
-    except Exception as e:
-        print(f"Unexpected error: {e}")
-        await websocket.send_text(f"Unexpected error: {str(e)}")
-
 
 class ResumeAnalysisServer:
     def __init__(self, results_file='resume_analysis_results.json'):
@@ -561,7 +507,114 @@ class ResumeAnalysisServer:
                 
             except Exception as e:
                 raise HTTPException(status_code=500, detail=f"Error analyzing bias: {str(e)}")
+        @self.app.post("/send-email/individual")
+        async def send_individual_email(request: dict = Body(...)):
+            """
+            Endpoint to send an email to a single candidate from ranked resumes
+            """
+            try:
+                ranked_resumes = request.get("ranked_resumes", [])
+                if not ranked_resumes:
+                    raise HTTPException(status_code=400, detail="No ranked resumes provided")
 
+                candidate_index = request.get("candidate_index")
+                if candidate_index is None or not (0 <= candidate_index < len(ranked_resumes)):
+                    raise HTTPException(status_code=400, detail="Invalid candidate index")
+
+                sender_email = request.get("sender_email")
+                password = request.get("password")
+                if not sender_email or not password:
+                    raise HTTPException(status_code=400, detail="Sender email and password are required")
+
+                candidate_data = ranked_resumes[candidate_index]
+                candidate_profile = candidate_data.get("full_resume")
+                if not candidate_profile or "email" not in candidate_profile["contact_info"]:
+                    raise HTTPException(status_code=400, detail="Candidate profile or email not available")
+
+                # Initialize email generator
+                email_gen = EmailGenerator()
+                load_dotenv()
+                email_gen.initialize_gemini(os.getenv("GOOGLE_API_KEY"))
+
+                # Send personalized email
+                success = email_gen.send_assignment_email(
+                    sender_email=sender_email,
+                    receiver_email=candidate_profile["contact_info"]["email"],
+                    password=password,
+                    candidate_profile=candidate_profile,
+                    job_description=request.get("job_description"),
+                    project_options=request.get("project_options"),
+                    company_info=request.get("company_info")
+                )
+
+                if success:
+                    return {
+                        "status": "success",
+                        "message": f"Email sent successfully to {candidate_profile['contact_info']['full_name']}"
+                    }
+                else:
+                    raise HTTPException(status_code=500, detail="Failed to send email")
+
+            except Exception as e:
+                raise HTTPException(status_code=500, detail=f"Error sending individual email: {str(e)}")
+
+        @self.app.post("/send-email/bulk")
+        async def send_bulk_emails(request: dict = Body(...)):
+            """
+            Endpoint to send emails to all candidates from ranked resumes
+            """
+            try:
+                ranked_resumes = request.get("ranked_resumes", [])
+                if not ranked_resumes:
+                    raise HTTPException(status_code=400, detail="No ranked resumes provided")
+
+                sender_email = request.get("sender_email")
+                password = request.get("password")
+                if not sender_email or not password:
+                    raise HTTPException(status_code=400, detail="Sender email and password are required")
+
+                # Initialize email generator
+                email_gen = EmailGenerator()
+                load_dotenv()
+                email_gen.initialize_gemini(os.getenv("GOOGLE_API_KEY"))
+
+                results = {}
+                for idx, candidate_data in enumerate(ranked_resumes):
+                    candidate_profile = candidate_data.get("full_resume")
+                    if not candidate_profile or "email" not in candidate_profile["contact_info"]:
+                        results[f"candidate_{idx}"] = {
+                            "status": "failed",
+                            "message": "Missing profile or email"
+                        }
+                        continue
+
+                    success = email_gen.send_assignment_email(
+                        sender_email=sender_email,
+                        receiver_email=candidate_profile["contact_info"]["email"],
+                        password=password,
+                        candidate_profile=candidate_profile,
+                        job_description=request.get("job_description"),
+                        project_options=request.get("project_options"),
+                        company_info=request.get("company_info")
+                    )
+
+                    results[f"candidate_{idx}"] = {
+                        "status": "success" if success else "failed",
+                        "message": f"Email {'sent successfully' if success else 'failed to send'} to {candidate_profile['contact_info']['full_name']}"
+                    }
+
+                successful_sends = sum(1 for r in results.values() if r["status"] == "success")
+                total_candidates = len(ranked_resumes)
+
+                return {
+                    "status": "completed",
+                    "summary": f"Sent emails to {successful_sends} out of {total_candidates} candidates",
+                    "detailed_results": results
+                }
+
+            except Exception as e:
+                raise HTTPException(status_code=500, detail=f"Error sending bulk emails: {str(e)}")
+            
     def run(self):
         import uvicorn
         uvicorn.run(self.app, host="0.0.0.0", port=8000)
