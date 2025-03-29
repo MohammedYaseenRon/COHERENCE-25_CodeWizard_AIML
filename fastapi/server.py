@@ -40,6 +40,7 @@ app.add_middleware(
 ENABLE_COMPRESSION_AND_NLTK = True  # Set to True to enable NLTK download, stopword removal, and compressed output
 
 EXCLUDED_DIRS = ["dist", "node_modules", ".git", "__pycache__"] 
+CHAT_HISTORY_FILE = "chat_history.json"
 
 class JobDescriptionRequest(BaseModel):
     job_description: str
@@ -105,6 +106,7 @@ class SelectedPersonnel(BaseModel):
     profile: Dict[str, Any] = Field(..., description="The complete resume profile in JSON format")
     selection_reason: Optional[str] = Field(None, description="Reason for selection")
     selection_date: str = Field(..., description="Date when the candidate was selected")
+
 # Updated bias analysis request model
 class BiasAnalysisRequest(BaseModel):
     job_title: str = Field(..., description="Job title for which bias analysis is needed")
@@ -116,6 +118,19 @@ class BiasAnalysisRequest(BaseModel):
 
     class Config:
         extra = "allow"
+
+class ChatHistoryItem(BaseModel):
+    role: str
+    timestamp: str
+    content: str
+    name: str
+    avatar: Optional[str] = None
+
+class ChatHistoryPayload(BaseModel):
+    conf_uid: str
+    history_uid: str
+    history: List[ChatHistoryItem]
+    timestamp: str
 
 def clean_json_response(text: str) -> dict:
     """
@@ -185,6 +200,25 @@ class ResumeAnalysisServer:
         self.analysis_results[filename] = resume_data
         self.save_results()
 
+    def load_chat_history(self):
+        """Loads chat history from the JSON file."""
+        try:
+            with open(CHAT_HISTORY_FILE, "r") as f:
+                return json.load(f)
+        except FileNotFoundError:
+            return {}
+        except json.JSONDecodeError:
+            print(f"Warning: {CHAT_HISTORY_FILE} is corrupted. Starting with an empty history.")
+            return {}
+
+    def save_chat_history(self, chat_history: Dict[str, Any]):
+        """Saves chat history to the JSON file."""
+        try:
+            with open(CHAT_HISTORY_FILE, "w") as f:
+                json.dump(chat_history, f, indent=4)
+        except IOError as e:
+            print(f"Error saving chat history: {e}")
+
     def main_processing(self, input_path):
         output_file = "uncompressed_output.txt"
         processed_file = "compressed_output.txt"
@@ -226,6 +260,20 @@ class ResumeAnalysisServer:
             raise HTTPException(status_code=500, detail=str(e))
 
     def setup_routes(self):
+        @self.app.get("/resume-analysis-results")
+        async def get_resume_analysis_results():
+            """
+            Endpoint to retrieve the resume analysis results from resume_analysis_results.json.
+            """
+            try:
+                with open("resume_analysis_results.json", 'r') as f:
+                    analysis_results = json.load(f)
+                return analysis_results
+            except FileNotFoundError:
+                raise HTTPException(status_code=404, detail="Resume analysis results file not found")
+            except Exception as e:
+                raise HTTPException(status_code=500, detail=f"Error retrieving resume analysis results: {str(e)}")
+            
         @self.app.websocket("/resume-analyze")
         async def websocket_resume_endpoint(websocket: WebSocket):
             await websocket.accept()
@@ -393,6 +441,8 @@ class ResumeAnalysisServer:
                 },
                 content={"message": "OK"}
             )
+        
+
 
         @self.app.post("/rank-resumes")
         async def rank_resumes(request: JobDescriptionRequest):
@@ -962,6 +1012,7 @@ class ResumeAnalysisServer:
                     "issues": ["Issue 1", "Issue 2", ...]
                 }}
                 """
+                client = genai.Client(api_key=os.getenv("GOOGLE_API_KEY"))
 
                 response = client.models.generate_content(
                     model="gemini-2.0-flash",
@@ -975,13 +1026,13 @@ class ResumeAnalysisServer:
             except Exception as e:
                 raise HTTPException(status_code=500, detail=f"Error analyzing project: {str(e)}")
 
-        @app.get("/get_file/{file_name}")
+        @self.app.get("/get_file/{file_name}")
         async def get_file(file_name: str):
             if not os.path.exists(file_name):
                 raise HTTPException(status_code=404, detail="File not found")
             return FileResponse(file_name, media_type="text/plain", filename=file_name)
 
-        @app.post("/process_upload/")
+        @self.app.post("/process_upload/")
         async def process_upload(file: UploadFile = File(...)):
             temp_file_path = f"temp_{file.filename}"
             try:
@@ -992,6 +1043,89 @@ class ResumeAnalysisServer:
             finally:
                 os.remove(temp_file_path)
             return result
+        
+        @self.app.post("/update_chat_history")
+        async def update_chat_history(payload: ChatHistoryPayload):
+            """
+            Updates or saves chat history based on the received payload.
+            """
+            chat_history = self.load_chat_history()
+            history_key = f"{payload.conf_uid}_{payload.history_uid}"
+            
+            chat_history[history_key] = {
+                "conf_uid": payload.conf_uid,
+                "history_uid": payload.history_uid,
+                "history": [item.model_dump() for item in payload.history],
+                "timestamp": payload.timestamp,
+            }
+
+            self.save_chat_history(chat_history)
+            return {"message": "Chat history updated successfully"}
+        
+        @self.app.get("/get_chat_history")
+        async def get_chat_history():
+            """
+            Retrieves chat history.
+            """
+            chat_history = self.load_chat_history()
+            return chat_history
+        
+        @self.app.post("/analyze_interview")
+        async def analyze_interview(history_uid: str = None):
+            """
+            Analyzes interview chat histories directly from stored data using Gemini.
+            """
+            # Load the chat history directly
+            chat_history = self.load_chat_history()
+            
+            # Flatten all chat history data into a single string
+            all_messages = []
+            
+            # If history_uid provided, filter only that conversation
+            if history_uid:
+                for key, data in chat_history.items():
+                    if history_uid in key:
+                        for message in data.get("history", []):
+                            all_messages.append(f"{message.get('name', 'Unknown')}: {message.get('content', '')}")
+            else:
+                # Include all conversations
+                for key, data in chat_history.items():
+                    # Add conversation identifier
+                    all_messages.append(f"--- Conversation: {key} ---")
+                    for message in data.get("history", []):
+                        all_messages.append(f"{message.get('name', 'Unknown')}: {message.get('content', '')}")
+                    all_messages.append("---")
+            
+            # Check if we found any messages
+            if not all_messages:
+                return {"error": "No matching interview history found"}
+            
+            # Join all messages into a single text
+            flattened_history = "\n".join(all_messages)
+            
+            prompt = f"""
+            Analyze the following interview chat history and provide a detailed report. 
+            Include observations on the candidate's skills, communication style, 
+            responses to specific questions, and any other relevant insights.
+            
+            Interview Chat History:
+            {flattened_history}
+            
+            Analysis Report:
+            """
+            
+            client = genai.Client(api_key=os.getenv("GOOGLE_API_KEY"))
+            
+            try:
+                response = client.models.generate_content(
+                    model="gemini-2.0-flash",
+                    contents=prompt,
+                    config={'response_mime_type': 'application/json'}
+                )
+                interview_results = clean_json_response(response.text)
+                return interview_results
+            except Exception as e:
+                return {"error": f"Error analyzing interview: {str(e)}"}
             
     def run(self):
         import uvicorn

@@ -83,7 +83,6 @@ export const ResumeScanner: React.FC<ResumeScannerProps> = ({
                     <p className="text-sm text-gray-500 mt-2">Supports PDF, DOCX</p>
                     <button
                         className="mt-4 bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
-                        suppressHydrationWarning    
                     >
                         Choose File
                     </button>

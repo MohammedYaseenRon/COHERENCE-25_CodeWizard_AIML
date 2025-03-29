@@ -12,7 +12,6 @@ import {
   ChevronsLeft,
   ChevronsRight
 } from 'lucide-react';
-import Link from 'next/link'; // Import Link from next/link
 
 interface SidebarItemProps {
   icon: React.ReactNode;
@@ -20,41 +19,37 @@ interface SidebarItemProps {
   active?: boolean;
   isExpanded: boolean;
   onClick?: () => void;
-  href: string; 
 }
 
 const SidebarItem: React.FC<SidebarItemProps> = ({ 
   icon, 
   label, 
   active = false, 
-  isExpanded, 
-  onClick,
-  href // Destructure href
+  isExpanded,
+  onClick 
 }) => {
   return (
-    <Link href={href}> {/* Wrap the SidebarItem with Link */}
-        <div 
-          className={`
-            flex items-center p-3 cursor-pointer 
-            hover:bg-gray-700 transition-all duration-300
-            ${active ? 'bg-gray-700 text-blue-400' : 'text-gray-300'}
-            relative
-          `}
-          onClick={onClick}
-        >
-          {React.cloneElement(icon as React.ReactElement, {
-            className: 'mr-3 w-5 h-5'
-          })}
-          <span className={`
-            text-sm font-medium 
-            absolute left-16 whitespace-nowrap
-            transition-all duration-300
-            ${isExpanded ? 'opacity-100 visible' : 'opacity-0 invisible'}
-          `}>
-            {label}
-          </span>
-        </div>
-    </Link>
+    <div 
+      className={`
+        flex items-center p-3 cursor-pointer 
+        hover:bg-gray-700 transition-all duration-300
+        ${active ? 'bg-gray-700 text-blue-400' : 'text-gray-300'}
+        relative
+      `}
+      onClick={onClick}
+    >
+      {React.cloneElement(icon as React.ReactElement, {
+        className: 'mr-3 w-5 h-5'
+      })}
+      <span className={`
+        text-sm font-medium 
+        absolute left-16 whitespace-nowrap
+        transition-all duration-300
+        ${isExpanded ? 'opacity-100 visible' : 'opacity-0 invisible'}
+      `}>
+        {label}
+      </span>
+    </div>
   );
 };
 
@@ -72,13 +67,15 @@ const Sidebar: React.FC<SidebarProps> = ({
   onToggleExpand 
 }) => {
   const sidebarItems = [
-    { icon: <Home />, label: 'Dashboard', key: 'dashboard', href: '/userpage' },
-    { icon: <FileText />, label: 'Resumes', key: 'resumes', href: '/resumes' },
-    { icon: <Briefcase />, label: 'Jobs', key: 'jobs', href: '/jobs' },
-    { icon: <Users />, label: 'Candidates', key: 'candidates', href: '/candidates' },
-    { icon: <MessageSquare />, label: 'Messages', key: 'messages', href: '/messages' },
-    { icon: <BarChart />, label: 'Analytics', key: 'analytics', href: '/analytics' }
+    { icon: <Home />, label: 'Dashboard', key: 'dashboard' },
+    { icon: <FileText />, label: 'Resumes', key: 'resumes' },
+    { icon: <Briefcase />, label: 'Jobs', key: 'jobs' },
+    { icon: <Users />, label: 'Candidates', key: 'candidates' },
+    { icon: <MessageSquare />, label: 'Messages', key: 'messages' },
+    { icon: <BarChart />, label: 'Analytics', key: 'analytics' }
   ];
+
+  
 
   return (
     <div 
@@ -118,13 +115,12 @@ const Sidebar: React.FC<SidebarProps> = ({
       <nav className="flex-grow">
         {sidebarItems.map((item) => (
           <SidebarItem
-            key={item.key}
+            key={item.label}
             icon={item.icon}
             label={item.label}
             isExpanded={isExpanded}
-            active={activeTab === item.key}
-            onClick={() => onTabChange(item.key)}
-            href={item.href} // Pass href to SidebarItem
+            active={activeTab === item.label.toLowerCase()}
+            onClick={() => onTabChange(item.label.toLowerCase())}
           />
         ))}
       </nav>
@@ -135,7 +131,6 @@ const Sidebar: React.FC<SidebarProps> = ({
           label="Settings"
           isExpanded={isExpanded}
           onClick={() => onTabChange('settings')}
-          href="/settings" // Add a link for settings
         />
       </div>
     </div>

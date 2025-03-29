@@ -165,7 +165,7 @@ export const CandidatesSection: React.FC<CandidatesSectionProps> = ({
         <div>
           <h2 className="text-xl font-bold text-white">
             Top Matching Candidates
-            {rankingResults?.ranking_method && ` (${rankingResults.ranking_method})`}
+            {/* {rankingResults?.ranking_method && ` (${rankingResults.ranking_method})`} */}
           </h2>
           <p className="text-gray-400 text-sm mt-1">
             {filteredCandidates.length} candidate{filteredCandidates.length !== 1 ? "s" : ""} found
@@ -362,4 +362,3 @@ export const CandidatesSection: React.FC<CandidatesSectionProps> = ({
     </motion.div>
   )
 }
-

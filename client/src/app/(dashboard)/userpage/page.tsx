@@ -43,7 +43,7 @@ export default function ResumeScannerApp() {
     education: [],
   })
 
- useEffect(() => {
+  useEffect(() => {
     const fetchAnalysisResults = async () => {
       try {
         const response = await fetch('https://rbd6wn7l-8000.inc1.devtunnels.ms/resume-analysis-results', {
@@ -251,26 +251,84 @@ export default function ResumeScannerApp() {
   )
 
   return (
-     <div className="flex h-screen bg-black text-white">
-      {/* <Header userInitials="AB" /> */}
-      <main className="p-6">
-        <h2 className="text-2xl font-bold mb-6">Resume Scanning Dashboard</h2>
-        {uploadStatus && <div className="mb-4 p-3 bg-gray-700 text-green-400">{uploadStatus}</div>}
-        <AnimatePresence>
-          {currentView === 'initial' ? (
-            <motion.div initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-4">
-              <ResumeScanner onScan={handleScanResume} isScanning={isScanning} multiple={true}  />
-              <JobDescriptionSection onSubmit={handleAnalyzeJob} isLoading={isAnalyzing} />
-            </motion.div>
-          ) : (
-            <motion.div initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }}>
-              <button  className="mb-4 bg-purple-600 px-4 py-2 rounded">Back</button>
-              {/* <CandidatesSection candidates={candidates} /> */}
-            </motion.div>
+    <div className="flex h-screen bg-black text-white">
+      <div 
+        className={`
+          flex-1 overflow-auto transition-all duration-300
+        `}
+      >
+        {/* Header */}
+        <Header userInitials="JS" />
+
+        {/* Dashboard content */}
+        <main className="p-6">
+          <h2 className="text-2xl font-bold mb-6">Resume Scanning Dashboard</h2>
+
+          {/* Status display */}
+          {uploadStatus && (
+            <div className={`
+              mb-4 p-3 rounded 
+              ${uploadStatus.includes('Error') ? 'bg-red-600/20 text-red-400' : 'bg-green-600/20 text-green-400'}
+            `}>
+              {uploadStatus}
+            </div>
           )}
-        </AnimatePresence>
-        {analysisResults && <ResumeAnalysisCharts />}
-      </main>
+
+          {/* Conditional rendering based on current view */}
+          <AnimatePresence>
+            {currentView === 'initial' && (
+              <motion.div 
+                key="initial-view"
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 50 }}
+                className="grid grid-cols-1 lg:grid-cols-2 gap-6"
+              >
+                <ResumeScanner 
+                  onScan={handleScanResume} 
+                  isScanning={isScanning} 
+                  multiple={true}
+                />
+
+                <JobDescriptionSection 
+                  onSubmit={handleAnalyzeJob} 
+                  isLoading={isAnalyzing} 
+                />
+              </motion.div>
+            )}
+
+            {currentView === 'candidates' && (
+              <motion.div 
+                key="candidates-view"
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 50 }}
+              >
+                <button 
+                  onClick={() => setCurrentView('initial')}
+                  className="mb-4 bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded"
+                >
+                  Back to Scanner
+                </button>
+                <CandidatesSection 
+                  candidates={candidates} 
+                  onSaveCandidate={handleSaveCandidate} 
+                  analysisResults={analysisResults}
+                  rankingResults={resumeRankings}
+                />
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Conditional loading overlay */}
+          {(isScanning || isAnalyzing) && <LoadingOverlay />}
+
+          {/* Optional: Analysis Results Display */}
+          {analysisResults && (
+            <ResumeAnalysisCharts analysisResults={analysisResults} />
+          )}
+        </main>
+      </div>
     </div>
   )
 }

@@ -110,7 +110,7 @@ const ResumeAnalysisCharts: React.FC = () => {
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6 bg-[#1b2537] rounded-lg">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6 p-6 bg-[#1b2537] rounded-lg">
       {/* Resume Count */}
       <div className="bg-[#2c3646] rounded-lg p-4 shadow-lg flex flex-col justify-center items-center">
         <h3 className="text-xl font-semibold text-white mb-2">Total Resumes Analyzed</h3>

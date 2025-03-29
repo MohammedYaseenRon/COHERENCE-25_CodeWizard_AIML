@@ -1,0 +1,142 @@
+{
+    "shizuku-local-001_2025-03-29_12-33-33_79192bbd41ae4873892a0eb1fead63e1": {
+        "conf_uid": "shizuku-local-001",
+        "history_uid": "2025-03-29_12-33-33_79192bbd41ae4873892a0eb1fead63e1",
+        "history": [
+            {
+                "role": "human",
+                "timestamp": "2025-03-29T12:33:37",
+                "content": "ok nwo",
+                "name": "Human",
+                "avatar": null
+            }
+        ],
+        "timestamp": "2025-03-29T12:33:52.460076"
+    },
+    "test-conf-123_2024-10-27_15-30-00_abcdef123456": {
+        "conf_uid": "test-conf-123",
+        "history_uid": "2024-10-27_15-30-00_abcdef123456",
+        "history": [
+            {
+                "role": "human",
+                "timestamp": "2024-10-27T15:30:10",
+                "content": "Hello, is anyone there?",
+                "name": "User1",
+                "avatar": null
+            },
+            {
+                "role": "ai",
+                "timestamp": "2024-10-27T15:30:25",
+                "content": "Hi! How can I help you?",
+                "name": "Bot",
+                "avatar": "bot.png"
+            },
+            {
+                "role": "human",
+                "timestamp": "2024-10-27T15:31:00",
+                "content": "I have a question about the product.",
+                "name": "User1",
+                "avatar": null
+            }
+        ],
+        "timestamp": "2024-10-27T15:31:15.123456"
+    },
+    "shizuku-local-001_2025-03-29_12-46-10_c17cf83e8a39483698925478e44359cc": {
+        "conf_uid": "shizuku-local-001",
+        "history_uid": "2025-03-29_12-46-10_c17cf83e8a39483698925478e44359cc",
+        "history": [
+            {
+                "role": "human",
+                "timestamp": "2025-03-29T12:46:19",
+                "content": "hi",
+                "name": "Human",
+                "avatar": null
+            },
+            {
+                "role": "ai",
+                "timestamp": "2025-03-29T12:46:41",
+                "content": "Hi![joy] Welcome to the frontend developer interview!I'm excited to learn more about your skills and experience today.To start, can you briefly walk me through your background in frontend development?[neutral] What projects have you worked on, and what technologies are you most comfortable with?",
+                "name": "Shizuku",
+                "avatar": "shizuku.png"
+            },
+            {
+                "role": "human",
+                "timestamp": "2025-03-29T12:47:26",
+                "content": "I have  2 years of experince in frontend development i have worked on many projects in react , next i am more comfortable with backend",
+                "name": "Human",
+                "avatar": null
+            },
+            {
+                "role": "ai",
+                "timestamp": "2025-03-29T12:47:56",
+                "content": "Great to hear you have a solid foundation with React and Next.js![surprise] It's also interesting that you're comfortable with backend technologies \u2013 that can be a real asset in a frontend role.Now, let's dive a bit deeper into your frontend knowledge.Could you describe your experience with state management in React?[neutral] Have you used Redux, Context API, or other state management libraries?[smirk] What are the pros and cons of each in your opinion?",
+                "name": "Shizuku",
+                "avatar": "shizuku.png"
+            },
+            {
+                "role": "human",
+                "timestamp": "2025-03-29T12:48:32",
+                "content": "yeah i have used zustand and redux also its a state management library it makes very easy to pass states anywhere in the component",
+                "name": "Human",
+                "avatar": null
+            },
+            {
+                "role": "ai",
+                "timestamp": "2025-03-29T12:48:58",
+                "content": "Okay,that's good to know.[neutral] You've touched on an important point about state management libraries making it easier to share state across components.Let's explore this a bit further.[smirk] Can you elaborate on the specific scenarios where you would choose Redux over Zustand, or vice versa?[fear] What factors influence your decision when selecting a state management solution for a React project?",
+                "name": "Shizuku",
+                "avatar": "shizuku.png"
+            },
+            {
+                "role": "human",
+                "timestamp": "2025-03-29T12:49:33",
+                "content": "zustand makes it very easy to work with project and it has a very simple syntax to work with redux on the other hand is a little bit old",
+                "name": "Human",
+                "avatar": null
+            },
+            {
+                "role": "ai",
+                "timestamp": "2025-03-29T12:50:04",
+                "content": "I understand your perspective.[neutral] Zustand does offer a simpler and more streamlined syntax compared to Redux, which can be appealing for many projects.Now, let's switch gears a bit.[smirk] Imagine you're working on a project with a complex form that has multiple input fields and validation requirements.[fear] How would you approach managing the form state and handling form validation in React?[neutral] What strategies or libraries would you consider using?",
+                "name": "Shizuku",
+                "avatar": "shizuku.png"
+            },
+            {
+                "role": "human",
+                "timestamp": "2025-03-29T12:50:22",
+                "content": "for eg ??",
+                "name": "Human",
+                "avatar": null
+            },
+            {
+                "role": "ai",
+                "timestamp": "2025-03-29T12:50:52",
+                "content": "[neutral] Sure,let's say you have a registration form with fields like name, email, password, and confirm password.Each field has its own validation rules, such as requiring a valid email format, a minimum password length, and ensuring that the \"password\" and \"confirm password\" fields match.How would you manage the state for these fields, handle the validation logic, and display appropriate error messages to the user?[smirk]",
+                "name": "Shizuku",
+                "avatar": "shizuku.png"
+            },
+            {
+                "role": "human",
+                "timestamp": "2025-03-29T12:53:44",
+                "content": "yeah i will use a library for form managment and show validation and all eroror as require",
+                "name": "Human",
+                "avatar": null
+            },
+            {
+                "role": "ai",
+                "timestamp": "2025-03-29T12:54:05",
+                "content": "Okay,that's a good approach.[neutral] Using a form management library can definitely simplify the process.Can you name some specific form management libraries that you're familiar with?[smirk] And could you explain how you would typically integrate one of these libraries into a React component to handle form state and validation?",
+                "name": "Shizuku",
+                "avatar": "shizuku.png"
+            },
+            {
+                "role": "human",
+                "timestamp": "2025-03-29T12:54:36",
+                "content": "i dont remember now",
+                "name": "Human",
+                "avatar": null
+            }
+        ],
+        "timestamp": "2025-03-29T12:54:36.173039"
+    }
+}

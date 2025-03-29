@@ -44,6 +44,8 @@ class EmailGenerator:
         self.smtp_server = smtp_server
         self.smtp_port = smtp_port
         self.gemini_client = None
+        self.repo_assignments_file = "repo_assignments.json"
+        self.repo_assignments = self._load_repo_assignments()
         
     def initialize_gemini(self, api_key: str = None):
         """
@@ -56,6 +58,37 @@ class EmailGenerator:
         if not api_key:
             raise ValueError("Gemini API key not provided and GOOGLE_API_KEY environment variable not set")
         self.gemini_client = genai.Client(api_key=api_key)
+
+    def _load_repo_assignments(self) -> Dict[str, str]:
+        """
+        Loads the repository assignments from the JSON file.
+
+        Returns:
+            A dictionary where keys are candidate identifiers and values are repository names.
+        """
+        try:
+            with open(self.repo_assignments_file, "r") as f:
+                return json.load(f)
+        except FileNotFoundError:
+            return {}  # Return an empty dictionary if the file doesn't exist
+        except json.JSONDecodeError:
+            print(f"Warning: {self.repo_assignments_file} is corrupted. Starting with an empty assignment list.")
+            return {}  # Return an empty dictionary if the file is corrupted
+
+    def _save_repo_assignment(self, candidate_identifier: str, repo_name: str):
+        """
+        Saves a repository assignment to the in-memory dictionary and the JSON file.
+
+        Args:
+            candidate_identifier: Unique identifier for the candidate.
+            repo_name: The name of the repository assigned to the candidate.
+        """
+        self.repo_assignments[candidate_identifier] = repo_name
+        try:
+            with open(self.repo_assignments_file, "w") as f:
+                json.dump(self.repo_assignments, f, indent=4)
+        except IOError as e:
+            print(f"Error saving repo assignments to file: {e}")
     
     def _generate_assignment_content(
         self, 
@@ -103,6 +136,7 @@ class EmailGenerator:
                 "requirements": ["list", "of", "specific", "requirements"],
                 "expected_outcomes": ["list", "of", "expected", "outcomes"]
             }},
+            "repository_name": "Repository name for the project",
             "next_steps": "Instructions for what the candidate should do next",
             "closing": "Professional closing remarks"
         }}
@@ -126,25 +160,24 @@ class EmailGenerator:
         # Parse and clean the response
         content = clean_json_response(response.text)
         
-        # Return the parsed dictionary directly, not a JSON string
-        return content  # This is now a dictionary, not a string
+        return content
     
     def _construct_email(
-        self, 
-        sender_email: str, 
-        receiver_email: str, 
+        self,
+        sender_email: str,
+        receiver_email: str,
         content: Dict[str, Any],
         company_info: Optional[Dict[str, str]] = None
     ) -> MIMEMultipart:
         """
         Construct the email message from generated content.
-        
+
         Args:
             sender_email: Email address of sender
             receiver_email: Email address of recipient
             content: Generated content from Gemini
             company_info: Optional company information to include in signature
-            
+
         Returns:
             Constructed MIMEMultipart email message
         """
@@ -153,7 +186,7 @@ class EmailGenerator:
             "contact_email": "hr@company.com",
             "website": "www.company.com"
         }
-        
+
         # Add fallback values for missing content
         if 'greeting' not in content:
             content['greeting'] = "Dear Candidate"
@@ -170,49 +203,69 @@ class EmailGenerator:
             content['next_steps'] = "Please review the details and confirm your acceptance."
         if 'closing' not in content:
             content['closing'] = "We look forward to working with you."
-        
+
         # Ensure project_details has all required fields
         pd = content.get('project_details', {})
         if not isinstance(pd.get('requirements', None), list):
             pd['requirements'] = []
         if not isinstance(pd.get('expected_outcomes', None), list):
             pd['expected_outcomes'] = []
-        
+
         # Convert requirements and expected outcomes to comma-separated strings
         req_str = ", ".join(pd.get('requirements', []))
         outcomes_str = ", ".join(pd.get('expected_outcomes', []))
-        
+
+        repository_name = content.get('repository_name', 'Project Repository')
+
         # Construct email body from content
         body = f"""
         {content['greeting']}
-        
+
         {content['introduction']}
-        
+
         Project Assignment Details:
         - Project Name: {pd.get('name', 'Project Assignment')}
         - Description: {pd.get('description', 'A tailored project assignment')}
         - Key Requirements: {req_str}
         - Expected Outcomes: {outcomes_str}
-        
+        - Project Repository Name: {repository_name}
+
         {content['next_steps']}
-        
+
         {content['closing']}
-        
+
         Best Regards,
         {company_info['name']}
         Email: {company_info['contact_email']}
         Website: {company_info['website']}
         """
-        
+
         # Set up the MIME message
         message = MIMEMultipart()
         message["From"] = sender_email
         message["To"] = receiver_email
         message["Subject"] = content.get('subject', 'Project Assignment Notification')
         message.attach(MIMEText(body, "plain"))
-        
+
         return message
     
+    def get_github_username(self, candidate_profile: Dict[str, Any], receiver_email: str) -> str:
+        """
+        Safely retrieves the GitHub username from the candidate profile.
+
+        Args:
+            candidate_profile: The candidate's profile dictionary.
+            receiver_email: Fallback email address if GitHub is not found.
+
+        Returns:
+            The GitHub username or the receiver email if not found.
+        """
+        if "contactinfo" in candidate_profile and isinstance(candidate_profile["contactinfo"], dict):
+            contact_info = candidate_profile["contactinfo"]
+            if "github" in contact_info:
+                return contact_info["github"]
+        return receiver_email
+
     def send_assignment_email(
         self,
         sender_email: str,
@@ -225,7 +278,7 @@ class EmailGenerator:
     ) -> bool:
         """
         Generate and send a project assignment email to a candidate.
-        
+
         Args:
             sender_email: Email address of sender
             receiver_email: Email address of recipient
@@ -234,32 +287,46 @@ class EmailGenerator:
             job_description: Job description data
             project_options: Optional project options to consider
             company_info: Optional company information for signature
-            
+
         Returns:
             True if email was sent successfully, False otherwise
         """
         try:
             # Generate content with Gemini
             content = self._generate_assignment_content(
-                candidate_profile, 
-                job_description, 
+                candidate_profile,
+                job_description,
                 project_options
             )
+            contact_identifier = None
+
+            # Extract repository name from Gemini's response
+            repository_name = content.get("repository_name", "DefaultProjectRepo")
             
+            github_username = self.get_github_username(candidate_profile, receiver_email)
+
+            # Use the github_username as the candidate identifier.
+            candidate_identifier = candidate_profile.get("email", github_username)
+
+            if not candidate_identifier:
+                print("Warning: Could not determine candidate identifier. Repository assignment not saved.")
+            else:
+                self._save_repo_assignment(candidate_identifier, repository_name)
+
             # Construct email
             message = self._construct_email(
-                sender_email, 
-                receiver_email, 
+                sender_email,
+                receiver_email,
                 content,
                 company_info
             )
-            
+
             # Send email
             with smtplib.SMTP(self.smtp_server, self.smtp_port) as server:
                 server.starttls()
                 server.login(sender_email, password)
                 server.sendmail(sender_email, receiver_email, message.as_string())
-            
+
             return True
         except Exception as e:
             print(f"Error sending assignment email: {e}")

@@ -29,7 +29,7 @@ const SidebarLayout: React.FC<SidebarLayoutProps> = ({ children, userInitials })
         ${isSidebarExpanded ? 'ml-64' : 'ml-16'}`}
       >
         {/* Header */}
-        <Header userInitials={userInitials} />
+        {/* <Header userInitials={userInitials} /> */}
 
         {/* Main Content Area */}
         <main className="p-6">

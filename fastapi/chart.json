@@ -1,8 +1,8 @@
 {
   "summary_stats": {
     "total_resumes": 8,
-    "total_skills": 90,
-    "total_projects": 16
+    "total_skills": 92,
+    "total_projects": 18
   },
   "skills_data": {
     "top_skills": [
@@ -16,6 +16,14 @@
       },
       {
         "name": "SQL",
+        "count": 3
+      },
+      {
+        "name": "Tailwind CSS",
+        "count": 3
+      },
+      {
+        "name": "HTML",
         "count": 3
       },
       {
@@ -37,14 +45,6 @@
       {
         "name": "Redux",
         "count": 2
-      },
-      {
-        "name": "React Native",
-        "count": 2
-      },
-      {
-        "name": "Tailwind CSS",
-        "count": 2
       }
     ],
     "skill_distribution": [
@@ -54,7 +54,7 @@
       },
       {
         "name": "Backend",
-        "value": 7
+        "value": 9
       },
       {
         "name": "DevOps",
@@ -62,7 +62,7 @@
       },
       {
         "name": "Database",
-        "value": 10
+        "value": 13
       }
     ]
   },
@@ -73,11 +73,11 @@
     },
     {
       "name": "Junior",
-      "value": 2
+      "value": 4
     },
     {
       "name": "Mid-level",
-      "value": 1
+      "value": 0
     },
     {
       "name": "Senior",
@@ -95,6 +95,10 @@
     },
     {
       "name": "Diploma In Engineering",
+      "count": 1
+    },
+    {
+      "name": "Information Technology",
       "count": 1
     },
     {
@@ -126,10 +130,18 @@
       },
       {
         "name": "Tailwind CSS",
+        "count": 4
+      },
+      {
+        "name": "Node.js",
         "count": 3
       },
       {
         "name": "TypeScript",
+        "count": 3
+      },
+      {
+        "name": "Express",
         "count": 3
       },
       {
@@ -141,15 +153,7 @@
         "count": 3
       },
       {
-        "name": "Node.js",
-        "count": 2
-      },
-      {
         "name": "Zustand",
-        "count": 2
-      },
-      {
-        "name": "Supabase",
         "count": 2
       }
     ],
@@ -168,7 +172,7 @@
       },
       {
         "name": "Database",
-        "value": 3
+        "value": 4
       }
     ]
   },
@@ -193,8 +197,22 @@
       "experience_level": "Junior"
     },
     {
+      "name": "PRANAV KULKARNI",
+      "skills_count": 16,
+      "projects_count": 2,
+      "experience_count": 1,
+      "education": [
+        {
+          "degree": "Information Technology",
+          "institution": "International institute of Information Technology IIIT pune",
+          "year": 2026
+        }
+      ],
+      "experience_level": "Junior"
+    },
+    {
       "name": "Mohammed Yaseen Ron",
-      "skills_count": 17,
+      "skills_count": 16,
       "projects_count": 2,
       "experience_count": 1,
       "education": [
@@ -213,14 +231,14 @@
     },
     {
       "name": "Sumeet Mourya",
-      "skills_count": 28,
+      "skills_count": 21,
       "projects_count": 4,
       "experience_count": 0,
       "education": [
         {
           "degree": "Bachelors in Information Engineering",
           "institution": "Technical University of Munich",
-          "year": 2027
+          "year": 0
         },
         {
           "degree": "Higher Secondary Education",
@@ -228,7 +246,7 @@
           "year": 2022
         }
       ],
-      "experience_level": "Mid-level"
+      "experience_level": "Junior"
     },
     {
       "name": "Mohammed Yaseen Ron",
