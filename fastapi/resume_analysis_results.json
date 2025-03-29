@@ -221,94 +221,22 @@
     "achievements": null
   },
   "Resume-pranav-kulkarni.pdf": {
-    "contact_info": {
-      "full_name": "PRANAV KULKARNI",
-      "email": "kulkarnipranav901@gmail.com",
-      "phone": "+919403579863",
-      "location": "PIMPRI-CHINCHWAD PUNE-411017",
-      "linkedin": null,
-      "github": null,
-      "website": null
-    },
-    "education": [
-      {
-        "degree": "Information Technology",
-        "institution": "International institute of Information Technology IIIT pune",
-        "graduation_year": 2026,
-        "gpa": null,
-        "honors": null
-      }
-    ],
-    "work_experience": [
-      {
-        "company": "Unknown (Internship)",
-        "job_title": "Web Development training",
-        "start_date": "Date Not Specified",
-        "end_date": null,
-        "responsibilities": [
-          "Received Web Development training during internship."
-        ],
-        "technologies": null
-      }
-    ],
-    "skills": {
-      "technical_skills": [
-        "HTML",
-        "Java script",
-        "React",
-        "Tailwind CSS",
-        "Node.js",
-        "Express(EX)",
-        "Hono",
-        "Zod",
-        "Next.js",
-        "RESTful APIs",
-        "MongoDB",
-        "PostgreSQL",
-        "MySQL",
-        "CI/CD",
-        "Pipelines",
-        "Kubernetes"
-      ],
-      "soft_skills": null,
-      "certifications": null
-    },
-    "summary": "A passionate Full Stack Developer with expertise in frontend, backend, and DevOps technologies. I excel in creating seamless and dynamic web applications. Transform your vision into stunning digital reality with expert development services tailored to your unique business needs.",
-    "projects": [
-      {
-        "name": "Todo Application",
-        "description": "Developing a to-do app with Node.js, MongoDB, Express, and React involves creating a backend with Node.js and Express for API endpoints, using MongoDB for database storage, and building a frontend with React for a responsive user interface. Integrating these technologies allows for a full-stack application capable of managing tasks efficiently.",
-        "technologies": [
-          "Node.js",
-          "MongoDB",
-          "Express",
-          "React"
-        ],
-        "start_date": null,
-        "end_date": null,
-        "link": "https://github.com/Praxxav/Todo-app"
-      },
-      {
-        "name": "Dukkan Web Interface",
-        "description": "Developed Dukkan interface using Tailwind CSS, optimizing UI for enhanced user experience. Implemented responsive design principles to ensure compatibility across devices. Enhanced frontend functionality for improved usability and performance.",
-        "technologies": [
-          "Tailwind CSS"
-        ],
-        "start_date": null,
-        "end_date": null,
-        "link": "https://github.com/Praxxav/dukkan"
-      }
-    ],
-    "achievements": null
+    "error": "Error processing file: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-2.0-pro-exp'}, 'quotaValue': '50'}]}, {'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '14s'}]}}"
   },
   "Yaseenron.pdf": {
+    "error": "Error processing file: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-2.0-pro-exp'}, 'quotaValue': '50'}]}, {'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '8s'}]}}"
+  },
+  "template.cv.pdf": {
+    "error": "Error processing file: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-2.0-pro-exp'}, 'quotaValue': '50'}]}, {'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '10s'}]}}"
+  },
+  "Resume - Shivam Musterya 1.pdf": {
     "contact_info": {
       "full_name": "Mohammed Yaseen Ron",
       "email": "yaseenron070@gmail.com",
-      "phone": "91-7208455991",
+      "phone": "+91-7208455991",
       "location": null,
       "linkedin": "www.linkedin.com/in/yaseen-ron-36319b305",
-      "github": "https://github.com/MohammedYaseenRon",
+      "github": "https://github.com/MohammedYaseenRon/",
       "website": null
     },
     "education": [
@@ -329,80 +257,163 @@
     ],
     "work_experience": [
       {
-        "company": "TechNSure Private Limited Comapany",
+        "company": "(Private Limited Comapany)",
         "job_title": "FrontEnd Developer",
-        "start_date": "Oct2024",
-        "end_date": "Jan2025",
+        "start_date": "Oct 2024",
+        "end_date": "Present",
         "responsibilities": [
-          "Designed and implemented responsive user interfaces using Next.js, React, and TypeScript, focusing on pixel-perfect accuracy to align with high-fidelity prototypes created in Figma.",
-          "Collaborated closely with designers and backend developers to deliver seamless integrations, maintaining a smooth user experience and reducing project delivery timelines.",
-          "Integrated RESTful APIs endpoints efficiently, ensuring secure and reliable data flow between frontend and backend systems."
+          "Collaborated with cross-functional teams to translate business objectives into scalable web solutions, ensuring full alignment with project goals and reducing time-to-market by 20%.",
+          "Developed dynamic and responsive user interfaces, optimizing user engagement and website performance."
+        ],
+        "technologies": null
+      },
+      {
+        "company": "Supraja Technologies",
+        "job_title": "Cybersecurity Intern",
+        "start_date": "Feb 2024",
+        "end_date": "Apr 2024",
+        "responsibilities": [
+          "Performed VAPT, identifying and mitigating critical vulnerabilities in 10+ web applications.",
+          "Discovered and exploited website vulnerabilities, documenting processes for security enhancement."
+        ],
+        "technologies": null
+      },
+      {
+        "company": "ShigaCorp",
+        "job_title": "Business Development Intern",
+        "start_date": "Aug 2023",
+        "end_date": "Oct 2023",
+        "responsibilities": [
+          "Visualized data-driven reports, reducing decision-making time and facilitating rapid adaptation to market trends.",
+          "Maximized business development efforts through targeted data analysis, driving a 25% increase in sales leads."
+        ],
+        "technologies": null
+      },
+      {
+        "company": "Anand Techno Creations",
+        "job_title": "IoT Project Development Intern",
+        "start_date": "Jun 2021",
+        "end_date": "Aug 2021",
+        "responsibilities": [
+          "Executed end-to-end IoT project lifecycles, from conceptualization to implementation, resulting in the successful development of 2+ commercially viable solutions.",
+          "Excelled in PCB design and simulation with Proteus, seamlessly integrating IoT devices with Firebase and AWS."
         ],
         "technologies": [
-          "Next.js",
-          "React",
-          "TypeScript",
-          "Figma",
-          "RESTful APIs"
+          "Proteus",
+          "Firebase",
+          "AWS"
         ]
       }
     ],
     "skills": {
       "technical_skills": [
-        "C",
         "C++",
-        "Html",
-        "CSS",
+        "Python",
         "JavaScript",
-        "Typescript",
-        "Next JS",
-        "Mern Stack (MongoDB, Express JS, React JS, Node JS)",
-        "Git",
-        "PostgresQL",
-        "Tailwind CSS",
-        "Redux",
-        "Software Development Life Cycle (SDLC)",
-        "Docker",
-        "DBMS (SQL, NoSQL)",
-        "AWS",
+        "SQL",
+        "React.js",
+        "Django",
+        "Material-UI",
+        "Github",
+        "VS Code",
+        "Microsoft Tools",
+        "Tableau",
+        "Blockchain",
+        "Data Analysis",
+        "Web Scraping",
+        "HTML",
+        "CSS",
+        "ML/DL models",
+        "HERE api",
+        "OpenStreetMap",
+        "Open AI",
+        "HERE & Geoapify API",
+        "SQLlite",
+        "Conv.ai",
+        "Ready Player Me",
         "Vercel"
       ],
-      "soft_skills": null,
+      "soft_skills": [
+        "Quick Learner",
+        "Critical Thinking",
+        "Problem Solving",
+        "Analytical Skills",
+        "Growth mindset",
+        "Confidence"
+      ],
       "certifications": [
-        "Full Stack Development:100xDevs"
+        "Full Stack Development: 100xDevs"
       ]
     },
     "summary": null,
     "projects": [
       {
-        "name": "Full stack web application",
-        "description": "Built a full-stack banking application using TypeScript, Next.js (frontend & backend), Express, PostgreSQL, Prisma ORM, and Tailwind CSS. Managed the project with Turborepo for efficient monorepo handling. Implemented secure user authentication with NextAuth, allowing users to sign in and log in using credentials. Enabled users to perform transactions (add/remove money to/from a wallet), view account balance, and track transaction history with clear statuses (e.g., Success or Failure). Integrated a webhook handler to enable seamless communication with the banking API for real-time updates.",
+        "name": "Friend Next Door",
+        "description": "Offers Al-driven mental health support, enabling users to engage with empathetic 3D virtual companions. Through authentic conversations and comprehensive resources, fosters a supportive environment for emotional well-being.",
         "technologies": [
-          "TypeScript",
-          "Next.js",
-          "Express",
-          "PostgreSQL",
-          "Prisma ORM",
-          "Tailwind CSS",
-          "Turborepo",
-          "NextAuth",
-          "Webhooks"
+          "React.js",
+          "Conv.ai",
+          "Ready Player Me",
+          "Vercel"
         ],
         "start_date": null,
         "end_date": null,
         "link": null
       },
       {
-        "name": "Talents tracks | (working)",
-        "description": "Built a job-seeker and recruiter platform using Next.js, Node.js, Express.js, PostgreSQL, Prisma, and Tailwind CSS. Implemented a role-based authentication system to manage secure access for job-seekers and recruiters. Developed features for job-seekers to showcase skill-based projects, receive ratings, and gather feedback from recruiters. Created a recruiter dashboard enabling project evaluation, task posting, job offer management, and scheduling meetings. Integrated real-time chat and commenting functionality using WebSockets for enhanced collaboration. Focused on practical skill evaluation over traditional resumes, fostering a results-driven hiring ecosystem.",
+        "name": "Intelligent Intrusion Detection System",
+        "description": "Redefines network monitoring, by utilizing advanced ML/DL techniques surpassing traditional IDS systems. Its intuitive dashboard empowers admins to efficiently track and manage traffic, enhancing network security.",
         "technologies": [
-          "Next.js",
-          "Node.js",
-          "Express.js",
-          "PostgreSQL",
-          "Prisma",
-          "Tailwind CSS",
-          "WebSockets"
+          "HTML",
+          "CSS",
+          "Javascript",
+          "Django",
+          "Python",
+          "ML/DL models"
+        ],
+        "start_date": null,
+        "end_date": null,
+        "link": null
+      },
+      {
+        "name": "EcoSense",
+        "description": "An environmental monitoring system which utilizes real-time data for visualizing environment layers. Includes time series forecasts, health & policy recommendations, interactive maps, and ecofriendly marketplace.",
+        "technologies": [
+          "HTML/CSS",
+          "Javascript",
+          "HERE api",
+          "OpenStreetMap",
+          "Open Al"
+        ],
+        "start_date": null,
+        "end_date": null,
+        "link": null
+      },
+      {
+        "name": "Dynamo",
+        "description": "A multimodal route optimization platform using advanced algorithms to find efficient paths among destinations. Implemented additional features like last mile delivery optimizations, shipment manager, and consumption calculator.",
+        "technologies": [
+          "React.js",
+          "Material UI",
+          "ML/DL models",
+          "HERE & Geoapify API",
+          "Open Al"
+        ],
+        "start_date": null,
+        "end_date": null,
+        "link": null
+      },
+      {
+        "name": "Karnataka State Police Dashboard",
+        "description": "Developed an interactive dashboard with KPI monitoring for real-time visualization, enabling informed decision-making. Employed demographic analysis and feature engineering to predict criminal behavior and establish a feedback loop for continuous model improvement, boosting prediction accuracy.",
+        "technologies": [
+          "React.js",
+          "Material-UI",
+          "Open Al",
+          "Django",
+          "SQLlite",
+          "Python",
+          "ML/DL Models"
         ],
         "start_date": null,
         "end_date": null,
@@ -412,13 +423,196 @@
     "achievements": {
       "professional_awards": [
         "3rd prize at Global Hackathon name called GNEC Hackathon 2024 Fall - Compete For UN - Affiliated",
-        "Participated In Mumbai Hacks asia's largest Hackathon which awarded a Guinness world record."
+        "Participated In Mumbai Hacks asia's largest Hackathon which awarded a Guinness world record"
       ],
       "publications": null,
       "conference_presentations": null,
       "patents": null,
       "volunteer_work": null,
       "leadership_roles": null,
+      "community_involvement": null
+    }
+  },
+  "REsumeDebanjan.pdf": {
+    "error": "Error processing file: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'model': 'gemini-2.0-pro-exp', 'location': 'global'}, 'quotaValue': '50'}]}, {'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '54s'}]}}"
+  },
+  "Resume_Ujjawal_SIngh_1.pdf": {
+    "contact_info": {
+      "full_name": "UJJAWAL SINGH",
+      "email": "ujjawal1712@gmail.com",
+      "phone": "+91 9326430435",
+      "location": "Mumbai",
+      "linkedin": null,
+      "github": "https://github.com/ujju12345",
+      "website": null
+    },
+    "education": [
+      {
+        "degree": "Bachelor of Engineering in Computer Science",
+        "institution": "UNIVERSITY OF MUMBAI",
+        "graduation_year": 2020,
+        "gpa": 8.3,
+        "honors": [
+          "Relevant Coursework: Data Structures, Natural Language Processing, Databases, Web technology"
+        ]
+      },
+      {
+        "degree": "Science",
+        "institution": "STANN KNOWLEGE CAMPUS",
+        "graduation_year": 0,
+        "gpa": null,
+        "honors": [
+          "Percentage: 85%",
+          "Relevant Coursework: HTML, CSS, Web technology"
+        ]
+      }
+    ],
+    "work_experience": [
+      {
+        "company": "Tbz",
+        "job_title": "Full Stack Dev",
+        "start_date": "May 2023",
+        "end_date": null,
+        "responsibilities": [
+          "Led a team in developing a fully dynamic Real Estate ERP software using React and PHP.",
+          "Managed both backend and frontend development, ensuring seamless functionality across all modules.",
+          "Contributed to the development of a Real Estate mobile app, integrating dynamic features for users.",
+          "Ensured high-quality performance and dynamic features to meet client needs and industry standards."
+        ],
+        "technologies": [
+          "React",
+          "PHP"
+        ]
+      },
+      {
+        "company": "One Portfolio Pvt.Ltd",
+        "job_title": "React Native Android/ios Dev",
+        "start_date": "March 2022",
+        "end_date": "May 2023",
+        "responsibilities": [
+          "Integrated 200+ APIs into the application, enhancing functionality and connectivity with external services.",
+          "Enhanced multiple app screens for a seamless, responsive user experience across multiple devices",
+          "Ensured high-quality performance and dynamic features to meet client needs and industry standards.",
+          "Gained hands-on experience with Git, GitLab, Bitbucket, Slack, Microsoft Teams, code reviews, and tech principles.",
+          "Published the app successfully on the Play Store."
+        ],
+        "technologies": [
+          "React Native",
+          "Git",
+          "GitLab",
+          "Bitbucket",
+          "Slack",
+          "Microsoft Teams"
+        ]
+      },
+      {
+        "company": "WebLord Info Tech Pvt.Ltd",
+        "job_title": "Full Stack dev",
+        "start_date": "August 2020",
+        "end_date": "Feb 2022",
+        "responsibilities": [
+          "Developed dynamic web pages using React, and Responsive Web Design.",
+          "Learn and implement Advanced Javascript concept",
+          "Developed RESTful API endpoints for seamless integration of voice input into the existing system",
+          "Utilized Jira as the primary project management tool to plan, track, and manage tasks"
+        ],
+        "technologies": [
+          "React",
+          "Responsive Web Design",
+          "Javascript",
+          "RESTful API",
+          "Jira"
+        ]
+      }
+    ],
+    "skills": {
+      "technical_skills": [
+        "Nodejs",
+        "PHP",
+        "JavaScript",
+        "React Native",
+        "React",
+        "SQL",
+        "Postgres",
+        "REST API",
+        "POSTMAN",
+        "Firebase",
+        "GitLab",
+        "Design Patterns",
+        "Git",
+        "Cloud Computing",
+        "Web Development",
+        "HTML",
+        "CSS",
+        "Data Structures",
+        "Natural Language Processing",
+        "Databases",
+        "Bitbucket",
+        "Slack",
+        "Microsoft Teams",
+        "Jira",
+        "Bootstrap",
+        "Heidi SQL",
+        "socket.io",
+        "Docker",
+        "BigQuery"
+      ],
+      "soft_skills": [
+        "Leadership",
+        "Teamwork",
+        "Planning",
+        "Execution skills",
+        "Code reviews"
+      ],
+      "certifications": [
+        "Certification of 'Exploring and preparing your Data with BigQuery' - Google Cloud- COURSERA",
+        "Certification of Creating New BigQuery and Visualizing Insights - Google Cloud- COURSERA",
+        "Certification of 'Achieving Advanced Insights with BigQuery'- Google Cloud- COURSERA",
+        "Certification of Real Estate Price Prediction of Boston dataset- Microsoft Learn Student Ambassador",
+        "Certificationof IntroductiontoSQL - Datacamp",
+        "Certification of 'Python for Beginners - Udemy"
+      ]
+    },
+    "summary": null,
+    "projects": [
+      {
+        "name": "SOCIAL NETWORKING WEBSITE",
+        "description": "Built a responsive website using Bootstrap. Stored user data using Heidi SQL for efficient and secure database management. Used socket.io for real-time messaging. It was a team project consisting of 3 members.",
+        "technologies": [
+          "Bootstrap",
+          "Heidi SQL",
+          "socket.io"
+        ],
+        "start_date": null,
+        "end_date": null,
+        "link": null
+      },
+      {
+        "name": "SENTIMENT ANALYSIS USING MACHINE LEARNING",
+        "description": "Analyzed user emotions based on text within the Twitter dataset. Achieved a 75% accuracy rate in categorizing user emotions based on text within the Twitter dataset. Utilized Docker for containerization, streamlining application deployment, and enhancing scalability and portability.",
+        "technologies": [
+          "Machine Learning",
+          "Docker"
+        ],
+        "start_date": null,
+        "end_date": null,
+        "link": null
+      }
+    ],
+    "achievements": {
+      "professional_awards": [
+        "Secured the 2nd prize in the Web App Development category at the prestigious Engineer's Day competition"
+      ],
+      "publications": null,
+      "conference_presentations": null,
+      "patents": null,
+      "volunteer_work": [
+        "Active involvement in club activities",
+        "Effectively organized a college event, demonstrating strong planning and execution skills."
+      ],
+      "leadership_roles": [
+        "Developed leadership and teamwork skills through active involvement in club activities"
+      ],
       "community_involvement": null
     }
   }

@@ -1,56 +1,56 @@
 {
   "summary_stats": {
-    "total_resumes": 2,
-    "total_skills": 35,
-    "total_projects": 6
+    "total_resumes": 8,
+    "total_skills": 90,
+    "total_projects": 16
   },
   "skills_data": {
     "top_skills": [
       {
-        "name": "CI/CD",
+        "name": "CSS",
+        "count": 4
+      },
+      {
+        "name": "JavaScript",
+        "count": 4
+      },
+      {
+        "name": "SQL",
+        "count": 3
+      },
+      {
+        "name": "Git",
+        "count": 3
+      },
+      {
+        "name": "Docker",
+        "count": 3
+      },
+      {
+        "name": "Vercel",
+        "count": 3
+      },
+      {
+        "name": "Firebase",
         "count": 2
       },
       {
-        "name": "Kubernetes",
+        "name": "Redux",
         "count": 2
       },
       {
-        "name": "HTML",
-        "count": 1
-      },
-      {
-        "name": "Java script",
-        "count": 1
-      },
-      {
-        "name": "React",
-        "count": 1
+        "name": "React Native",
+        "count": 2
       },
       {
         "name": "Tailwind CSS",
-        "count": 1
-      },
-      {
-        "name": "Node.js",
-        "count": 1
-      },
-      {
-        "name": "Express(EX)",
-        "count": 1
-      },
-      {
-        "name": "Hono",
-        "count": 1
-      },
-      {
-        "name": "Zod",
-        "count": 1
+        "count": 2
       }
     ],
     "skill_distribution": [
       {
         "name": "Frontend",
-        "value": 9
+        "value": 12
       },
       {
         "name": "Backend",
@@ -58,11 +58,11 @@
       },
       {
         "name": "DevOps",
-        "value": 3
+        "value": 4
       },
       {
         "name": "Database",
-        "value": 6
+        "value": 10
       }
     ]
   },
@@ -77,103 +77,143 @@
     },
     {
       "name": "Mid-level",
-      "value": 0
+      "value": 1
     },
     {
       "name": "Senior",
-      "value": 0
+      "value": 1
     },
     {
       "name": "Expert",
-      "value": 0
+      "value": 1
     }
   ],
   "education_data": [
     {
-      "name": "Information Technology",
+      "name": "Bachelor's degree",
       "count": 1
+    },
+    {
+      "name": "Diploma In Engineering",
+      "count": 1
+    },
+    {
+      "name": "BE",
+      "count": 2
+    },
+    {
+      "name": "Higher Secondary Education",
+      "count": 3
     },
     {
       "name": "Bachelors",
       "count": 1
     },
     {
-      "name": "Higher Secondary Education",
+      "name": "Bachelor of Engineering",
+      "count": 1
+    },
+    {
+      "name": "Science",
       "count": 1
     }
   ],
   "technology_data": {
     "top_technologies": [
       {
-        "name": "Express",
-        "count": 2
-      },
-      {
-        "name": "React",
-        "count": 2
-      },
-      {
-        "name": "Java",
-        "count": 2
-      },
-      {
-        "name": "Node.js",
-        "count": 1
-      },
-      {
-        "name": "MongoDB",
-        "count": 1
+        "name": "Next.js",
+        "count": 4
       },
       {
         "name": "Tailwind CSS",
-        "count": 1
+        "count": 3
       },
       {
         "name": "TypeScript",
-        "count": 1
+        "count": 3
       },
       {
-        "name": "NextJs",
-        "count": 1
+        "name": "React.js",
+        "count": 3
+      },
+      {
+        "name": "Open Al",
+        "count": 3
+      },
+      {
+        "name": "Node.js",
+        "count": 2
+      },
+      {
+        "name": "Zustand",
+        "count": 2
+      },
+      {
+        "name": "Supabase",
+        "count": 2
       }
     ],
     "technology_distribution": [
       {
         "name": "Frontend",
-        "value": 5
+        "value": 9
       },
       {
         "name": "Backend",
-        "value": 4
+        "value": 7
       },
       {
         "name": "DevOps",
-        "value": 0
+        "value": 1
       },
       {
         "name": "Database",
-        "value": 1
+        "value": 3
       }
     ]
   },
   "resume_comparison": [
     {
-      "name": "PRANAV KULKARNI",
-      "skills_count": 16,
+      "name": "MOHAMMED USMANI",
+      "skills_count": 15,
+      "projects_count": 3,
+      "experience_count": 1,
+      "education": [
+        {
+          "degree": "Bachelor's degree",
+          "institution": "VIT (Virar), Mumbai University",
+          "year": 2026
+        },
+        {
+          "degree": "Diploma In Engineering",
+          "institution": "Pravin Patil College, MSBTE",
+          "year": 2023
+        }
+      ],
+      "experience_level": "Junior"
+    },
+    {
+      "name": "Mohammed Yaseen Ron",
+      "skills_count": 17,
       "projects_count": 2,
       "experience_count": 1,
       "education": [
         {
-          "degree": "Information Technology",
-          "institution": "International institute of Information Technology IIIT pune",
+          "degree": "BE in Computer Science and Engineering (AI & ML)",
+          "institution": "Viva Institute of Technology",
           "year": 2026
+        },
+        {
+          "degree": "Higher Secondary Education in Science",
+          "institution": "SN College of Science and Arts",
+          "year": 2022
         }
       ],
       "experience_level": "Junior"
     },
     {
       "name": "Sumeet Mourya",
-      "skills_count": 21,
+      "skills_count": 28,
       "projects_count": 4,
       "experience_count": 0,
       "education": [
@@ -188,7 +228,45 @@
           "year": 2022
         }
       ],
-      "experience_level": "Junior"
+      "experience_level": "Mid-level"
+    },
+    {
+      "name": "Mohammed Yaseen Ron",
+      "skills_count": 25,
+      "projects_count": 5,
+      "experience_count": 4,
+      "education": [
+        {
+          "degree": "BE in Computer Science and Engineering (AI & ML)",
+          "institution": "Viva Institute of Technology",
+          "year": 2026
+        },
+        {
+          "degree": "Higher Secondary Education in Science",
+          "institution": "SN College of Science and Arts",
+          "year": 2022
+        }
+      ],
+      "experience_level": "Expert"
+    },
+    {
+      "name": "UJJAWAL SINGH",
+      "skills_count": 29,
+      "projects_count": 2,
+      "experience_count": 3,
+      "education": [
+        {
+          "degree": "Bachelor of Engineering in Computer Science",
+          "institution": "UNIVERSITY OF MUMBAI",
+          "year": 2020
+        },
+        {
+          "degree": "Science",
+          "institution": "STANN KNOWLEGE CAMPUS",
+          "year": 0
+        }
+      ],
+      "experience_level": "Senior"
     }
   ]
 }
