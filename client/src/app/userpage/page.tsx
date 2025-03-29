@@ -191,17 +191,19 @@ export default function ResumeScannerApp() {
   // Handle saving a candidate
   const handleSaveCandidate = async (id: string) => {
     try {
-      await saveCandidate(id)
-
-      // Update the local state
+      await saveCandidate(id);
+  
+      // Ensure saved candidates stay visible
       setCandidates(
-        candidates.map((candidate) => (candidate.id === id ? { ...candidate, saved: !candidate.saved } : candidate)),
-      )
+        candidates.map((candidate) => 
+          candidate.id === id ? { ...candidate, saved: true } : candidate
+        )
+      );
     } catch (error) {
-      console.error("Error saving candidate:", error)
-      // In a real app, you would show an error message
+      console.error("Error saving candidate:", error);
     }
-  }
+  };
+  
 
   // Loading overlay component
   const LoadingOverlay = () => (

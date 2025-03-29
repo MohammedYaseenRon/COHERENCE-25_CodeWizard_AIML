@@ -1,19 +1,28 @@
 // @/types/index.ts
-// @/types/index.ts (assumed)
+
 export interface Candidate {
   id: string;
   name: string;
+  full_resume?: string;  // Ensure these properties exist
+  match_percentage?: number;
+  matching_skills?: string[];
+  gaps?: number;
+  rank?: number;
+  filename?: string;
   years: number;
   location: string;
   education: string;
+  
   skills: string[];
   highlights: string[];
   match: number;
   saved: boolean;
-  email: string;      // Missing
-  experience: any;    // Missing (type unclear, could be number, string, etc.)
-  matchScore: number; // Missing (possibly same as match?)
-} 
+  email: string;
+  experience: any;
+  matchScore: number;
+  contact_info?: ContactInfo; // Added missing contact_info
+  work_experience?: WorkExperience[]; // Ensure it follows WorkExperience type
+}
 
 export interface Job {
   id: string;
@@ -78,21 +87,4 @@ export interface ResumeProfile {
   skills: Skills;
   summary?: string;
   projects?: Project[];
-}
-
-// export interface Candidate {
-//   id: string;
-//   name: string;
-//   email: string;
-//   skills: string[];
-//   experience: string;
-//   education: string;
-//   saved: boolean;
-//   matchScore: number;
-// }
-
-export interface FilterOptions {
-  skills: string[];
-  experience: string[];
-  education: string[];
 }
