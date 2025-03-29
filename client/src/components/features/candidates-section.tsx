@@ -97,9 +97,29 @@ export const CandidatesSection: React.FC<CandidatesSectionProps> = ({
     setSelectedCandidates(!isAllSelected ? [...candidates] : [])
   }
 
-  const handleSendMail = () => {
-    if (onSendMail && selectedCandidates.length > 0) {
-      onSendMail(selectedCandidates)
+  const handleSendMail = async () => {
+    console.log("Sending mail to selected candidates:", selectedCandidates);
+    
+    if (selectedCandidates.length > 0) {
+      try {
+        const response = await fetch('https://rbd6wn7l-8000.inc1.devtunnels.ms/send-email/bulk', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ ranked_resumes : selectedCandidates })
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to send emails');
+        }
+
+        // if (onSendMail) {
+        //   onSendMail(selectedCandidates);
+        // }
+      } catch (error) {
+        console.error('Error sending emails:', error);
+      }
     }
   }
 

@@ -11,6 +11,7 @@ import { JobDescriptionSection } from "@/components/features/job-description"
 import type { Candidate, FilterOptions } from "@/types"
 import { getCandidates, saveCandidate } from "@/lib/data-service"
 import dynamic from "next/dynamic";
+import ResumeAnalysisCharts from "@/components/ResumeAnalysisCharts"
 
 const Sidebar = dynamic(() => import("@/components/layout/sidebar"), {
   ssr: false,
@@ -308,12 +309,7 @@ export default function ResumeScannerApp() {
 
           {/* Optional: Analysis Results Display */}
           {analysisResults && (
-            <div className="mt-6 bg-gray-800 p-4 rounded">
-              <h3 className="text-xl font-semibold mb-2">Analysis Results</h3>
-              <pre className="text-xs overflow-x-auto">
-                {JSON.stringify(analysisResults, null, 2)}
-              </pre>
-            </div>
+            <ResumeAnalysisCharts analysisResults={analysisResults} />
           )}
         </main>
       </div>
