@@ -569,9 +569,12 @@ class ResumeAnalysisServer:
                     raise HTTPException(status_code=400, detail="No ranked resumes provided")
 
                 sender_email = request.get("sender_email")
+                if not sender_email:
+                    sender_email = os.getenv("SENDER_EMAIL")
+
                 password = request.get("password")
-                if not sender_email or not password:
-                    raise HTTPException(status_code=400, detail="Sender email and password are required")
+                if not password:
+                    password = os.getenv("SENDER_PASSWORD")
 
                 # Initialize email generator
                 email_gen = EmailGenerator()
