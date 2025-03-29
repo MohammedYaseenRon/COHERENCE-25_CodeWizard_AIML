@@ -3,7 +3,11 @@ import os
 import pathlib
 import websockets
 import tempfile
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect, HTTPException, Body
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect, HTTPException, Body, Response, UploadFile, File
+from fastapi.responses import FileResponse
+import nltk
+from nltk.corpus import stopwords
+from urllib.parse import urljoin, urlparse
 from google import genai
 from dotenv import load_dotenv
 import json
@@ -17,6 +21,7 @@ from helpers.FileHandler import FileUploadHandler
 import aiofiles
 from fastapi.responses import JSONResponse
 from mailer import EmailGenerator
+from onefilellm import process_github_issue, process_github_repo,process_github_pull_request, process_arxiv_pdf, process_doi_or_pmid, crawl_and_extract_text, preprocess_text, fetch_youtube_transcript, process_local_folder
 
 # Load environment variables
 load_dotenv()
@@ -31,6 +36,10 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"]
 )
+
+ENABLE_COMPRESSION_AND_NLTK = True  # Set to True to enable NLTK download, stopword removal, and compressed output
+
+EXCLUDED_DIRS = ["dist", "node_modules", ".git", "__pycache__"] 
 
 class JobDescriptionRequest(BaseModel):
     job_description: str
@@ -120,6 +129,29 @@ def clean_json_response(text: str) -> dict:
         text = text[:-3].strip()
     return json.loads(text)
 
+
+def safe_file_read(filepath, fallback_encoding='latin1'):
+    try:
+        with open(filepath, "r", encoding='utf-8') as file:
+            return file.read()
+    except UnicodeDecodeError:
+        with open(filepath, "r", encoding=fallback_encoding) as file:
+            return file.read()
+
+stop_words = set()  # Initialize as empty set by default
+if ENABLE_COMPRESSION_AND_NLTK:
+    try:
+        nltk.download("stopwords", quiet=True)
+        stop_words = set(stopwords.words("english"))
+    except Exception as e:
+        print(f"[bold yellow]Warning:[/bold yellow] Failed to download or load NLTK stopwords. Compression will proceed without stopword removal. Error: {e}")
+
+TOKEN = os.getenv('GITHUB_TOKEN', 'default_token_here')
+if TOKEN == 'default_token_here':
+    raise EnvironmentError("GITHUB_TOKEN environment variable not set.")
+
+headers = {"Authorization": f"token {TOKEN}"}
+
 class ResumeAnalysisServer:
     def __init__(self, results_file='resume_analysis_results.json'):
         load_dotenv()
@@ -152,6 +184,46 @@ class ResumeAnalysisServer:
         """
         self.analysis_results[filename] = resume_data
         self.save_results()
+
+    def main_processing(self, input_path):
+        output_file = "uncompressed_output.txt"
+        processed_file = "compressed_output.txt"
+        urls_list_file = "processed_urls.txt"
+
+        try:
+            if "github.com" in input_path:
+                if "/pull/" in input_path:
+                    final_output = process_github_pull_request(input_path)
+                elif "/issues/" in input_path:
+                    final_output = process_github_issue(input_path)
+                else:
+                    final_output = process_github_repo(input_path)
+            elif urlparse(input_path).scheme in ["http", "https"]:
+                if "youtube.com" in input_path or "youtu.be" in input_path:
+                    final_output = fetch_youtube_transcript(input_path)
+                elif "arxiv.org" in input_path:
+                    final_output = process_arxiv_pdf(input_path)
+                else:
+                    crawl_result = crawl_and_extract_text(input_path, max_depth=2, include_pdfs=True, ignore_epubs=True)
+                    final_output = crawl_result['content']
+                    with open(urls_list_file, 'w', encoding='utf-8') as urls_file:
+                        urls_file.write('\n'.join(crawl_result['processed_urls']))
+            elif input_path.startswith("10.") and "/" in input_path or input_path.isdigit():
+                final_output = process_doi_or_pmid(input_path)
+            else:
+                final_output = process_local_folder(input_path)
+
+            with open(output_file, "w", encoding="utf-8") as file:
+                file.write(final_output)
+
+            if ENABLE_COMPRESSION_AND_NLTK:
+                preprocess_text(output_file, processed_file)
+                return {"uncompressed_file": output_file, "compressed_file": processed_file}
+            else:
+                return {"uncompressed_file": output_file}
+
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=str(e))
 
     def setup_routes(self):
         @self.app.websocket("/resume-analyze")
@@ -435,60 +507,65 @@ class ResumeAnalysisServer:
                 
                 # Process each resume
                 for filename, resume in self.analysis_results.items():
-                    # Basic resume info
-                    resume_info = {
-                        "name": resume["contact_info"]["full_name"],
-                        "skills_count": len(resume["skills"]["technical_skills"]),
-                        "projects_count": len(resume.get("projects", [])),
-                        "experience_count": len(resume.get("work_experience", [])),
-                        "education": [],
-                        "experience_level": None
-                    }
-                    
-                    # Calculate experience score
-                    project_count = len(resume.get("projects", []))
-                    skill_count = len(resume["skills"]["technical_skills"])
-                    work_exp_count = len(resume.get("work_experience", []))
-                    experience_score = (project_count * 2) + (skill_count * 0.5) + (work_exp_count * 5)
-                    
-                    # Determine experience level
-                    if experience_score >= 40:
-                        experience_level = "Expert"
-                    elif experience_score >= 30:
-                        experience_level = "Senior"
-                    elif experience_score >= 20:
-                        experience_level = "Mid-level"
-                    elif experience_score >= 10:
-                        experience_level = "Junior"
-                    else:
-                        experience_level = "Entry"
-                    
-                    resume_info["experience_level"] = experience_level
-                    chart_data["experience_levels"][experience_level] += 1
-                    
-                    # Process education
-                    for edu in resume["education"]:
-                        degree_type = edu["degree"].split(" in ")[0]  # e.g. "Bachelors" from "Bachelors in CS"
-                        chart_data["degree_types"][degree_type] = chart_data["degree_types"].get(degree_type, 0) + 1
-                        resume_info["education"].append({
-                            "degree": edu["degree"],
-                            "institution": edu["institution"],
-                            "year": edu["graduation_year"]
-                        })
-                    
-                    # Process skills
-                    for skill in resume["skills"]["technical_skills"]:
-                        chart_data["total_skills"].add(skill)
-                        chart_data["skill_frequency"][skill] = chart_data["skill_frequency"].get(skill, 0) + 1
-                    
-                    # Process projects
-                    chart_data["total_projects"] += len(resume.get("projects", []))
-                    for project in resume.get("projects", []):
-                        for tech in project.get("technologies", []):
-                            chart_data["common_technologies"][tech] = chart_data["common_technologies"].get(tech, 0) + 1
-                    
-                    chart_data["resumes"].append(resume_info)
-                
+                    try:
+                        # Basic resume info
+                        resume_info = {
+                            "name": resume["contact_info"]["full_name"],
+                            "skills_count": len(resume["skills"]["technical_skills"]),
+                            "projects_count": len(resume.get("projects", [])),  # Ensure projects is a list or empty list
+                            "experience_count": len(resume.get("work_experience", [])),  # Ensure work_experience is a list or empty list
+                            "education": [],
+                            "experience_level": None
+                        }
+
+                        # Calculate experience score
+                        project_count = len(resume.get("projects", []))  # Safely handle missing projects
+                        skill_count = len(resume["skills"]["technical_skills"])
+                        work_exp_count = len(resume.get("work_experience", []))  # Safely handle missing work_experience
+                        experience_score = (project_count * 2) + (skill_count * 0.5) + (work_exp_count * 5)
+
+                        # Determine experience level
+                        if experience_score >= 40:
+                            experience_level = "Expert"
+                        elif experience_score >= 30:
+                            experience_level = "Senior"
+                        elif experience_score >= 20:
+                            experience_level = "Mid-level"
+                        elif experience_score >= 10:
+                            experience_level = "Junior"
+                        else:
+                            experience_level = "Entry"
+
+                        resume_info["experience_level"] = experience_level
+                        chart_data["experience_levels"][experience_level] += 1
+
+                        # Process education (ensure education is a list before iteration)
+                        for edu in resume.get("education", []):  # Safely handle missing education
+                            degree_type = edu["degree"].split(" in ")[0]  # e.g. "Bachelors" from "Bachelors in CS"
+                            chart_data["degree_types"][degree_type] = chart_data["degree_types"].get(degree_type, 0) + 1
+                            resume_info["education"].append({
+                                "degree": edu["degree"],
+                                "institution": edu["institution"],
+                                "year": edu["graduation_year"]
+                            })
+
+                        # Process skills
+                        for skill in resume.get("skills", {}).get("technical_skills", []):  # Safely handle missing skills
+                            chart_data["total_skills"].add(skill)
+                            chart_data["skill_frequency"][skill] = chart_data["skill_frequency"].get(skill, 0) + 1
+
+                        # Process projects (ensure projects is a list before iteration)
+                        chart_data["total_projects"] += len(resume.get("projects", []))  # Safely handle missing projects
+                        if resume.get("projects"):  # Check if projects exist and are not None
+                            for project in resume["projects"]:  # Safely handle missing projects
+                                for tech in project.get("technologies", []):  # Safely handle missing technologies
+                                    chart_data["common_technologies"][tech] = chart_data["common_technologies"].get(tech, 0) + 1
+
+                        chart_data["resumes"].append(resume_info)
+
+                    except Exception as e:
+                        print(f"Error: {e}")
+
                 # Convert sets to counts
                 chart_data["total_skills"] = len(chart_data["total_skills"])
                 
@@ -811,6 +888,43 @@ class ResumeAnalysisServer:
 
             except Exception as e:
                 raise HTTPException(status_code=500, detail=f"Error sending bulk emails: {str(e)}")
+            
+        
+        @app.post("/process_url_or_path/")
+        async def process_url_or_path(input_path: str = Body(embed=True), compressed: bool = False): # added compressed param
+            result = self.main_processing(input_path)
+
+            file_to_read = result["uncompressed_file"] # default to uncompressed
+
+            if compressed and "compressed_file" in result:
+                file_to_read = result["compressed_file"]
+
+            try:
+                with open(file_to_read, "r", encoding="utf-8") as file:
+                    file_content = file.read()
+                return Response(content=file_content, media_type="text/plain") #return content
+            except FileNotFoundError:
+                raise HTTPException(status_code=404, detail="File not found")
+            except Exception as e:
+                raise HTTPException(status_code=500, detail=str(e))
+
+        @app.get("/get_file/{file_name}")
+        async def get_file(file_name: str):
+            if not os.path.exists(file_name):
+                raise HTTPException(status_code=404, detail="File not found")
+            return FileResponse(file_name, media_type="text/plain", filename=file_name)
+
+        @app.post("/process_upload/")
+        async def process_upload(file: UploadFile = File(...)):
+            temp_file_path = f"temp_{file.filename}"
+            try:
+                with open(temp_file_path, "wb") as buffer:
+                    content = await file.read()
+                    buffer.write(content)
+                result = self.main_processing(temp_file_path)
+            finally:
+                os.remove(temp_file_path)
+            return result
             
     def run(self):
         import uvicorn

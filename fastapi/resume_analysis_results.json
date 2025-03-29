@@ -224,8 +224,8 @@
     "contact_info": {
       "full_name": "PRANAV KULKARNI",
       "email": "kulkarnipranav901@gmail.com",
-      "phone": "+919403579863",
-      "location": "PIMPRI-CHINCHWAD PUNE-411017, India",
+      "phone": "9403579863",
+      "location": "PIMPRI-CHINCHWAD PUNE-411017",
       "linkedin": null,
       "github": "https://github.com/Praxxav",
       "website": null
@@ -241,12 +241,12 @@
     ],
     "work_experience": [
       {
-        "company": "Unknown Company",
-        "job_title": "INTERNSHIP Web Development training",
-        "start_date": "JANUARY 2022",
-        "end_date": null,
+        "company": "Unknown",
+        "job_title": "Web Development Intern",
+        "start_date": "Unknown",
+        "end_date": "Unknown",
         "responsibilities": [
-          "Participated in Web Development training."
+          "Web Development training"
         ],
         "technologies": null
       }
@@ -422,144 +422,7 @@
     }
   },
   "template.cv.pdf": {
-    "contact_info": {
-      "full_name": "Sumeet Mourya",
-      "email": "mouryasumeet5@gmail.com",
-      "phone": "(+49) 01628900637",
-      "location": "M\u00fchlstra\u00dfe 22, 74080 Heilbronn (Germany)",
-      "linkedin": "https://www.linkedin.com/in/sumeet-mourya-ab79422a3/",
-      "github": "https://github.com/Sumeet-2023",
-      "website": null
-    },
-    "education": [
-      {
-        "degree": "Bachelors in Information Engineering",
-        "institution": "Technical University of Munich",
-        "graduation_year": 2027,
-        "gpa": null,
-        "honors": [
-          "Currently enrolled (Started 18/10/2023)"
-        ]
-      },
-      {
-        "degree": "Higher Secondary Education",
-        "institution": "S.V.P Junior College of Science and Commerce",
-        "graduation_year": 2022,
-        "gpa": null,
-        "honors": [
-          "Final grade: 86%"
-        ]
-      }
-    ],
-    "work_experience": [],
-    "skills": {
-      "technical_skills": [
-        "Java",
-        "Python",
-        "Html",
-        "CSS",
-        "JavaScript",
-        "Typescript",
-        "NextJS",
-        "MERN Stack (MongoDB, ExpressJS, ReactJS, NodeJS)",
-        "Git",
-        "ProstgresSQL",
-        "BoostrapCSS",
-        "TailwindCSS",
-        "RESTful APIS",
-        "Software Development Life Cycle (SDLC)",
-        "Agile Methodologies",
-        "Docker",
-        "Kubernetes",
-        "CI/CD",
-        "Database management (SQL, NoSQL)",
-        "Vercel",
-        "ML Tools(Tensorflow, Keras)",
-        "JUnit5",
-        "EasyMock",
-        "LibGDX",
-        "Prisma ORM",
-        "Turborepo",
-        "NextAuth",
-        "Figma"
-      ],
-      "soft_skills": null,
-      "certifications": [
-        "Full Stack Web Development (11/2023 - 06/2024) - Link: https://app.100xdevs.com/certificate/verify/BFC6YRCT",
-        "Career Essentials in Software Development by Microsoft and LinkedIn (12/06/2024 \u2013 16/06/2024) - Link: https://www.linkedin.com/learning/certificates/188035b8b307139570e73d8cbd0a2de4aac180d261988d48e7a38fab64337229",
-        "Machine Learning Specialization (02/2024 - 04/2024) - Includes Supervised Machine Learning: Regression and Classification, Advanced Learning Algorithms, Unsupervised Learning, Recommenders, Reinforcement Learning - Link: https://www.coursera.org/account/accomplishments/specialization/QRRJ678ZWCZM"
-      ]
-    },
-    "summary": "I am a dedicated and ambitious computer science student currently pursuing a Bachelor's degree in Information Engineering at the Technical University of Munich. My passion for technologies drives me to continuously expand my knowledge and skills in software development, particularly in web technologies and machine learning. With hands-on experience in developing full stack web applications using TypeScript, Node.js, and Next.js, I am well-versed in building maintainable, reusable, and testable code.",
-    "projects": [
-      {
-        "name": "Full Stack Web Application",
-        "description": "Banking application were user can add/remove money to/from wallet created using TypeScript, NextJs (Frontend & Backend), Express, Postgres, Tailwind, Prisma ORM where application is managed by Turborepo. User can SignIn with LogIn with credential using NextAuth. Perform transaction, view balance and transaction history with status of Succeed or Failure. Contains webhook handler were Banking API can talk.",
-        "technologies": [
-          "TypeScript",
-          "NextJs (Frontend & Backend)",
-          "Express",
-          "Postgres",
-          "Tailwind",
-          "Prisma ORM",
-          "Turborepo",
-          "NextAuth"
-        ],
-        "start_date": null,
-        "end_date": null,
-        "link": null
-      },
-      {
-        "name": "Frontend Application",
-        "description": "A modern responsive web application crafted using HTML, CSS, React and JavaScript. This project showcases a recreation of restaurant website using the design from Figma.",
-        "technologies": [
-          "HTML",
-          "CSS",
-          "React",
-          "JavaScript",
-          "Figma"
-        ],
-        "start_date": null,
-        "end_date": null,
-        "link": "https://shorturl.at/rYO7c"
-      },
-      {
-        "name": "Software Development Library Management System",
-        "description": "A centralized platform for library staff to efficiently manage library resources and provide seamless services to customer. The system supports functionalities such as adding, editing, and deleting books from the inventory, managing customer information, facilitating borrowing, and returning of book copies, generating reports, and more. It aims to enhance the overall efficiency and effectiveness of library operations developed using Java. Includes Requirements Analysis, Use Case diagram, TDD with JUnit5 and EasyMock guarantees reliability and accuracy of the system.",
-        "technologies": [
-          "Java",
-          "JUnit5",
-          "EasyMock"
-        ],
-        "start_date": null,
-        "end_date": null,
-        "link": null
-      },
-      {
-        "name": "Game Development 2D Top-Down Game",
-        "description": "2D Adventure game developed in Java using the LibGDX framework. Set in a series of increasingly complex mazes, players must navigate through various challenges, avoiding dynamic enemies, overcoming static obstacles and solving puzzles to progress through levels.",
-        "technologies": [
-          "Java",
-          "LibGDX"
-        ],
-        "start_date": null,
-        "end_date": null,
-        "link": null
-      }
-    ],
-    "achievements": {
-      "professional_awards": [
-        "Appeared in 2 Entrance Exam (Subject: Physics, Chemistry and Math) (01/2022 \u2013 08/2023)",
-        "Joint Entrance Exam (JEE): 97.24 Percentile.",
-        "MHT-CET State Entrance Exam: 99.43 Percentile."
-      ],
-      "publications": null,
-      "conference_presentations": null,
-      "patents": null,
-      "volunteer_work": null,
-      "leadership_roles": null,
-      "community_involvement": null
-    }
+    "error": "Error processing file: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'model': 'gemini-2.0-pro-exp', 'location': 'global'}, 'quotaValue': '50'}]}, {'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '25s'}]}}"
   },
   "Resume - Shivam Musterya 1.pdf": {
     "contact_info": {
@@ -766,89 +629,7 @@
     }
   },
   "REsumeDebanjan.pdf": {
-    "contact_info": {
-      "full_name": "DEBANJAN MONDAL",
-      "email": "debanjanmondalk2005@gmail.com",
-      "phone": "+916289896305",
-      "location": "Kolkata, India",
-      "linkedin": null,
-      "github": "https://github.com/Debanjannnn",
-      "website": null
-    },
-    "education": [
-      {
-        "degree": "Bachelor in CSE",
-        "institution": "Sister Nivedita University",
-        "graduation_year": 2027,
-        "gpa": null,
-        "honors": null
-      }
-    ],
-    "work_experience": [],
-    "skills": {
-      "technical_skills": [
-        "React",
-        "Next.js",
-        "Node.js",
-        "Express",
-        "C++",
-        "Serverless Architecture",
-        "PostgreSQL",
-        "Prisma",
-        "Docker",
-        "AWS",
-        "JavaScript",
-        "C",
-        "MERN stack",
-        "MySQL"
-      ],
-      "soft_skills": [
-        "Communication skills"
-      ],
-      "certifications": null
-    },
-    "summary": "FULL STACK DEVELOPER I OPEN SOURCE CONTRIBUTOR. I'm a second-year undergrad passionate about full stack development and open source. My expertise spans Next.js, the MERN stack, MySQL, PostgreSQL, AWS, and Docker. Driven by curiosity and a proactive mindset, I build innovative and scalable web applications.",
-    "projects": [
-      {
-        "name": "BLOG APP",
-        "description": "I built a Blog App using React and integrated ZOD validation by deploying my own npm package. The app includes signup and signin routes, allowing users to upload their own blog posts.",
-        "technologies": [
-          "MERN",
-          "React",
-          "ZOD",
-          "npm"
-        ],
-        "start_date": null,
-        "end_date": null,
-        "link": "https://blog-app-fullstack-gamma.vercel.app/signup"
-      },
-      {
-        "name": "CONFO Video Conferencing App",
-        "description": "I built CONFO, a video conferencing app using Next.js and TypeScript, integrating Clerk for authentication and getstream for real-time functionality. The app includes features such as starting, scheduling, and recording meetings, giving users full control over their online interactions.",
-        "technologies": [
-          "Next.js",
-          "TypeScript",
-          "Clerk",
-          "getstream",
-          "shadcn",
-          "Tailwind CSS"
-        ],
-        "start_date": null,
-        "end_date": null,
-        "link": "https://confo.vercel.app/"
-      },
-      {
-        "name": "TRADE STRATEGY",
-        "description": "Developed a simple application that provides the market prices of BTC and SOL in INR and USD. The app also calculates potential profit from reselling in different currencies (USD to INR and vice versa).",
-        "technologies": [
-          "Typescript"
-        ],
-        "start_date": null,
-        "end_date": null,
-        "link": "https://github.com/Debanjannnn/TRADE-STRATEGY"
-      }
-    ],
-    "achievements": null
+    "error": "Error processing file: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'model': 'gemini-2.0-pro-exp', 'location': 'global'}, 'quotaValue': '50'}]}, {'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '54s'}]}}"
   },
   "Resume_Ujjawal_SIngh_1.pdf": {
     "contact_info": {
