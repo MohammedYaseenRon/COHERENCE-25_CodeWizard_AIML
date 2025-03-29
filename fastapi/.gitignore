@@ -61,6 +61,9 @@ resume_analysis_results.json
 .env
 .env.*
 
+*.pdf
+/uploaded_resumes
+
 # virtualenv
 venv/
 ENV/

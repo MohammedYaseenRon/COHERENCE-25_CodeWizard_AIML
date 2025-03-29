@@ -1,0 +1,170 @@
+{
+  "1": {
+    "resume_id": "1",
+    "profile": {
+      "contact_info": {
+        "full_name": "PRANAV KULKARNI",
+        "email": "kulkarnipranav901@gmail.com",
+        "phone": "9403579863",
+        "location": "PIMPRI-CHINCHWAD PUNE-411017",
+        "linkedin": null
+      },
+      "education": [
+        {
+          "degree": "Information Technology",
+          "institution": "International institute of Information Technology IIIT pune",
+          "graduation_year": 2026,
+          "gpa": null,
+          "honors": null
+        }
+      ],
+      "work_experience": [
+        {
+          "company": "INTERNSHIP",
+          "job_title": "Web Development training",
+          "start_date": "N/A",
+          "end_date": null,
+          "responsibilities": [
+            "Web Development training"
+          ],
+          "technologies": null
+        }
+      ],
+      "skills": {
+        "technical_skills": [
+          "HTML",
+          "Java script",
+          "React",
+          "Tailwind CSS",
+          "Node.js",
+          "Express(EX)",
+          "Hono",
+          "Zod",
+          "Next.js",
+          "RESTful APIs",
+          "MongoDB",
+          "PostgreSQL",
+          "MySQL",
+          "CI/CD",
+          "Pipelines",
+          "Kubernetes"
+        ],
+        "soft_skills": null,
+        "certifications": null
+      },
+      "summary": "A passionate Full Stack Developer with expertise in frontend, backend, and DevOps technologies. I excel in creating seamless and dynamic web applications. Transform your vision into stunning digital reality with expert development services tailored to your unique business needs.",
+      "projects": [
+        {
+          "name": "Todo Application",
+          "description": "Developing a to-do app with Node.js, MongoDB, Express, and React involves creating a backend with Node.js and Express for API endpoints, using MongoDB for database storage, and building a frontend with React for a responsive user interface. Integrating these technologies allows for a full-stack application capable of managing tasks efficiently.",
+          "technologies": [
+            "Node.js",
+            "MongoDB",
+            "Express",
+            "React"
+          ],
+          "start_date": null,
+          "end_date": null,
+          "link": "https://github.com/Praxxav/Todo-app"
+        },
+        {
+          "name": "Dukkan Web Interface",
+          "description": "Developed Dukkan interface using Tailwind CSS, optimizing Ul for enhanced user experience. Implemented responsive design principles to ensure compatibility across devices. Enhanced frontend functionality for improved usability and performance.",
+          "technologies": [
+            "Tailwind CSS"
+          ],
+          "start_date": null,
+          "end_date": null,
+          "link": "https://github.com/Praxxav/dukkan"
+        }
+      ],
+      "achievements": null
+    },
+    "selection_reason": "Fit for role",
+    "selection_date": "29-03-2025"
+  },
+  "2": {
+    "resume_id": "2",
+    "profile": {
+      "contact_info": {
+        "full_name": "PRANAV KULKARNI",
+        "email": "kulkarnipranav901@gmail.com",
+        "phone": "9403579863",
+        "location": "PIMPRI-CHINCHWAD PUNE-411017",
+        "linkedin": null
+      },
+      "education": [
+        {
+          "degree": "Information Technology",
+          "institution": "International institute of Information Technology IIIT pune",
+          "graduation_year": 2026,
+          "gpa": null,
+          "honors": null
+        }
+      ],
+      "work_experience": [
+        {
+          "company": "INTERNSHIP",
+          "job_title": "Web Development training",
+          "start_date": "N/A",
+          "end_date": null,
+          "responsibilities": [
+            "Web Development training"
+          ],
+          "technologies": null
+        }
+      ],
+      "skills": {
+        "technical_skills": [
+          "HTML",
+          "Java script",
+          "React",
+          "Tailwind CSS",
+          "Node.js",
+          "Express(EX)",
+          "Hono",
+          "Zod",
+          "Next.js",
+          "RESTful APIs",
+          "MongoDB",
+          "PostgreSQL",
+          "MySQL",
+          "CI/CD",
+          "Pipelines",
+          "Kubernetes"
+        ],
+        "soft_skills": null,
+        "certifications": null
+      },
+      "summary": "A passionate Full Stack Developer with expertise in frontend, backend, and DevOps technologies. I excel in creating seamless and dynamic web applications. Transform your vision into stunning digital reality with expert development services tailored to your unique business needs.",
+      "projects": [
+        {
+          "name": "Todo Application",
+          "description": "Developing a to-do app with Node.js, MongoDB, Express, and React involves creating a backend with Node.js and Express for API endpoints, using MongoDB for database storage, and building a frontend with React for a responsive user interface. Integrating these technologies allows for a full-stack application capable of managing tasks efficiently.",
+          "technologies": [
+            "Node.js",
+            "MongoDB",
+            "Express",
+            "React"
+          ],
+          "start_date": null,
+          "end_date": null,
+          "link": "https://github.com/Praxxav/Todo-app"
+        },
+        {
+          "name": "Dukkan Web Interface",
+          "description": "Developed Dukkan interface using Tailwind CSS, optimizing Ul for enhanced user experience. Implemented responsive design principles to ensure compatibility across devices. Enhanced frontend functionality for improved usability and performance.",
+          "technologies": [
+            "Tailwind CSS"
+          ],
+          "start_date": null,
+          "end_date": null,
+          "link": "https://github.com/Praxxav/dukkan"
+        }
+      ],
+      "achievements": null
+    },
+    "selection_reason": "Fit for role",
+    "selection_date": "29-03-2025"
+  }
+}
