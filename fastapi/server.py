@@ -274,7 +274,7 @@ class ResumeAnalysisServer:
                     
                     # Generate content with JSON schema
                     response = client.models.generate_content(
-                        model='gemini-2.5-pro-exp-03-25',
+                        model='gemini-2.0-flash',
                         contents=[sample_file, prompt],
                         config={
                             'response_mime_type': 'application/json',
@@ -355,7 +355,7 @@ class ResumeAnalysisServer:
                         
                         # Generate content with JSON schema
                         response = client.models.generate_content(
-                            model='gemini-2.5-pro-exp-03-25',
+                            model='gemini-2.0-flash',
                             contents=[sample_file, prompt],
                             config={
                                 'response_mime_type': 'application/json',
@@ -767,7 +767,7 @@ class ResumeAnalysisServer:
                 
                 # Send request to Gemini
                 response = client.models.generate_content(
-                    model="gemini-2.5-pro-exp-03-25",
+                    model="gemini-2.0-flash",
                     contents=prompt + "\n\nAnalysis Data: " + json.dumps(analysis_content),
                     config={'response_mime_type': 'application/json'}
                 )
@@ -778,6 +778,7 @@ class ResumeAnalysisServer:
                 
             except Exception as e:
                 raise HTTPException(status_code=500, detail=f"Error analyzing bias: {str(e)}")
+            
         @self.app.post("/send-email/individual")
         async def send_individual_email(request: dict = Body(...)):
             """
@@ -907,6 +908,72 @@ class ResumeAnalysisServer:
                 raise HTTPException(status_code=404, detail="File not found")
             except Exception as e:
                 raise HTTPException(status_code=500, detail=str(e))
+            
+        @self.app.post("/analyze_project/")
+        async def analyze_project(input_path: str = Body(embed=True)):
+            """
+            Endpoint to analyze a project based on its code or documentation using Gemini.
+            """
+            try:
+                result = self.main_processing(input_path)
+
+                file_to_read = result["uncompressed_file"]  # default to uncompressed
+
+                try:
+                    with open(file_to_read, "r", encoding="utf-8") as file:
+                        project_content = file.read()
+                except FileNotFoundError:
+                    raise HTTPException(status_code=404, detail="File not found")
+
+                client = genai.Client(api_key=os.getenv("GOOGLE_API_KEY"))
+
+                prompt = f"""
+                Analyze the following project content and provide a detailed report including:
+
+                - A summary of the project's purpose and functionality.
+                - The project's structure, including key files and directories.
+                - Key technologies and libraries used.
+                - Potential areas for improvement or refactoring.
+                - Project metrics such as estimated complexity, maintainability, and code quality.
+                - A list of identified potential issues or bugs.
+                - a list of the programming languages used.
+                - a list of the libraries used.
+                - a list of the files that are most important.
+                - a list of the files that are most complex.
+
+                Project Content:
+                {project_content}
+
+                Return your analysis in the following JSON structure ONLY:
+                {{
+                    "summary": "Project summary",
+                    "structure": "Description of project structure",
+                    "technologies": ["Technology 1", "Technology 2", ...],
+                    "languages": ["Language1","Language2",...],
+                    "libraries": ["Library1","Library2",...],
+                    "important_files": ["file1","file2",...],
+                    "complex_files": ["file1","file2",...],
+                    "improvements": ["Improvement 1", "Improvement 2", ...],
+                    "metrics": {{
+                        "complexity": "Estimated complexity",
+                        "maintainability": "Estimated maintainability",
+                        "code_quality": "Estimated code quality"
+                    }},
+                    "issues": ["Issue 1", "Issue 2", ...]
+                }}
+                """
+
+                response = client.models.generate_content(
+                    model="gemini-2.0-flash",
+                    contents=prompt,
+                    config={'response_mime_type': 'application/json'}
+                )
+
+                project_analysis = clean_json_response(response.text)
+                return project_analysis
+
+            except Exception as e:
+                raise HTTPException(status_code=500, detail=f"Error analyzing project: {str(e)}")
 
         @app.get("/get_file/{file_name}")
         async def get_file(file_name: str):
