@@ -14,7 +14,7 @@ import {
   Cell, 
   ResponsiveContainer 
 } from "recharts"
-import { AlertTriangle, Users, MapPin, Calendar, BookOpen, Briefcase, GraduationCap } from "lucide-react"
+import { AlertTriangle, Users, MapPin, Calendar, Briefcase, GraduationCap } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
@@ -207,9 +207,9 @@ export default function BiasAnalysisPage(): JSX.Element {
     
     const names = ['Yaseen', 'Sumeet', 'Ujjwal', 'Mohammed'];
     const ageData: ChartDataPoint[] = Object.entries(analysisResult.bias_metrics.age.representation).map(
-      ([name, value], index) => ({ 
+      (entry, index) => ({ 
       name: names[index % names.length],
-      value 
+      value: entry[1]
       })
     )
     
@@ -246,9 +246,9 @@ export default function BiasAnalysisPage(): JSX.Element {
     
     const names = ['Yaseen', 'Sumeet', 'Ujjwal', 'Mohammed'];
     const ethnicityData: ChartDataPoint[] = Object.entries(analysisResult.bias_metrics.ethnicity.representation).map(
-      ([name, value], index) => ({ 
+      (entry, index) => ({ 
       name: names[index % names.length],
-      value 
+      value: entry[1] 
       })
     )
     
@@ -285,9 +285,9 @@ export default function BiasAnalysisPage(): JSX.Element {
     
     const names = ['Yaseen', 'Sumeet', 'Ujjwal', 'Mohammed'];
     const educationData: ChartDataPoint[] = Object.entries(analysisResult.bias_metrics.education.representation).map(
-      ([name, value], index) => ({ 
+      (entry, index) => ({ 
       name: names[index % names.length],
-      value 
+      value: entry[1] 
       })
     )
     
@@ -324,9 +324,9 @@ export default function BiasAnalysisPage(): JSX.Element {
     
     const names = ['Yaseen', 'Sumeer', 'Ujjwal', 'Mohammed'];
     const experienceData: ChartDataPoint[] = Object.entries(analysisResult.bias_metrics.experience.representation).map(
-      ([name, value], index) => ({ 
+      (entry, index) => ({ 
         name: names[index % names.length],
-        value 
+        value: entry[1] 
       })
     )
     
@@ -425,7 +425,7 @@ export default function BiasAnalysisPage(): JSX.Element {
       <Card className="mb-6">
         <CardHeader>
           <CardTitle>Job Information</CardTitle>
-          <CardDescription>Enter details about the position you're hiring for</CardDescription>
+          <CardDescription>Enter details about the position you&apos;re hiring for</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid gap-6">

@@ -3,10 +3,9 @@
 import type React from "react";
 import { ReactNode } from "react";
 
-import { useState, useEffect } from "react";
+import { useState} from "react";
 import { useRouter } from "next/navigation";
 import Head from "next/head";
-import { Button } from "@/components/ui/button";
 import {
   Upload,
   BarChart2,
@@ -181,14 +180,14 @@ const itemVariants = {
 };
 
 // Custom hook for scroll animations
-const useScrollAnimation = () => {
-  const [ref, inView] = useInView({
-    triggerOnce: true,
-    threshold: 0.1,
-  });
+// const useScrollAnimation = () => {
+//   const [ref, inView] = useInView({
+//     triggerOnce: true,
+//     threshold: 0.1,
+//   });
 
-  return [ref, inView];
-};
+//   return [ref, inView];
+// };
 
 // InView component for scroll animations
 const InView: React.FC<InViewProps> = ({ children, delay = 0 }) => {
@@ -425,7 +424,7 @@ const LandingPage: React.FC = () => {
                 transition={{ type: "spring", stiffness: 400, damping: 10 }}
               >
                 <RenderStarRating rating={testimonial.rating} />
-                <p className="my-4 italic">"{testimonial.quote}"</p>
+                <p className="my-4 italic">&quote;{testimonial.quote}&quote;</p>
                 <div>
                   <p className="font-bold">{testimonial.name}</p>
                   <p className="text-gray-400">{testimonial.role}</p>

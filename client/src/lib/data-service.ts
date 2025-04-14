@@ -6,8 +6,20 @@ const mockCandidates: Candidate[] = [
   {
     id: "1",
     name: "Alex Johnson",
+    email: "alex.johnson@example.com", // Add email
     match: 92,
+    matchScore: 92, // Add matchScore
     years: 5,
+    experience: [
+      {
+      company: "Web Solutions",
+      job_title: "Full Stack Developer",
+      start_date: "2020-01-01",
+      end_date: "2025-01-01",
+      responsibilities: ["Developed web applications", "Collaborated with cross-functional teams"],
+      technologies: ["React", "Node.js", "TypeScript"],
+      },
+    ], // Add experience
     location: "San Francisco, CA",
     education: "M.S. Computer Science",
     skills: ["React", "TypeScript", "Node.js", "AWS"],
@@ -17,8 +29,20 @@ const mockCandidates: Candidate[] = [
   {
     id: "2",
     name: "Sarah Miller",
+    email: "sarah.miller@example.com", // Add email
     match: 87,
+    matchScore: 87, // Add matchScore
     years: 4,
+    experience: [
+      {
+      company: "Creative Designs",
+      job_title: "Frontend Developer",
+      start_date: "2021-01-01",
+      end_date: "2025-01-01",
+      responsibilities: ["Designed user interfaces", "Improved website performance"],
+      technologies: ["JavaScript", "React", "CSS"],
+      },
+    ], // Add experience
     location: "New York, NY",
     education: "B.S. Computer Engineering",
     skills: ["JavaScript", "React", "Python", "Docker"],
@@ -28,8 +52,20 @@ const mockCandidates: Candidate[] = [
   {
     id: "3",
     name: "Marcus Chen",
+    email: "marcus.chen@example.com", // Add email
     match: 85,
+    matchScore: 85, // Add matchScore
     years: 6,
+    experience: [
+      {
+        company: "Tech Solutions",
+        job_title: "Backend Developer",
+        start_date: "2019-01-01",
+        end_date: "2025-01-01",
+        responsibilities: ["Developed backend services", "Implemented microservices architecture"],
+        technologies: ["Java", "Spring", "PostgreSQL"],
+      },
+    ], // Add experience
     location: "Seattle, WA",
     education: "B.S. Software Engineering",
     skills: ["Java", "Spring", "React", "TypeScript"],
@@ -39,8 +75,20 @@ const mockCandidates: Candidate[] = [
   {
     id: "4",
     name: "Priya Patel",
+    email: "priya.patel@example.com", // Add email
     match: 78,
+    matchScore: 78, // Add matchScore
     years: 3,
+    experience: [
+      {
+      company: "DataTech Solutions",
+      job_title: "Data Engineer",
+      start_date: "2022-01-01",
+      end_date: "2025-01-01",
+      responsibilities: ["Built ETL pipelines", "Optimized database performance"],
+      technologies: ["Python", "Django", "PostgreSQL"],
+      },
+    ], // Add experience
     location: "Austin, TX",
     education: "B.S. Computer Science",
     skills: ["Python", "Django", "React", "PostgreSQL"],
@@ -50,15 +98,27 @@ const mockCandidates: Candidate[] = [
   {
     id: "5",
     name: "David Kim",
+    email: "david.kim@example.com", // Add email
     match: 75,
+    matchScore: 75, // Add matchScore
     years: 7,
+    experience: [
+      {
+      company: "AI Innovations",
+      job_title: "AI Research Scientist",
+      start_date: "2018-01-01",
+      end_date: "2025-01-01",
+      responsibilities: ["Conducted AI research", "Developed machine learning models"],
+      technologies: ["Python", "TensorFlow", "PyTorch"],
+      },
+    ], // Add experience
     location: "Chicago, IL",
     education: "Ph.D. Computer Science",
     skills: ["Machine Learning", "Python", "TensorFlow", "AWS"],
     highlights: ["AI research", "Data science"],
     saved: false,
   },
-]
+];
 
 const mockJobs: Job[] = [
   {

@@ -2,14 +2,12 @@
 "use client";
 import { useState } from "react";
 import Sidebar from "@/components/layout/sidebar";
-import { Header } from "@/components/layout/header";
 
 interface SidebarLayoutProps {
   children: React.ReactNode;
-  userInitials: string;
 }
 
-const SidebarLayout: React.FC<SidebarLayoutProps> = ({ children, userInitials }) => {
+const SidebarLayout: React.FC<SidebarLayoutProps> = ({ children }) => {
   const [activeTab, setActiveTab] = useState("dashboard");
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(true);
 

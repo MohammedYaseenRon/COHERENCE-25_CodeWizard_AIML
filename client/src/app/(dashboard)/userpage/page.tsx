@@ -4,40 +4,37 @@ import { useState, useEffect, useCallback } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 
 import { Header } from "@/components/layout/header"
-import { FilterSection } from "@/components/features/filter-section"
 import { ResumeScanner } from "@/components/features/resume-scanner"
 import { CandidatesSection } from "@/components/features/candidates-section"
 import { JobDescriptionSection } from "@/components/features/job-description"
 import type { Candidate, FilterOptions } from "@/types"
 import { getCandidates, saveCandidate } from "@/lib/data-service"
-import dynamic from "next/dynamic";
 import ResumeAnalysisCharts from "@/components/ResumeAnalysisCharts"
 
-const Sidebar = dynamic(() => import("@/components/layout/sidebar"), {
-  ssr: false,
-});
+type AnalysisResults = {
+  [key: string]: unknown;
+};
+
+type RankingData = {
+  ranked_resumes?: Candidate[];
+};
 
 export default function ResumeScannerApp() {
-  // App state
-  const [activeTab, setActiveTab] = useState("dashboard")
-  const [filterOpen, setFilterOpen] = useState(false)
-  const [filterTab, setFilterTab] = useState("matches")
   const [isScanning, setIsScanning] = useState(false)
   const [isAnalyzing, setIsAnalyzing] = useState(false)
-  const [isSidebarExpanded, setIsSidebarExpanded] = useState(true)
   
   // View management state
   const [currentView, setCurrentView] = useState<'initial' | 'candidates'>('initial')
 
   // WebSocket state
   const [uploadSocket, setUploadSocket] = useState<WebSocket | null>(null)
-  const [analysisResults, setAnalysisResults] = useState<any>(null)
-  const [resumeRankings, setResumeRankings] = useState<any>(null)
+  const [analysisResults, setAnalysisResults] = useState<AnalysisResults | null>(null);
+  // const [resumeRankings, setResumeRankings] = useState<any>(null)
   const [uploadStatus, setUploadStatus] = useState<string>("")
 
   // Data state
   const [candidates, setCandidates] = useState<Candidate[]>([])
-  const [filterOptions, setFilterOptions] = useState<FilterOptions>({
+  const [filterOptions] = useState<FilterOptions>({
     skills: [],
     experience: [],
     education: [],
@@ -46,7 +43,7 @@ export default function ResumeScannerApp() {
   useEffect(() => {
     const fetchAnalysisResults = async () => {
       try {
-        const response = await fetch('https://rbd6wn7l-8000.inc1.devtunnels.ms/resume-analysis-results', {
+        const response = await fetch('https://globalhive.xyz/resume-analysis-results', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -69,7 +66,7 @@ export default function ResumeScannerApp() {
 
   // WebSocket connection setup
   const setupWebSocket = useCallback(() => {
-    const socket = new WebSocket('wss://rbd6wn7l-8000.inc1.devtunnels.ms/multi-upload');
+    const socket = new WebSocket('wss://globalhive.xyz/multi-upload');
 
     socket.onopen = () => {
       console.log('WebSocket connection established');
@@ -125,7 +122,7 @@ export default function ResumeScannerApp() {
   }, [filterOptions])
 
   // Handle resume scanning
-  const handleScanResume = async (resumeFiles: File[] | null, jobDescription?: string) => {
+  const handleScanResume = async (resumeFiles: File[] | null) => {
     if (!resumeFiles || resumeFiles.length === 0 || !uploadSocket) {
       setUploadStatus('No files selected or WebSocket not connected');
       return;
@@ -176,7 +173,7 @@ export default function ResumeScannerApp() {
     setUploadStatus('Ranking resumes...');
 
     try {
-      const response = await fetch('https://rbd6wn7l-8000.inc1.devtunnels.ms/rank-resumes', {
+      const response = await fetch('https://globalhive.xyz/rank-resumes', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -191,15 +188,14 @@ export default function ResumeScannerApp() {
         throw new Error('Failed to rank resumes');
       }
 
-      const rankingData = await response.json();
-      setResumeRankings(rankingData);
+      const rankingData: RankingData = await response.json();
+      // setResumeRankings(rankingData);
       setUploadStatus('Resume Ranking Complete');
       setIsAnalyzing(false);
       setCurrentView('candidates');
-
-      // Update candidates based on ranking if possible
+      
       if (rankingData.ranked_resumes) {
-        const rankedCandidates = rankingData.ranked_resumes.map((resume: any, index: number) => ({
+        const rankedCandidates = rankingData.ranked_resumes.map((resume: Candidate, index: number) => ({
           ...resume,
           rank: index + 1
         }));
@@ -313,8 +309,6 @@ export default function ResumeScannerApp() {
                 <CandidatesSection 
                   candidates={candidates} 
                   onSaveCandidate={handleSaveCandidate} 
-                  analysisResults={analysisResults}
-                  rankingResults={resumeRankings}
                 />
               </motion.div>
             )}
@@ -325,7 +319,7 @@ export default function ResumeScannerApp() {
 
           {/* Optional: Analysis Results Display */}
           {analysisResults && (
-            <ResumeAnalysisCharts analysisResults={analysisResults} />
+            <ResumeAnalysisCharts />
           )}
         </main>
       </div>

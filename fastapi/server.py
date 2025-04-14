@@ -435,7 +435,7 @@ class ResumeAnalysisServer:
             return JSONResponse(
                 status_code=200, 
                 headers={
-                    "Access-Control-Allow-Origin": "http://localhost:3000",
+                    "Access-Control-Allow-Origin": "http://globalhive.xyz",
                     "Access-Control-Allow-Methods": "POST, OPTIONS",
                     "Access-Control-Allow-Headers": "Content-Type, Authorization"
                 },
@@ -941,7 +941,7 @@ class ResumeAnalysisServer:
                 raise HTTPException(status_code=500, detail=f"Error sending bulk emails: {str(e)}")
             
         
-        @app.post("/process_url_or_path/")
+        @app.post("/process_url_or_path")
         async def process_url_or_path(input_path: str = Body(embed=True), compressed: bool = False): # added compressed param
             result = self.main_processing(input_path)
 
@@ -1129,7 +1129,7 @@ class ResumeAnalysisServer:
             
     def run(self):
         import uvicorn
-        uvicorn.run(self.app, host="0.0.0.0", port=8000)
+        uvicorn.run(self.app, host="0.0.0.0", port=5000)
 
 
 if __name__ == "__main__":

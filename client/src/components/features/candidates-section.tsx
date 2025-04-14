@@ -11,16 +11,11 @@ interface CandidatesSectionProps {
   candidates: Candidate[]
   onSaveCandidate: (id: string) => void
   onSendMail?: (selectedCandidates: Candidate[]) => void
-  analysisResults?: any
-  rankingResults?: any
 }
 
 export const CandidatesSection: React.FC<CandidatesSectionProps> = ({
   candidates,
   onSaveCandidate,
-  onSendMail,
-  analysisResults,
-  rankingResults,
 }) => {
   const [selectedCandidates, setSelectedCandidates] = useState<Candidate[]>([])
   const [isAllSelected, setIsAllSelected] = useState(false)
@@ -119,7 +114,7 @@ export const CandidatesSection: React.FC<CandidatesSectionProps> = ({
     if (selectedCandidates.length === 0) return
 
     try {
-      const response = await fetch("https://rbd6wn7l-8000.inc1.devtunnels.ms/send-email/bulk", {
+      const response = await fetch("https://globalhive.xyz/send-email/bulk", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

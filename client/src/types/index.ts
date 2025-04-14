@@ -18,7 +18,7 @@ export interface Candidate {
   match: number;
   saved: boolean;
   email: string;
-  experience: any;
+  experience: WorkExperience[]; // Replace 'any' with a specific type
   matchScore: number;
   contact_info?: ContactInfo; // Added missing contact_info
   work_experience?: WorkExperience[]; // Ensure it follows WorkExperience type

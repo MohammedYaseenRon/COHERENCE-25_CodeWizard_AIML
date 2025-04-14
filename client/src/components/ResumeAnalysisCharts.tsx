@@ -3,7 +3,6 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, 
   PieChart, Pie, Cell, 
   RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis,
-  LineChart, Line
 } from 'recharts';
 import { 
   Code, 
@@ -51,7 +50,7 @@ const ResumeAnalysisCharts: React.FC = () => {
     const fetchChartData = async () => {
       try {
         setLoading(true);
-        const response = await fetch('https://rbd6wn7l-8000.inc1.devtunnels.ms/generate-chart-data');
+        const response = await fetch('https://globalhive.xyz/generate-chart-data');
         
         if (!response.ok) {
           throw new Error('Failed to fetch chart data');

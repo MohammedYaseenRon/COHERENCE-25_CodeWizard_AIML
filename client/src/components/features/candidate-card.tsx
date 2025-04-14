@@ -7,7 +7,6 @@ import {
   GraduationCap,
   Star,
   FileText,
-  Award,
   Phone,
   Mail,
   MapPin,
