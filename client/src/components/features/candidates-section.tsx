@@ -9,12 +9,14 @@ import type { Candidate } from "@/types"
 
 interface CandidatesSectionProps {
   candidates: Candidate[]
+  job_description: {}
   onSaveCandidate: (id: string) => void
   onSendMail?: (selectedCandidates: Candidate[]) => void
 }
 
 export const CandidatesSection: React.FC<CandidatesSectionProps> = ({
   candidates,
+  job_description,
   onSaveCandidate,
 }) => {
   const [selectedCandidates, setSelectedCandidates] = useState<Candidate[]>([])
@@ -26,7 +28,6 @@ export const CandidatesSection: React.FC<CandidatesSectionProps> = ({
   const [filterSkills, setFilterSkills] = useState<string[]>([])
   const [activeFilters, setActiveFilters] = useState<string[]>([])
 
-  // Extract all unique skills from candidates
   useEffect(() => {
     const skillsSet = new Set<string>()
 
@@ -44,13 +45,11 @@ export const CandidatesSection: React.FC<CandidatesSectionProps> = ({
     setFilterSkills(Array.from(skillsSet))
   }, [candidates])
 
-  // Handle select/deselect all candidates
   const handleSelectAll = () => {
     setIsAllSelected(!isAllSelected)
     setSelectedCandidates(!isAllSelected ? [...candidates] : [])
   }
 
-  // Handle individual candidate selection
   const handleSelectCandidate = (candidate: Candidate) => {
     setSelectedCandidates((prev) =>
       prev.some((c) => c.filename === candidate.filename)
@@ -59,36 +58,31 @@ export const CandidatesSection: React.FC<CandidatesSectionProps> = ({
     )
   }
 
-  // Filter candidates based on search term and active filters
   const filteredCandidates = candidates.filter((candidate) => {
     const fullResume =
       typeof candidate.full_resume === "string"
-        ? JSON.parse(candidate.full_resume) // Convert string to object
-        : candidate.full_resume || {} // Default to empty object
+        ? JSON.parse(candidate.full_resume) 
+        : candidate.full_resume || {} 
 
     const nameMatch = fullResume?.contact_info?.full_name?.toLowerCase().includes(searchTerm.toLowerCase()) || false
 
-    // If no active filters, just check name match
     if (activeFilters.length === 0) return nameMatch
 
-    // Ensure technical_skills is an array before calling includes()
     const technicalSkills = Array.isArray(fullResume?.skills?.technical_skills)
       ? fullResume.skills.technical_skills
       : []
 
-    // Check if candidate has all active filter skills
     const hasAllSkills = activeFilters.every((filter) => technicalSkills.includes(filter))
 
     return nameMatch && hasAllSkills
   })
 
-  // Sort candidates
   const sortedCandidates = [...filteredCandidates].sort((a, b) => {
-    // Ensure full_resume is parsed properly
+
     const fullResumeA =
       typeof a.full_resume === "string"
-        ? JSON.parse(a.full_resume) // Convert string to object
-        : a.full_resume || {} // Default to empty object
+        ? JSON.parse(a.full_resume) 
+        : a.full_resume || {} 
 
     const fullResumeB = typeof b.full_resume === "string" ? JSON.parse(b.full_resume) : b.full_resume || {}
 
@@ -102,38 +96,34 @@ export const CandidatesSection: React.FC<CandidatesSectionProps> = ({
         : (b.match_percentage ?? 0) - (a.match_percentage ?? 0)
     }
 
-    // Sort by name
     const nameA = fullResumeA?.contact_info?.full_name?.toLowerCase() || ""
     const nameB = fullResumeB?.contact_info?.full_name?.toLowerCase() || ""
 
     return sortDirection === "asc" ? nameA.localeCompare(nameB) : nameB.localeCompare(nameA)
   })
 
-  // Handle sending emails
   const handleSendMail = async () => {
     if (selectedCandidates.length === 0) return
 
     try {
-      const response = await fetch("https://globalhive.xyz/send-email/bulk", {
+      const response = await fetch("http://localhost:8000/api/v1/email/send-email/bulk", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ ranked_resumes: selectedCandidates }),
+        body: JSON.stringify({ ranked_resumes: selectedCandidates, job_description: job_description}),
       })
 
       if (!response.ok) {
         throw new Error("Failed to send emails")
       }
 
-      // Success notification could be added here
     } catch (error) {
       console.error("Error sending emails:", error)
-      // Error notification could be added here
+
     }
   }
 
-  // Toggle sort direction when clicking the same sort option
   const handleSort = (type: "rank" | "match" | "name") => {
     if (sortBy === type) {
       setSortDirection(sortDirection === "asc" ? "desc" : "asc")
@@ -143,7 +133,6 @@ export const CandidatesSection: React.FC<CandidatesSectionProps> = ({
     }
   }
 
-  // Toggle filter skill
   const toggleFilter = (skill: string) => {
     setActiveFilters((prev) => (prev.includes(skill) ? prev.filter((f) => f !== skill) : [...prev, skill]))
   }
@@ -155,12 +144,12 @@ export const CandidatesSection: React.FC<CandidatesSectionProps> = ({
       transition={{ duration: 0.5 }}
       className="bg-[#1b2537] p-6 rounded-lg"
     >
-      {/* Header with title and selection controls */}
+      {}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
         <div>
           <h2 className="text-xl font-bold text-white">
             Top Matching Candidates
-            {/* {rankingResults?.ranking_method && ` (${rankingResults.ranking_method})`} */}
+            {}
           </h2>
           <p className="text-gray-400 text-sm mt-1">
             {filteredCandidates.length} candidate{filteredCandidates.length !== 1 ? "s" : ""} found
@@ -206,7 +195,7 @@ export const CandidatesSection: React.FC<CandidatesSectionProps> = ({
         </div>
       </div>
 
-      {/* Filter dropdown */}
+      {}
       <AnimatePresence>
         {filterOpen && (
           <motion.div
@@ -246,7 +235,7 @@ export const CandidatesSection: React.FC<CandidatesSectionProps> = ({
         )}
       </AnimatePresence>
 
-      {/* Sort controls */}
+      {}
       <div className="flex justify-between items-center mb-4 p-3 bg-[#2c3646] rounded-lg">
         <div className="flex items-center">
           <SlidersHorizontal size={16} className="mr-2 text-gray-400" />
@@ -308,7 +297,7 @@ export const CandidatesSection: React.FC<CandidatesSectionProps> = ({
         </label>
       </div>
 
-      {/* Candidate list */}
+      {}
       {sortedCandidates.length === 0 ? (
         <motion.div
           initial={{ opacity: 0 }}
@@ -320,38 +309,38 @@ export const CandidatesSection: React.FC<CandidatesSectionProps> = ({
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 items-stretch">
           <AnimatePresence>
-  {sortedCandidates.map((candidate, index) => (
-    <motion.div
-      key={candidate.filename || index}
-      layout
-      initial={{ opacity: 0, scale: 0.9 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.3 }}
-    >
-      <div className="relative">
-        {selectedCandidates.some((c) => c.filename === candidate.filename) && (
-          <div className="absolute -top-2 -right-2 w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center z-10">
-            <Check size={14} className="text-white" />
-          </div>
-        )}
-        <div
-          className="cursor-pointer"
-          onClick={(e) => {
-            e.stopPropagation()
-            handleSelectCandidate(candidate)
-          }}
-        >
-          <CandidateCard
-            candidate={candidate}
-            index={index}
-            onSave={onSaveCandidate}
-            isSelected={selectedCandidates.some((c) => c.filename === candidate.filename)}
-          />
-        </div>
-      </div>
-    </motion.div>
-  ))}
-</AnimatePresence>
+            {sortedCandidates.map((candidate, index) => (
+              <motion.div
+                key={candidate.filename || index}
+                layout
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.3 }}
+              >
+                <div className="relative">
+                  {selectedCandidates.some((c) => c.filename === candidate.filename) && (
+                    <div className="absolute -top-2 -right-2 w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center z-10">
+                      <Check size={14} className="text-white" />
+                    </div>
+                  )}
+                  <div
+                    className="cursor-pointer"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      handleSelectCandidate(candidate)
+                    }}
+                  >
+                    <CandidateCard
+                      candidate={candidate}
+                      index={index}
+                      onSave={onSaveCandidate}
+                      isSelected={selectedCandidates.some((c) => c.filename === candidate.filename)}
+                    />
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </AnimatePresence>
         </div>
       )}
     </motion.div>

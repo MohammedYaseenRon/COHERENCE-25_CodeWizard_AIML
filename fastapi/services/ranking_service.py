@@ -3,15 +3,14 @@ import os
 import json
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-from google import genai
-from dotenv import load_dotenv
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
+from services.gemini_service import GeminiService
+import numpy as np
 
 class ResumeRankingService:
     def __init__(self):
-        load_dotenv()
-        self.genai_client = genai.Client(api_key=os.getenv("GOOGLE_API_KEY"))
+        self.genai_client = GeminiService()
 
     def load_resumes(self, resumes_file):
         """
@@ -33,14 +32,11 @@ class ResumeRankingService:
         ranked_resumes = []
 
         for filename, resume_data in resumes.items():
-            # Skip entries with errors
             if 'error' in resume_data:
                 continue
 
-            # Convert resume data to a comprehensive text representation
             resume_text = self._convert_resume_to_text(resume_data)
 
-            # Use Gemini to assess job match
             prompt = f"""
             Job Description:
             {job_description}
@@ -65,18 +61,16 @@ class ResumeRankingService:
             """
 
             try:
-                response = self.genai_client.models.generate_content(
+                response = self.genai_client.generate_content(
                     model='gemini-2.0-flash',
-                    contents=[prompt],
-                    config={
-                        'response_mime_type': 'application/json',
-                    }
+                    contents=[prompt]
                 )
 
-                # Parse Gemini's response
+                if not response or not response.text:
+                    raise HTTPException(status_code=500, detail="No response from Gemini")
+
                 match_data = json.loads(response.text)
                 
-                # Add full resume data
                 match_data['filename'] = filename
                 match_data['full_resume'] = resume_data
                 
@@ -85,7 +79,6 @@ class ResumeRankingService:
             except Exception as e:
                 print(f"Error processing {filename}: {e}")
 
-        # Sort resumes by match percentage in descending order
         return sorted(ranked_resumes, key=lambda x: x.get('match_percentage', 0), reverse=True)
     def _convert_resume_to_text(self, resume_data):
         if resume_data is None:
@@ -99,12 +92,10 @@ class ResumeRankingService:
         text_parts.append(f"Email: {contact_info.get('email', 'N/A')}")
         text_parts.append(f"Location: {contact_info.get('location', 'N/A')}")
 
-        # Education
         text_parts.append("Education:")
         for edu in resume_data.get('education', []):
             text_parts.append(f"- {edu.get('degree', 'N/A')} from {edu.get('institution', 'N/A')}")
 
-        # Work Experience
         text_parts.append("Work Experience:")
         for exp in resume_data.get('work_experience', []):
             text_parts.append(f"- {exp.get('job_title', 'N/A')} at {exp.get('company', 'N/A')}")
@@ -124,13 +115,11 @@ class ResumeRankingService:
             elif isinstance(soft_skills, str):
                 text_parts.append(f"Soft Skills: {soft_skills}")
 
-        # Certifications
         certifications = skills.get('certifications', [])
         if certifications:
             text_parts.append("Certifications:")
             text_parts.extend([f"- {cert}" for cert in certifications])
 
-        # Projects
         projects = resume_data.get('projects', [])
         if projects:
             text_parts.append("Projects:")
@@ -144,7 +133,6 @@ class ResumeRankingService:
         """
         Fallback ranking method using cosine similarity
         """
-        # Extract text from resumes
         resume_texts = [
             self._convert_resume_to_text(resume_data) 
             for resume_data in resumes.values() 
@@ -153,13 +141,11 @@ class ResumeRankingService:
 
         documents = [job_description] + resume_texts
         vectorizer = TfidfVectorizer().fit_transform(documents)
-        vectors = vectorizer.toarray()
+        vectors = vectorizer.toarray() # type: ignore
 
-        # Calculate cosine similarity
-        job_description_vector = vectors[0]
+        job_description_vector = np.array(vectors[0])
         resume_vectors = vectors[1:]
-        cosine_similarities = cosine_similarity([job_description_vector], resume_vectors).flatten()
+        cosine_similarities = cosine_similarity([job_description_vector], resume_vectors).flatten() # type: ignore
 
-        # Rank resumes
         ranked_resumes = list(zip(list(resumes.keys())[1:], cosine_similarities))
         return sorted(ranked_resumes, key=lambda x: x[1], reverse=True)

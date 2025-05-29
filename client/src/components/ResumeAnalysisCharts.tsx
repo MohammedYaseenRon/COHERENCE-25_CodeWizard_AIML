@@ -50,7 +50,7 @@ const ResumeAnalysisCharts: React.FC = () => {
     const fetchChartData = async () => {
       try {
         setLoading(true);
-        const response = await fetch('https://globalhive.xyz/generate-chart-data');
+        const response = await fetch('http://localhost:8000/api/v1/analytics/generate-chart-data');
         
         if (!response.ok) {
           throw new Error('Failed to fetch chart data');

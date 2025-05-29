@@ -187,7 +187,7 @@
             
             try {
                 // Establish WebSocket connection to multi-upload endpoint
-                const socket = new WebSocket('wss://globalhive.xyz/multi-upload');
+                const socket = new WebSocket('ws://localhost:8000/api/v1/resume/multi-upload');
                 
                 socket.onopen = async () => {
                     // Send number of files

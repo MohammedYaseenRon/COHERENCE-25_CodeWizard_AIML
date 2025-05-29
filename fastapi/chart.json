@@ -69,7 +69,7 @@
   "experience_data": [
     {
       "name": "Entry",
-      "value": 0
+      "value": 1
     },
     {
       "name": "Junior",
@@ -266,6 +266,14 @@
         }
       ],
       "experience_level": "Expert"
+    },
+    {
+      "name": "N/A",
+      "skills_count": 0,
+      "projects_count": 0,
+      "experience_count": 0,
+      "education": [],
+      "experience_level": "Entry"
     },
     {
       "name": "UJJAWAL SINGH",

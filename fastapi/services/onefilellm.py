@@ -10,7 +10,7 @@ from nltk.corpus import stopwords
 import re
 import nbformat
 from nbconvert import PythonExporter
-from youtube_transcript_api import YouTubeTranscriptApi
+from youtube_transcript_api._api import YouTubeTranscriptApi
 from youtube_transcript_api.formatters import TextFormatter
 import pyperclip
 import wget
@@ -22,13 +22,9 @@ from rich.prompt import Prompt
 from rich.progress import Progress, TextColumn, BarColumn, TimeRemainingColumn
 from dotenv import load_dotenv
 import xml.etree.ElementTree as ET
+from config import settings
 # Load environment variables from a .env file if it exists
 load_dotenv()
-
-# --- Configuration Flags ---
-ENABLE_COMPRESSION_AND_NLTK = True # Set to True to enable NLTK download, stopword removal, and compressed output
-
-EXCLUDED_DIRS = ["dist", "node_modules", ".git", "__pycache__"]  # Add any other directories to exclude here
 
 def safe_file_read(filepath, fallback_encoding='latin1'):
     try:
@@ -39,7 +35,7 @@ def safe_file_read(filepath, fallback_encoding='latin1'):
             return file.read()
 
 stop_words = set() # Initialize as empty set by default
-if ENABLE_COMPRESSION_AND_NLTK:
+if settings.ENABLE_COMPRESSION_AND_NLTK:
     # The NLTK download and stopwords loading is now controlled by a configuration flag.
     # This is beneficial because:
     # 1. It avoids unnecessary downloads when compression is not needed
@@ -89,7 +85,7 @@ def process_directory(url, output):
     files = response.json()
 
     for file in files:
-        if file["type"] == "dir" and file["name"] in EXCLUDED_DIRS:
+        if file["type"] == "dir" and file["name"] in settings.EXCLUDED_DIRS:
             continue  # Skip excluded directories
 
         if file["type"] == "file" and is_allowed_filetype(file["name"]):
@@ -116,7 +112,7 @@ def process_directory(url, output):
 def process_local_directory(local_path, output):
     for root, dirs, files in os.walk(local_path):
         # Modify dirs in-place to exclude specified directories
-        dirs[:] = [d for d in dirs if d not in EXCLUDED_DIRS]
+        dirs[:] = [d for d in dirs if d not in settings.EXCLUDED_DIRS]
 
         for file in files:
             if is_allowed_filetype(file):
@@ -166,7 +162,7 @@ def process_github_repo(repo_url):
         files = response.json()
 
         for file in files:
-            if file["type"] == "dir" and file["name"] in EXCLUDED_DIRS:
+            if file["type"] == "dir" and file["name"] in settings.EXCLUDED_DIRS:
                 continue
 
             if file["type"] == "file" and is_allowed_filetype(file["name"]):
@@ -197,7 +193,7 @@ def process_local_folder(local_path):
         content = [f"# --- Source: Local Directory {local_path} ---"]
         for root, dirs, files in os.walk(local_path):
             # Exclude directories
-            dirs[:] = [d for d in dirs if d not in EXCLUDED_DIRS]
+            dirs[:] = [d for d in dirs if d not in settings.EXCLUDED_DIRS]
 
             for file in files:
                 if is_allowed_filetype(file):
@@ -267,7 +263,7 @@ def fetch_youtube_transcript(url):
     try:
         transcript_list = YouTubeTranscriptApi.get_transcript(video_id)
         formatter = TextFormatter()
-        transcript = formatter.format_transcript(transcript_list)
+        transcript = formatter.format_transcript(transcript_list) #type: ignore
         
         formatted_text = f"# --- Source: YouTube Transcript {url} ---\n\n"
         formatted_text += transcript
@@ -287,7 +283,7 @@ def preprocess_text(input_file, output_file):
         text = re.sub(r"\s+", " ", text)
         text = text.lower()
         # Only remove stopwords if the feature is enabled and stopwords were loaded
-        if ENABLE_COMPRESSION_AND_NLTK and stop_words:
+        if settings.ENABLE_COMPRESSION_AND_NLTK and stop_words:
             words = text.split()
             words = [word for word in words if word not in stop_words]
             text = " ".join(words)
@@ -398,7 +394,7 @@ def crawl_and_extract_text(base_url, max_depth, include_pdfs, ignore_epubs):
 
                 if current_depth < max_depth:
                     for link in soup.find_all('a', href=True):
-                        new_url = urljoin(current_url, link['href']).split('#')[0]
+                        new_url = urljoin(current_url, link['href']).split('#')[0] #type: ignore
                         if new_url not in visited_urls and is_within_depth(base_url, new_url, max_depth) and (include_pdfs or not new_url.endswith('.pdf')) and not (ignore_epubs and new_url.endswith('.epub')):
                             urls_to_visit.append((new_url, current_depth + 1))
 
@@ -433,7 +429,7 @@ def process_doi_or_pmid(identifier):
         if pdf_element is None:
             raise ValueError(f"No PDF found for identifier {identifier}. Sci-hub might be inaccessible or the document is not available.")
 
-        content = pdf_element.get('src').replace('#navpanes=0&view=FitH', '').replace('//', '/')
+        content = pdf_element.get('src').replace('#navpanes=0&view=FitH', '').replace('//', '/') #type: ignore
 
         if content.startswith('/downloads'):
             pdf_url = 'https://sci-hub.se' + content
@@ -725,7 +721,7 @@ def main():
             progress.update(task, advance=50) # Move progress update here
 
             # --- Conditional Compression Block ---
-            if ENABLE_COMPRESSION_AND_NLTK:
+            if settings.ENABLE_COMPRESSION_AND_NLTK:
                 # When the compression flag is enabled, we perform additional processing:
                 # 1. We generate a compressed version of the output with stopwords removed
                 # 2. We calculate token counts for both compressed and uncompressed versions
@@ -757,7 +753,7 @@ def main():
             console.print(f"[bright_green]Uncompressed Token Count:[/bright_green] [bold bright_cyan]{uncompressed_token_count}[/bold bright_cyan]")
 
             # Adjust the final output message
-            if ENABLE_COMPRESSION_AND_NLTK:
+            if settings.ENABLE_COMPRESSION_AND_NLTK:
                 console.print(f"\n[bold bright_yellow]{processed_file}[/bold bright_yellow] and [bold bright_blue]{output_file}[/bold bright_blue] have been created.")
             else:
                 console.print(f"\n[bold bright_blue]{output_file}[/bold bright_blue] has been created.")

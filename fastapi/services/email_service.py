@@ -4,9 +4,7 @@ import os
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from typing import Dict, Any, Optional
-from google import genai
-from pydantic import BaseModel
-from dotenv import load_dotenv
+from services.gemini_service import GeminiService
 import re
 
 def clean_json_response(text: str) -> dict:
@@ -46,18 +44,7 @@ class EmailGenerator:
         self.gemini_client = None
         self.repo_assignments_file = "repo_assignments.json"
         self.repo_assignments = self._load_repo_assignments()
-        
-    def initialize_gemini(self, api_key: str = None):
-        """
-        Initialize the Gemini client with an API key.
-        
-        Args:
-            api_key: Gemini API key. If None, will try to get from environment variable GOOGLE_API_KEY
-        """
-        api_key = api_key or os.getenv("GOOGLE_API_KEY")
-        if not api_key:
-            raise ValueError("Gemini API key not provided and GOOGLE_API_KEY environment variable not set")
-        self.gemini_client = genai.Client(api_key=api_key)
+        self.gemini_client = GeminiService()
 
     def _load_repo_assignments(self) -> Dict[str, str]:
         """
@@ -150,14 +137,15 @@ class EmailGenerator:
         """
         
         # Call Gemini API
-        response = self.gemini_client.models.generate_content(
+        response = self.gemini_client.generate_content(
             model="gemini-2.0-flash",
             contents=prompt,
-            config={'response_mime_type': 'application/json'}
         )
         print(response.text)
 
-        # Parse and clean the response
+        if not response or not response.text:
+            raise ValueError("No response received from Gemini or response is empty.")
+        
         content = clean_json_response(response.text)
         
         return content

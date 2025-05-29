@@ -43,7 +43,7 @@ export default function ResumeScannerApp() {
   useEffect(() => {
     const fetchAnalysisResults = async () => {
       try {
-        const response = await fetch('https://globalhive.xyz/resume-analysis-results', {
+        const response = await fetch('http://localhost:8000/api/v1/resume/resume-analysis-results', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -66,7 +66,7 @@ export default function ResumeScannerApp() {
 
   // WebSocket connection setup
   const setupWebSocket = useCallback(() => {
-    const socket = new WebSocket('wss://globalhive.xyz/multi-upload');
+    const socket = new WebSocket('ws://localhost:8000/api/v1/resume/multi-upload');
 
     socket.onopen = () => {
       console.log('WebSocket connection established');
@@ -173,7 +173,7 @@ export default function ResumeScannerApp() {
     setUploadStatus('Ranking resumes...');
 
     try {
-      const response = await fetch('https://globalhive.xyz/rank-resumes', {
+      const response = await fetch('http://localhost:8000/api/v1/resume/rank-resumes', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -308,6 +308,7 @@ export default function ResumeScannerApp() {
                 </button>
                 <CandidatesSection 
                   candidates={candidates} 
+                  job_description={{"role": "Data Scientist"}}
                   onSaveCandidate={handleSaveCandidate} 
                 />
               </motion.div>
