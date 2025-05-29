@@ -1,18 +1,34 @@
 {
   "summary_stats": {
-    "total_resumes": 8,
-    "total_skills": 92,
-    "total_projects": 18
+    "total_resumes": 9,
+    "total_skills": 95,
+    "total_projects": 20
   },
   "skills_data": {
     "top_skills": [
+      {
+        "name": "JavaScript",
+        "count": 5
+      },
       {
         "name": "CSS",
         "count": 4
       },
       {
-        "name": "JavaScript",
+        "name": "Git",
         "count": 4
+      },
+      {
+        "name": "Vercel",
+        "count": 4
+      },
+      {
+        "name": "Firebase",
+        "count": 3
+      },
+      {
+        "name": "React Native",
+        "count": 3
       },
       {
         "name": "SQL",
@@ -27,34 +43,18 @@
         "count": 3
       },
       {
-        "name": "Git",
-        "count": 3
-      },
-      {
         "name": "Docker",
         "count": 3
-      },
-      {
-        "name": "Vercel",
-        "count": 3
-      },
-      {
-        "name": "Firebase",
-        "count": 2
-      },
-      {
-        "name": "Redux",
-        "count": 2
       }
     ],
     "skill_distribution": [
       {
         "name": "Frontend",
-        "value": 12
+        "value": 13
       },
       {
         "name": "Backend",
-        "value": 9
+        "value": 10
       },
       {
         "name": "DevOps",
@@ -62,7 +62,7 @@
       },
       {
         "name": "Database",
-        "value": 13
+        "value": 14
       }
     ]
   },
@@ -73,7 +73,7 @@
     },
     {
       "name": "Junior",
-      "value": 4
+      "value": 5
     },
     {
       "name": "Mid-level",
@@ -120,12 +120,24 @@
     {
       "name": "Science",
       "count": 1
+    },
+    {
+      "name": "B.E. IN CSE (AIML)",
+      "count": 1
+    },
+    {
+      "name": "DIPLOMA IN ENGINEERING",
+      "count": 1
     }
   ],
   "technology_data": {
     "top_technologies": [
       {
         "name": "Next.js",
+        "count": 5
+      },
+      {
+        "name": "Node.js",
         "count": 4
       },
       {
@@ -133,7 +145,15 @@
         "count": 4
       },
       {
-        "name": "Node.js",
+        "name": "Express",
+        "count": 4
+      },
+      {
+        "name": "Firebase",
+        "count": 3
+      },
+      {
+        "name": "Zustand",
         "count": 3
       },
       {
@@ -141,20 +161,8 @@
         "count": 3
       },
       {
-        "name": "Express",
-        "count": 3
-      },
-      {
         "name": "React.js",
         "count": 3
-      },
-      {
-        "name": "Open Al",
-        "count": 3
-      },
-      {
-        "name": "Zustand",
-        "count": 2
       }
     ],
     "technology_distribution": [
@@ -293,6 +301,25 @@
         }
       ],
       "experience_level": "Senior"
+    },
+    {
+      "name": "Mohammed Usmani",
+      "skills_count": 17,
+      "projects_count": 2,
+      "experience_count": 1,
+      "education": [
+        {
+          "degree": "B.E. IN CSE (AIML)",
+          "institution": "VIVA INSTITUTE OF TECHNOLOGY, VIRAR",
+          "year": 2026
+        },
+        {
+          "degree": "DIPLOMA IN ENGINEERING",
+          "institution": "PRAVIN PATIL POLYTECHNIC, BHAYANDAR",
+          "year": 2023
+        }
+      ],
+      "experience_level": "Junior"
     }
   ]
 }

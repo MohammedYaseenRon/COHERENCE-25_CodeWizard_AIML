@@ -45,7 +45,7 @@ const Navbar: React.FC = () => {
             <Button
               variant="outline"
               className="border-purple-500 text-purple-500 hover:bg-purple-500 hover:text-white"
-              onClick={() => router.push("/userpage")}
+              onClick={() => router.push("/dashboard")}
             >
               Get Started
             </Button>

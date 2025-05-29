@@ -929,5 +929,119 @@
       ],
       "community_involvement": null
     }
+  },
+  "Resume.pdf": {
+    "contact_info": {
+      "full_name": "Mohammed Usmani",
+      "email": "usmanimohammed12@gmail.com",
+      "phone": "+91 86899 08731",
+      "location": "Bhayandar, Thane 401101, India",
+      "linkedin": null,
+      "github": null,
+      "website": "portfolio.globalhive.xyz"
+    },
+    "education": [
+      {
+        "degree": "B.E. IN CSE (AIML)",
+        "institution": "VIVA INSTITUTE OF TECHNOLOGY, VIRAR",
+        "graduation_year": 2026,
+        "gpa": null,
+        "honors": null
+      },
+      {
+        "degree": "DIPLOMA IN ENGINEERING",
+        "institution": "PRAVIN PATIL POLYTECHNIC, BHAYANDAR",
+        "graduation_year": 2023,
+        "gpa": 81.33,
+        "honors": null
+      }
+    ],
+    "work_experience": [
+      {
+        "company": "YBI FOUNDATION",
+        "job_title": "DATA SCIENCE INTERN",
+        "start_date": "JUNE 2024",
+        "end_date": "JULY 2024",
+        "responsibilities": [
+          "Assisted in data collection, cleaning, and preprocessing to ensure high-quality datasets for analysis.",
+          "Conducted exploratory data analysis (EDA) to uncover patterns, trends, and insights.",
+          "Assessed and optimized machine learning models using key metrics such as accuracy, precision, recall, and F1-score."
+        ],
+        "technologies": null
+      }
+    ],
+    "skills": {
+      "technical_skills": [
+        "JavaScript",
+        "TypeScript",
+        "MERN Stack",
+        "(MongoDB, Express, React JS, Node JS)",
+        "Supabase",
+        "Firebase",
+        "Prisma ORM",
+        "Zustand",
+        "PostgreSQL",
+        "Vercel",
+        "Tailwind",
+        "React Native",
+        "Git",
+        "Python",
+        "FastAPI",
+        "Django",
+        "Machine Learning"
+      ],
+      "soft_skills": null,
+      "certifications": null
+    },
+    "summary": "Computer Science Engineering student specializing in AI/ML and full-stack development, with a track record of delivering impactful platforms. Developed CityFix, an award-winning civic engagement app (3rd place, GNEC Fall Hackathon 2024), FitAl, a comprehensive Al-driven fitness and wellness web app, and HappyFood, a zero-waste donation platform. Proficient in the MERN stack, Next.js, Firebase, Supabase, FastAPI, and modern ML frameworks. Strong problem-solving skills, rapid prototyping ability, and a passion for transforming ideas into scalable solutions.",
+    "projects": [
+      {
+        "name": "CityFix",
+        "description": "Developed a cross-platform application to enhance community collaboration and problem-solving. Key features: Fundraising, issue creation, project management, and NGO location mapping.",
+        "technologies": [
+          "React Native",
+          "Expo",
+          "Firebase",
+          "Node.js",
+          "Express",
+          "Railway",
+          "Zustand",
+          "GitHub"
+        ],
+        "start_date": null,
+        "end_date": null,
+        "link": null
+      },
+      {
+        "name": "Fitness Website",
+        "description": "Designed and developed a comprehensive Al-driven fitness platform offering personalized meal plans, real-time workout posture detection with repetition counting, an interactive Al assistant, and gamified workout experiences to boost engagement.",
+        "technologies": [
+          "Next.js",
+          "Firebase",
+          "Tailwind",
+          "Python",
+          "FastAPI",
+          "Google Gemini API",
+          "Mediapipe",
+          "OpenCV",
+          "GitHub"
+        ],
+        "start_date": null,
+        "end_date": null,
+        "link": null
+      }
+    ],
+    "achievements": {
+      "professional_awards": [
+        "Won 3rd prize in GNEC Fall 2024 Hackathon for the CityFix project.",
+        "Won 3rd prize in Codeathon (DSA hackathon) hosted by Vidyavardhini college, Vasai in 2024"
+      ],
+      "publications": null,
+      "conference_presentations": null,
+      "patents": null,
+      "volunteer_work": null,
+      "leadership_roles": null,
+      "community_involvement": null
+    }
   }
 }

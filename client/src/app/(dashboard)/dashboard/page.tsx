@@ -1,6 +1,8 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
+// import {useSession, signIn, signOut} from "next-auth/react"
+// import { useRouter } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
 
 import { Header } from "@/components/layout/header"
@@ -22,23 +24,27 @@ type RankingData = {
 export default function ResumeScannerApp() {
   const [isScanning, setIsScanning] = useState(false)
   const [isAnalyzing, setIsAnalyzing] = useState(false)
-  
-  // View management state
+
   const [currentView, setCurrentView] = useState<'initial' | 'candidates'>('initial')
 
-  // WebSocket state
   const [uploadSocket, setUploadSocket] = useState<WebSocket | null>(null)
   const [analysisResults, setAnalysisResults] = useState<AnalysisResults | null>(null);
-  // const [resumeRankings, setResumeRankings] = useState<any>(null)
+
   const [uploadStatus, setUploadStatus] = useState<string>("")
 
-  // Data state
   const [candidates, setCandidates] = useState<Candidate[]>([])
   const [filterOptions] = useState<FilterOptions>({
     skills: [],
     experience: [],
     education: [],
   })
+
+  // const router = useRouter();
+
+  // const { data: user } = useSession();
+  // if (!user || user.user.role !== 'hr') {
+  //   router.replace('/login');
+  // }
 
   useEffect(() => {
     const fetchAnalysisResults = async () => {
@@ -64,54 +70,61 @@ export default function ResumeScannerApp() {
     fetchAnalysisResults();
   }, []);
 
-  // WebSocket connection setup
   const setupWebSocket = useCallback(() => {
-    const socket = new WebSocket('ws://localhost:8000/api/v1/resume/multi-upload');
+    let socket: WebSocket | null = null; 
+    const connect = () => {
+      socket = new WebSocket('ws://localhost:8000/api/v1/resume/multi-upload');
 
-    socket.onopen = () => {
-      console.log('WebSocket connection established');
-      setUploadSocket(socket);
-    };
+      socket.onopen = () => {
+        console.log('WebSocket connection established');
+        setUploadSocket(socket);
+        setUploadStatus("");
+      };
 
-    socket.onmessage = (event) => {
-      try {
-        if (!event.data.startsWith('Processing')){
-          const parsedData = JSON.parse(event.data);
-          setAnalysisResults(parsedData);
-          setUploadStatus('Analysis Complete');
+      socket.onmessage = (event) => {
+        try {
+          if (!event.data.startsWith('Processing')) {
+            const parsedData = JSON.parse(event.data);
+            setAnalysisResults(parsedData);
+            setUploadStatus('Analysis Complete');
+            setIsScanning(false);
+            setCurrentView('candidates');
+          }
+        } catch (error) {
+          console.error('Error parsing WebSocket message:', error);
+          setUploadStatus('Error processing analysis');
           setIsScanning(false);
-          setCurrentView('candidates');
         }
-      } catch (error) {
-        console.error('Error parsing WebSocket message:', error);
-        setUploadStatus('Error processing analysis');
-        setIsScanning(false);
-      }
+      };
+
+      socket.onerror = (error) => {
+        setUploadStatus('WebSocket connection error. Retrying...');
+        if (socket) {
+          socket.close();
+        }
+        setTimeout(connect, 3000);
+      };
+
+      socket.onclose = () => {
+        console.log('WebSocket connection closed');
+        if (uploadSocket === socket) {
+          setUploadSocket(null);
+        }
+      };
     };
 
-    socket.onerror = (error) => {
-      console.error('WebSocket error:', error);
-      setUploadStatus('WebSocket connection error');
-      setIsScanning(false);
-    };
-
-    socket.onclose = () => {
-      console.log('WebSocket connection closed');
-      setUploadSocket(null);
-    };
+    connect();
 
     return () => {
       if (socket) socket.close();
     };
   }, []);
 
-  // Initialize WebSocket on component mount
   useEffect(() => {
     const cleanup = setupWebSocket();
     return cleanup;
   }, [setupWebSocket])
 
-  // Handle filter changes
   useEffect(() => {
     const applyFilters = async () => {
       const filtered = await getCandidates(filterOptions)
@@ -121,7 +134,6 @@ export default function ResumeScannerApp() {
     applyFilters()
   }, [filterOptions])
 
-  // Handle resume scanning
   const handleScanResume = async (resumeFiles: File[] | null) => {
     if (!resumeFiles || resumeFiles.length === 0 || !uploadSocket) {
       setUploadStatus('No files selected or WebSocket not connected');
@@ -132,28 +144,25 @@ export default function ResumeScannerApp() {
     setUploadStatus('Uploading and analyzing...');
 
     try {
-      // Send number of files
+
       uploadSocket.send(JSON.stringify({
         num_files: resumeFiles.length
       }));
 
-      // Process each file
       for (const file of resumeFiles) {
-        // Send file metadata
+
         uploadSocket.send(JSON.stringify({
           filename: file.name
         }));
 
-        // Read and send file in chunks
         const arrayBuffer = await file.arrayBuffer();
-        const chunkSize = 1024; // 1KB chunks
+        const chunkSize = 1024; 
         for (let i = 0; i < arrayBuffer.byteLength; i += chunkSize) {
           const chunk = arrayBuffer.slice(i, i + chunkSize);
           uploadSocket.send(chunk);
         }
 
-        // Send EOF signal
-        uploadSocket.send(new Uint8Array([69, 79, 70])); // 'EOF' in bytes
+        uploadSocket.send(new Uint8Array([69, 79, 70])); 
       }
     } catch (error) {
       console.error("Error scanning resume:", error)
@@ -162,7 +171,6 @@ export default function ResumeScannerApp() {
     }
   }
 
-  // Handle job description analysis
   const handleAnalyzeJob = async (description: string) => {
     if (!description) {
       setUploadStatus('Please provide a job description');
@@ -189,11 +197,11 @@ export default function ResumeScannerApp() {
       }
 
       const rankingData: RankingData = await response.json();
-      // setResumeRankings(rankingData);
+
       setUploadStatus('Resume Ranking Complete');
       setIsAnalyzing(false);
       setCurrentView('candidates');
-      
+
       if (rankingData.ranked_resumes) {
         const rankedCandidates = rankingData.ranked_resumes.map((resume: Candidate, index: number) => ({
           ...resume,
@@ -208,12 +216,10 @@ export default function ResumeScannerApp() {
     }
   }
 
-  // Handle saving a candidate
   const handleSaveCandidate = async (id: string) => {
     try {
       await saveCandidate(id);
-  
-      // Ensure saved candidates stay visible
+
       setCandidates(
         candidates.map((candidate) => 
           candidate.id === id ? { ...candidate, saved: true } : candidate
@@ -223,9 +229,7 @@ export default function ResumeScannerApp() {
       console.error("Error saving candidate:", error);
     }
   };
-  
 
-  // Loading overlay component
   const LoadingOverlay = () => (
     <motion.div 
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/80"
@@ -250,17 +254,17 @@ export default function ResumeScannerApp() {
     <div className="flex h-screen bg-black text-white">
       <div 
         className={`
-          flex-1 overflow-auto transition-all duration-300
+          flex-1 transition-all duration-300
         `}
       >
-        {/* Header */}
+        
         <Header userInitials="JS" />
 
-        {/* Dashboard content */}
-        <main className="p-6">
+        
+        <main className="p-6 overflow-auto">
           <h2 className="text-2xl font-bold mb-6">Resume Scanning Dashboard</h2>
 
-          {/* Status display */}
+          
           {uploadStatus && (
             <div className={`
               mb-4 p-3 rounded 
@@ -270,7 +274,7 @@ export default function ResumeScannerApp() {
             </div>
           )}
 
-          {/* Conditional rendering based on current view */}
+          
           <AnimatePresence>
             {currentView === 'initial' && (
               <motion.div 
@@ -315,10 +319,10 @@ export default function ResumeScannerApp() {
             )}
           </AnimatePresence>
 
-          {/* Conditional loading overlay */}
+          
           {(isScanning || isAnalyzing) && <LoadingOverlay />}
 
-          {/* Optional: Analysis Results Display */}
+          
           {analysisResults && (
             <ResumeAnalysisCharts />
           )}

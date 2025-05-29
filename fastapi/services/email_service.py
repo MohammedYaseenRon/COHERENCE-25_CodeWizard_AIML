@@ -5,25 +5,8 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from typing import Dict, Any, Optional
 from services.gemini_service import GeminiService
+from utils.response import clean_json_response
 import re
-
-def clean_json_response(text: str) -> dict:
-    """
-    Removes markdown formatting ('''json ... ''') from the response and extracts JSON safely.
-    """
-    # Extract JSON block using regex
-    match = re.search(r"\{.*\}", text, re.DOTALL)  # Find JSON-like structure
-    if match:
-        json_str = match.group(0)  # Extract matched JSON part
-        try:
-            return json.loads(json_str)  # Attempt to parse JSON
-        except json.JSONDecodeError as e:
-            print(f"Error decoding JSON: {e}")
-            return {}  # Return empty dict on failure
-    else:
-        print("No valid JSON found in response.")
-        return {}  # Return empty dict if no JSON found
-
 
 class EmailGenerator:
     """
@@ -82,7 +65,7 @@ class EmailGenerator:
         candidate_profile: Dict[str, Any], 
         job_description: Dict[str, Any],
         project_options: Optional[Dict[str, Any]] = None
-    ) -> Dict[str, Any]:  # Changed return type annotation to Dict[str, Any]
+    ) -> Dict[str, Any]:
         """
         Use Gemini to generate personalized project assignment content based on profile and job description.
         

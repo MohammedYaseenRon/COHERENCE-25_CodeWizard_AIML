@@ -26,7 +26,6 @@ type InViewProps = {
   delay?: number;
 };
 
-// Types for testimonial and feature data
 type Testimonial = {
   name: string;
   role: string;
@@ -44,15 +43,15 @@ const LoadingOverlay: React.FC = () => {
   return (
     <div className="fixed inset-0 z-[100] bg-black flex items-center justify-center">
       <div className="relative w-48 h-48">
-        {/* Circular Loading Spinner */}
+        
         <div className="absolute inset-0 border-4 border-transparent border-t-purple-500 border-r-purple-500 rounded-full animate-spin"></div>
 
-        {/* Pulsing Logo */}
+        
         <div className="absolute inset-0 flex items-center justify-center">
           <File className="text-purple-500 animate-pulse" size={64} />
         </div>
 
-        {/* Loading Text with Typing Animation */}
+        
         <div className="absolute bottom-0 left-0 right-0 text-center mt-4">
           <span className="text-white text-lg animate-typing overflow-hidden whitespace-nowrap border-r-4 border-r-white pr-1">
             Signing In...
@@ -62,8 +61,6 @@ const LoadingOverlay: React.FC = () => {
     </div>
   );
 };
-
-
 
 const testimonials: Testimonial[] = [
   {
@@ -155,7 +152,6 @@ const RenderStarRating = ({ rating }: { rating: number }) => (
   </div>
 );
 
-// Animation variants for staggered children
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
@@ -179,17 +175,6 @@ const itemVariants = {
   },
 };
 
-// Custom hook for scroll animations
-// const useScrollAnimation = () => {
-//   const [ref, inView] = useInView({
-//     triggerOnce: true,
-//     threshold: 0.1,
-//   });
-
-//   return [ref, inView];
-// };
-
-// InView component for scroll animations
 const InView: React.FC<InViewProps> = ({ children, delay = 0 }) => {
   const [ref, inView] = useInView({
     triggerOnce: true,
@@ -211,16 +196,15 @@ const InView: React.FC<InViewProps> = ({ children, delay = 0 }) => {
 const LandingPage: React.FC = () => {
     const [isLoading, setIsLoading] = useState(false);
     const router = useRouter();
-  
+
     const handleSignIn = () => {
       setIsLoading(true);
-      // Simulate an async sign-in process
+
       setTimeout(() => {
-        router.push("/userpage");
-      }, 2000); // 2 seconds loading animation
+        router.push("/dashboard");
+      }, 2000);
     };
 
-  // If loading is true, render the LoadingOverlay
   if (isLoading) {
     return <LoadingOverlay />;
   }
@@ -234,7 +218,7 @@ const LandingPage: React.FC = () => {
 
       <Navbar />
 
-      {/* Hero Section */}
+      
       <motion.header
         className="container mx-auto px-4 pt-32 pb-16 text-center"
         initial={{ opacity: 0 }}
@@ -284,7 +268,7 @@ const LandingPage: React.FC = () => {
         </motion.div>
       </motion.header>
 
-      {/* Features Section */}
+      
       <InView>
         <section className="container mx-auto px-4 py-16">
           <motion.h2
@@ -326,7 +310,7 @@ const LandingPage: React.FC = () => {
         </section>
       </InView>
 
-      {/* How It Works Section */}
+      
       <InView>
         <section className="container mx-auto px-4 py-16">
           <motion.h2
@@ -402,7 +386,7 @@ const LandingPage: React.FC = () => {
         </section>
       </InView>
 
-      {/* Testimonials Section */}
+      
       <InView>
         <section className="container mx-auto px-4 py-16">
           <motion.div
@@ -435,7 +419,7 @@ const LandingPage: React.FC = () => {
         </section>
       </InView>
 
-      {/* Call to Action */}
+      
       <InView>
         <section className="container mx-auto px-4 py-16 text-center">
           <motion.h2
@@ -485,7 +469,7 @@ const LandingPage: React.FC = () => {
         </section>
       </InView>
 
-      {/* Footer */}
+      
       <footer className="container mx-auto px-4 py-12 border-t border-gray-800">
         <div className="grid md:grid-cols-4 gap-8">
           <div>

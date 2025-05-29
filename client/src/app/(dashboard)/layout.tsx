@@ -1,8 +1,7 @@
-// components/layout/SidebarLayout.tsx
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Sidebar from "@/components/layout/sidebar";
-
+import { useRouter } from "next/navigation";
 interface SidebarLayoutProps {
   children: React.ReactNode;
 }
@@ -10,10 +9,15 @@ interface SidebarLayoutProps {
 const SidebarLayout: React.FC<SidebarLayoutProps> = ({ children }) => {
   const [activeTab, setActiveTab] = useState("dashboard");
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(true);
+  const router = useRouter();
+
+  useEffect(() => {
+    router.replace(`/${activeTab}`);
+  }
+  , [activeTab]);
 
   return (
     <div className="flex h-screen bg-black text-white">
-      {/* Sidebar */}
       <Sidebar 
         activeTab={activeTab}
         onTabChange={setActiveTab}
@@ -21,15 +25,10 @@ const SidebarLayout: React.FC<SidebarLayoutProps> = ({ children }) => {
         onToggleExpand={() => setIsSidebarExpanded(!isSidebarExpanded)}
       />
 
-      {/* Main content with dynamic margin based on sidebar width */}
       <div 
         className={`flex-1 overflow-auto transition-all duration-300 
         ${isSidebarExpanded ? 'ml-64' : 'ml-16'}`}
       >
-        {/* Header */}
-        {/* <Header userInitials={userInitials} /> */}
-
-        {/* Main Content Area */}
         <main className="p-6">
           {children}
         </main>
