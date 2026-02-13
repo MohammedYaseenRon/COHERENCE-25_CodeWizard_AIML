@@ -34,7 +34,6 @@ posthog==3.21.0
 proto-plus==1.26.1
 protobuf==5.29.4
 pyasn1-modules==0.2.8
-pycurl==7.45.2
 pydantic==2.10.6
 pydantic_core==2.27.2
 pydub==0.25.1
